@@ -239,7 +239,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#c45a3b] text-white rounded-full shadow-lg hover:bg-[#a84832] transition-all flex items-center justify-center"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#c45a3b] text-white rounded-full shadow-lg hover:bg-[#a84832] transition-all flex items-center justify-center"
           aria-label="Öppna assistent"
         >
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -250,7 +250,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-6 left-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-48px)] bg-white rounded-2xl shadow-2xl border border-[#e5e7eb] flex flex-col overflow-hidden">
+        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-48px)] bg-white rounded-2xl shadow-2xl border border-[#e5e7eb] flex flex-col overflow-hidden">
           {/* Header */}
           <div className="px-4 py-3 border-b border-[#e5e7eb] bg-[#f9fafb]">
             <div className="flex items-center justify-between">
