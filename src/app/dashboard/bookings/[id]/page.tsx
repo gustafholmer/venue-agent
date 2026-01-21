@@ -1,0 +1,470 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { getBooking, type BookingWithVenue } from '@/actions/bookings/get-booking'
+import { acceptBooking } from '@/actions/bookings/accept-booking'
+import { declineBooking } from '@/actions/bookings/decline-booking'
+import { formatPrice } from '@/lib/pricing'
+import { MessageThread } from '@/components/booking/message-thread'
+
+const STATUS_LABELS: Record<string, { label: string; color: string }> = {
+  pending: { label: 'Väntande', color: 'bg-yellow-100 text-yellow-800 border-yellow-200' },
+  accepted: { label: 'Godkänd', color: 'bg-green-100 text-green-800 border-green-200' },
+  declined: { label: 'Nekad', color: 'bg-red-100 text-red-800 border-red-200' },
+  cancelled: { label: 'Avbokad', color: 'bg-gray-100 text-gray-800 border-gray-200' },
+  completed: { label: 'Genomförd', color: 'bg-blue-100 text-blue-800 border-blue-200' },
+  paid_out: { label: 'Utbetald', color: 'bg-purple-100 text-purple-800 border-purple-200' },
+}
+
+const EVENT_TYPE_LABELS: Record<string, string> = {
+  aw: 'AW',
+  konferens: 'Konferens',
+  fest: 'Fest',
+  workshop: 'Workshop',
+  middag: 'Middag',
+  foretag: 'Företagsevent',
+  privat: 'Privat event',
+  annat: 'Annat',
+}
+
+export default function BookingDetailPage() {
+  const params = useParams()
+  const router = useRouter()
+  const bookingId = params.id as string
+
+  const [booking, setBooking] = useState<BookingWithVenue | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
+  // Decline modal state
+  const [showDeclineModal, setShowDeclineModal] = useState(false)
+  const [declineReason, setDeclineReason] = useState('')
+  const [declineError, setDeclineError] = useState<string | null>(null)
+
+  const fetchBooking = useCallback(async () => {
+    setIsLoading(true)
+    const result = await getBooking(bookingId)
+    if (result.success && result.booking) {
+      setBooking(result.booking)
+      setError(null)
+    } else {
+      setError(result.error || 'Kunde inte hämta bokningen')
+      setBooking(null)
+    }
+    setIsLoading(false)
+  }, [bookingId])
+
+  useEffect(() => {
+    fetchBooking()
+  }, [fetchBooking])
+
+  const handleAccept = async () => {
+    setIsSubmitting(true)
+    setError(null)
+
+    const result = await acceptBooking(bookingId)
+
+    if (result.success) {
+      setSuccessMessage('Bokningsförfrågan godkänd!')
+      await fetchBooking()
+      setTimeout(() => setSuccessMessage(null), 5000)
+    } else {
+      setError(result.error || 'Kunde inte godkänna bokningen')
+    }
+
+    setIsSubmitting(false)
+  }
+
+  const handleDecline = async () => {
+    if (!declineReason.trim()) {
+      setDeclineError('Ange en anledning till nekandet')
+      return
+    }
+
+    setIsSubmitting(true)
+    setDeclineError(null)
+
+    const result = await declineBooking(bookingId, declineReason)
+
+    if (result.success) {
+      setShowDeclineModal(false)
+      setDeclineReason('')
+      setSuccessMessage('Bokningsförfrågan nekad')
+      await fetchBooking()
+      setTimeout(() => setSuccessMessage(null), 5000)
+    } else {
+      setDeclineError(result.error || 'Kunde inte neka bokningen')
+    }
+
+    setIsSubmitting(false)
+  }
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('sv-SE', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+
+  const formatDateTime = (dateStr: string) => {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('sv-SE', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+  }
+
+  const formatTime = (timeStr: string | null) => {
+    if (!timeStr) return '-'
+    return timeStr.slice(0, 5) // Extract HH:MM from HH:MM:SS
+  }
+
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
+          <p className="text-[#6b7280] mt-2">Laddar bokning...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !booking) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+          <h2 className="text-lg font-medium text-red-800 mb-2">Fel</h2>
+          <p className="text-red-700 mb-4">{error}</p>
+          <Link href="/dashboard/bookings">
+            <Button variant="outline">Tillbaka till bokningar</Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  if (!booking) {
+    return null
+  }
+
+  const status = STATUS_LABELS[booking.status] || { label: booking.status, color: 'bg-gray-100 text-gray-800 border-gray-200' }
+  const eventType = EVENT_TYPE_LABELS[booking.event_type || ''] || booking.event_type || '-'
+
+  // Build timeline events
+  const timelineEvents = [
+    {
+      label: 'Förfrågan skapad',
+      date: booking.created_at,
+      icon: (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+      ),
+    },
+  ]
+
+  if (booking.responded_at) {
+    const respondedLabel = booking.status === 'accepted' ? 'Godkänd' : booking.status === 'declined' ? 'Nekad' : 'Besvarad'
+    timelineEvents.push({
+      label: respondedLabel,
+      date: booking.responded_at,
+      icon: booking.status === 'accepted' ? (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      ) : (
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      ),
+    })
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      {/* Back link */}
+      <Link
+        href="/dashboard/bookings"
+        className="inline-flex items-center text-[#6b7280] hover:text-[#374151] mb-6"
+      >
+        <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Tillbaka till bokningar
+      </Link>
+
+      {/* Messages */}
+      {successMessage && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+          {successMessage}
+        </div>
+      )}
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          {error}
+        </div>
+      )}
+
+      {/* Header with status */}
+      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold text-[#111827]">
+              Bokning från {booking.customer_name}
+            </h1>
+            <p className="text-[#6b7280] mt-1">
+              {booking.venue.name} - {formatDate(booking.event_date)}
+            </p>
+          </div>
+          <div className={`inline-flex items-center px-4 py-2 rounded-full border text-sm font-medium ${status.color}`}>
+            {status.label}
+          </div>
+        </div>
+
+        {/* Action buttons for pending bookings */}
+        {booking.status === 'pending' && (
+          <div className="flex gap-3 mt-6 pt-6 border-t border-[#e5e7eb]">
+            <Button
+              onClick={handleAccept}
+              disabled={isSubmitting}
+              className="flex-1 sm:flex-none"
+            >
+              {isSubmitting ? 'Bearbetar...' : 'Godkänna'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeclineModal(true)}
+              disabled={isSubmitting}
+              className="flex-1 sm:flex-none"
+            >
+              Neka
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main content - left column */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Customer info */}
+          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#111827] mb-4">Kundinformation</h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <dt className="text-sm text-[#6b7280]">Namn</dt>
+                <dd className="mt-1 text-[#111827] font-medium">{booking.customer_name}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-[#6b7280]">E-post</dt>
+                <dd className="mt-1 text-[#111827]">
+                  <a href={`mailto:${booking.customer_email}`} className="text-[#1e3a8a] hover:underline">
+                    {booking.customer_email}
+                  </a>
+                </dd>
+              </div>
+              {booking.customer_phone && (
+                <div>
+                  <dt className="text-sm text-[#6b7280]">Telefon</dt>
+                  <dd className="mt-1 text-[#111827]">
+                    <a href={`tel:${booking.customer_phone}`} className="text-[#1e3a8a] hover:underline">
+                      {booking.customer_phone}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {booking.company_name && (
+                <div>
+                  <dt className="text-sm text-[#6b7280]">Företag</dt>
+                  <dd className="mt-1 text-[#111827]">{booking.company_name}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          {/* Event details */}
+          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#111827] mb-4">Eventdetaljer</h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <dt className="text-sm text-[#6b7280]">Datum</dt>
+                <dd className="mt-1 text-[#111827] font-medium">{formatDate(booking.event_date)}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-[#6b7280]">Tid</dt>
+                <dd className="mt-1 text-[#111827]">
+                  {formatTime(booking.start_time)} - {formatTime(booking.end_time)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm text-[#6b7280]">Eventtyp</dt>
+                <dd className="mt-1 text-[#111827]">{eventType}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-[#6b7280]">Antal gäster</dt>
+                <dd className="mt-1 text-[#111827]">{booking.guest_count || '-'} personer</dd>
+              </div>
+              {booking.event_description && (
+                <div className="sm:col-span-2">
+                  <dt className="text-sm text-[#6b7280]">Beskrivning</dt>
+                  <dd className="mt-1 text-[#111827] whitespace-pre-wrap">{booking.event_description}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          {/* Price breakdown */}
+          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#111827] mb-4">Prisuppdelning</h2>
+            <dl className="space-y-3">
+              <div className="flex justify-between">
+                <dt className="text-[#6b7280]">Baspris</dt>
+                <dd className="text-[#111827]">{formatPrice(booking.base_price)}</dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-[#6b7280]">Plattformsavgift (12%)</dt>
+                <dd className="text-[#111827]">{formatPrice(booking.platform_fee)}</dd>
+              </div>
+              <div className="flex justify-between pt-3 border-t border-[#e5e7eb]">
+                <dt className="font-medium text-[#111827]">Totalt pris (kund)</dt>
+                <dd className="font-semibold text-[#111827]">{formatPrice(booking.total_price)}</dd>
+              </div>
+              <div className="flex justify-between pt-3 border-t border-[#e5e7eb]">
+                <dt className="font-medium text-[#1e3a8a]">Din utbetalning</dt>
+                <dd className="font-semibold text-[#1e3a8a]">{formatPrice(booking.venue_payout)}</dd>
+              </div>
+            </dl>
+          </div>
+
+          {/* Decline reason (if declined) */}
+          {booking.status === 'declined' && booking.decline_reason && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+              <h2 className="text-lg font-semibold text-red-800 mb-2">Anledning till nekande</h2>
+              <p className="text-red-700">{booking.decline_reason}</p>
+            </div>
+          )}
+
+          {/* Message thread */}
+          <MessageThread bookingId={bookingId} />
+        </div>
+
+        {/* Sidebar - right column */}
+        <div className="space-y-6">
+          {/* Timeline */}
+          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#111827] mb-4">Tidslinje</h2>
+            <div className="space-y-4">
+              {timelineEvents.map((event, index) => (
+                <div key={index} className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#f3f4f6] rounded-full flex items-center justify-center text-[#6b7280]">
+                    {event.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[#111827]">{event.label}</p>
+                    <p className="text-xs text-[#6b7280]">{formatDateTime(event.date)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick actions */}
+          {booking.status === 'accepted' && (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="font-medium text-green-800">Bokning godkänd</h3>
+              </div>
+              <p className="text-sm text-green-700">
+                Denna bokning är godkänd och datumet är nu blockerat i din kalender.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Decline modal */}
+      {showDeclineModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-[#111827]">Neka bokningsförfrågan</h3>
+              <button
+                onClick={() => {
+                  setShowDeclineModal(false)
+                  setDeclineReason('')
+                  setDeclineError(null)
+                }}
+                className="p-1 hover:bg-[#f3f4f6] rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <p className="text-[#6b7280] mb-4">
+              Ange en anledning till varför du nekar denna förfrågan. Detta hjälper kunden att förstå beslutet.
+            </p>
+
+            {declineError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                {declineError}
+              </div>
+            )}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-[#374151] mb-1">
+                Anledning till nekande *
+              </label>
+              <textarea
+                value={declineReason}
+                onChange={(e) => setDeclineReason(e.target.value)}
+                placeholder="T.ex. Datumet är upptaget, Lokalen passar inte för detta event..."
+                rows={4}
+                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent resize-none"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowDeclineModal(false)
+                  setDeclineReason('')
+                  setDeclineError(null)
+                }}
+                disabled={isSubmitting}
+                className="flex-1"
+              >
+                Avbryt
+              </Button>
+              <Button
+                onClick={handleDecline}
+                disabled={isSubmitting || !declineReason.trim()}
+                className="flex-1 bg-red-600 hover:bg-red-700"
+              >
+                {isSubmitting ? 'Nekar...' : 'Neka förfrågan'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
