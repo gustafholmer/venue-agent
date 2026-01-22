@@ -250,9 +250,9 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-48px)] bg-white rounded-2xl shadow-2xl border border-[#e5e7eb] flex flex-col overflow-hidden">
+        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-48px)] bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="px-4 py-3 border-b border-[#e5e7eb] bg-[#f9fafb]">
+          <div className="px-4 py-3 border-b border-white/30 bg-white/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-[#fef3c7] rounded-full flex items-center justify-center">
@@ -303,7 +303,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
           </div>
 
           {/* Input */}
-          <div className="border-t border-[#e5e7eb] p-3">
+          <div className="border-t border-white/30 p-3 bg-white/50">
             <form onSubmit={handleSubmit}>
               <div className="flex gap-2">
                 <input
