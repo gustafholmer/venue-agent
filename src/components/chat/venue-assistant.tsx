@@ -239,10 +239,10 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-white/70 backdrop-blur-sm text-[#6b7280] rounded-full shadow-sm border border-[#e5e7eb] hover:bg-white hover:text-[#c45a3b] hover:shadow-md opacity-60 hover:opacity-100 transition-all flex items-center justify-center"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#c45a3b] text-white rounded-full shadow-lg hover:bg-[#a84832] transition-all flex items-center justify-center"
           aria-label="Öppna assistent"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         </button>
@@ -250,9 +250,9 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-48px)] bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 flex flex-col overflow-hidden">
+        <div className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-48px)] bg-white/40 backdrop-blur-md rounded-2xl shadow-xl border border-white/30 flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="px-4 py-3 border-b border-white/30 bg-white/50">
+          <div className="px-4 py-3 border-b border-white/20 bg-white/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-[#fef3c7] rounded-full flex items-center justify-center">
@@ -303,7 +303,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
           </div>
 
           {/* Input */}
-          <div className="border-t border-white/30 p-3 bg-white/50">
+          <div className="border-t border-white/20 p-3 bg-white/30">
             <form onSubmit={handleSubmit}>
               <div className="flex gap-2">
                 <input
