@@ -139,7 +139,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER set_venue_slug
-  BEFORE INSERT OR UPDATE OF name ON venues
+  BEFORE INSERT ON venues
   FOR EACH ROW
   WHEN (NEW.slug IS NULL OR NEW.slug = '')
   EXECUTE FUNCTION generate_venue_slug();
