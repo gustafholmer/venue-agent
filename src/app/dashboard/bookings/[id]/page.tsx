@@ -9,6 +9,7 @@ import { acceptBooking } from '@/actions/bookings/accept-booking'
 import { declineBooking } from '@/actions/bookings/decline-booking'
 import { formatPrice } from '@/lib/pricing'
 import { MessageThread } from '@/components/booking/message-thread'
+import { createClient } from '@/lib/supabase/client'
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   pending: { label: 'Väntande', color: 'bg-yellow-100 text-yellow-800 border-yellow-200' },
@@ -40,11 +41,22 @@ export default function BookingDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   // Decline modal state
   const [showDeclineModal, setShowDeclineModal] = useState(false)
   const [declineReason, setDeclineReason] = useState('')
   const [declineError, setDeclineError] = useState<string | null>(null)
+
+  // Fetch current user
+  useEffect(() => {
+    async function fetchUser() {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      setCurrentUserId(user?.id || null)
+    }
+    fetchUser()
+  }, [])
 
   const fetchBooking = useCallback(async () => {
     setIsLoading(true)
@@ -356,7 +368,13 @@ export default function BookingDetailPage() {
           )}
 
           {/* Message thread */}
-          <MessageThread bookingId={bookingId} />
+          {currentUserId && (
+            <MessageThread
+              bookingId={bookingId}
+              currentUserId={currentUserId}
+              participantName={booking.customer_name}
+            />
+          )}
         </div>
 
         {/* Sidebar - right column */}
