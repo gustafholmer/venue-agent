@@ -151,8 +151,12 @@ export async function createBookingRequest(
 
     const pricing = calculatePricing(basePrice)
 
-    // Get current user if logged in
+    // Get current user - must be logged in to book
     const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return { success: false, error: 'Du måste vara inloggad för att boka' }
+    }
 
     // Generate verification token for secure public access
     const verificationToken = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
@@ -162,7 +166,7 @@ export async function createBookingRequest(
       .from('booking_requests')
       .insert({
         venue_id: input.venueId,
-        customer_id: user?.id || null,
+        customer_id: user.id,
         event_type: input.eventType,
         event_description: input.eventDescription || null,
         guest_count: input.guestCount,
