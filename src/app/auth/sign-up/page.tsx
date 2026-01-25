@@ -1,13 +1,27 @@
 import { signUp } from '@/actions/auth/sign-up'
 import { Button } from '@/components/ui/button'
 
-export default function SignUpPage() {
+interface SignUpPageProps {
+  searchParams: Promise<{ returnUrl?: string }>
+}
+
+export default async function SignUpPage({ searchParams }: SignUpPageProps) {
+  const { returnUrl } = await searchParams
+  // Validate returnUrl - only allow relative URLs (must start with /)
+  const validReturnUrl = returnUrl && returnUrl.startsWith('/') ? returnUrl : null
+  const signInLink = validReturnUrl
+    ? `/auth/sign-in?returnUrl=${encodeURIComponent(validReturnUrl)}`
+    : '/auth/sign-in'
+
   return (
     <main className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[#111827] text-center mb-8">Skapa konto</h1>
 
         <form action={signUp} className="space-y-4">
+          {validReturnUrl && (
+            <input type="hidden" name="returnUrl" value={validReturnUrl} />
+          )}
           <div>
             <label htmlFor="email" className="block text-sm text-[#374151] mb-1.5">
               E-post
@@ -44,7 +58,7 @@ export default function SignUpPage() {
 
         <p className="text-center text-sm text-[#6b7280] mt-6">
           Har du redan ett konto?{' '}
-          <a href="/auth/sign-in" className="text-[#1e3a8a] hover:underline">
+          <a href={signInLink} className="text-[#1e3a8a] hover:underline">
             Logga in
           </a>
         </p>
