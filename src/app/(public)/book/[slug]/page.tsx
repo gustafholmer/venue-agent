@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getVenueBySlug } from '@/actions/venues/get-venue-by-slug'
+import { createClient } from '@/lib/supabase/server'
 import { BookingForm } from './booking-form'
 
 interface PageProps {
@@ -34,10 +35,16 @@ async function BookingPageContent({ params }: PageProps) {
 
   const venue = result.venue
 
+  // Fetch current user server-side
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const initialUser = user ? { id: user.id, email: user.email } : null
+
   return (
     <div className="min-h-screen bg-[#f9fafb]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-        <BookingForm venue={venue} />
+        <BookingForm venue={venue} initialUser={initialUser} />
       </div>
     </div>
   )

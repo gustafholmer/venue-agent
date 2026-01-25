@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { VenueWithDetails } from '@/actions/venues/get-venue-by-slug'
 import { createBookingRequest } from '@/actions/bookings/create-booking-request'
 import { getVenueAvailability } from '@/actions/bookings/get-venue-availability'
+import { checkAuth } from '@/actions/auth/check-auth'
+import { saveBookingFormData, getBookingFormData, clearBookingFormData } from '@/lib/booking-form-storage'
 import { calculatePricing, formatPrice, PLATFORM_FEE_RATE } from '@/lib/pricing'
 import { DatePicker } from '@/components/booking/date-picker'
 import { Button } from '@/components/ui/button'
@@ -16,6 +18,7 @@ import { VenueAssistant } from '@/components/chat/venue-assistant'
 
 interface BookingFormProps {
   venue: VenueWithDetails
+  initialUser: { id: string; email?: string } | null
 }
 
 const EVENT_TYPES = [
@@ -35,10 +38,12 @@ const TIME_OPTIONS = [
   '20:00', '21:00', '22:00', '23:00',
 ]
 
-export function BookingForm({ venue }: BookingFormProps) {
+export function BookingForm({ venue, initialUser }: BookingFormProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
 
   // Form state
   const [eventDate, setEventDate] = useState('')
@@ -56,6 +61,32 @@ export function BookingForm({ venue }: BookingFormProps) {
   // Availability state
   const [blockedDates, setBlockedDates] = useState<string[]>([])
   const [bookedDates, setBookedDates] = useState<string[]>([])
+
+  // Get venue slug for storage and URLs
+  const slug = venue.slug || venue.id
+
+  // On mount: check for ?fromAuth=true and restore form data from sessionStorage
+  useEffect(() => {
+    const fromAuth = searchParams.get('fromAuth') === 'true'
+    if (fromAuth) {
+      const savedData = getBookingFormData(slug)
+      if (savedData) {
+        setEventDate(savedData.eventDate)
+        setStartTime(savedData.startTime)
+        setEndTime(savedData.endTime)
+        setEventType(savedData.eventType)
+        setEventDescription(savedData.eventDescription)
+        setGuestCount(savedData.guestCount)
+        setCustomerName(savedData.customerName)
+        setCustomerEmail(savedData.customerEmail)
+        setCustomerPhone(savedData.customerPhone)
+        setCompanyName(savedData.companyName)
+        setAgreedToTerms(savedData.agreedToTerms)
+      }
+      // Clean up the URL by removing the fromAuth param
+      window.history.replaceState({}, '', `/book/${slug}`)
+    }
+  }, [searchParams, slug])
 
   // Fetch availability for current and next 2 months on load
   useEffect(() => {
@@ -98,6 +129,7 @@ export function BookingForm({ venue }: BookingFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setShowLoginPrompt(false)
 
     if (!agreedToTerms) {
       setError('Du måste godkänna villkoren')
@@ -107,6 +139,37 @@ export function BookingForm({ venue }: BookingFormProps) {
     setIsSubmitting(true)
 
     try {
+      // Check if user is authenticated
+      // Use initialUser first for quick check, then verify with server action
+      let isAuthenticated = !!initialUser
+      if (!isAuthenticated) {
+        const authResult = await checkAuth()
+        isAuthenticated = authResult.isAuthenticated
+      }
+
+      if (!isAuthenticated) {
+        // Save form data to sessionStorage before showing login prompt
+        saveBookingFormData({
+          venueId: venue.id,
+          venueSlug: slug,
+          eventDate,
+          startTime,
+          endTime,
+          eventType,
+          eventDescription,
+          guestCount,
+          customerName,
+          customerEmail,
+          customerPhone,
+          companyName,
+          agreedToTerms,
+          savedAt: Date.now(),
+        })
+        setShowLoginPrompt(true)
+        setIsSubmitting(false)
+        return
+      }
+
       const result = await createBookingRequest({
         venueId: venue.id,
         eventDate,
@@ -122,8 +185,10 @@ export function BookingForm({ venue }: BookingFormProps) {
       })
 
       if (result.success && result.bookingId && result.verificationToken) {
+        // Clear any saved form data on successful booking
+        clearBookingFormData()
         // Redirect to confirmation page with booking ID and verification token
-        router.push(`/book/${venue.slug || venue.id}/confirm?id=${result.bookingId}&token=${result.verificationToken}`)
+        router.push(`/book/${slug}/confirm?id=${result.bookingId}&token=${result.verificationToken}`)
       } else {
         setError(result.error || 'Något gick fel')
       }
@@ -360,16 +425,30 @@ export function BookingForm({ venue }: BookingFormProps) {
                 </div>
               )}
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                className="w-full"
-                disabled={isSubmitting || !agreedToTerms}
-              >
-                {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
-              </Button>
+              {/* Login Prompt or Submit Button */}
+              {showLoginPrompt ? (
+                <div className="space-y-4 text-center p-4 bg-[#f3f4f6] rounded-lg">
+                  <p className="text-[#374151]">Logga in för att boka</p>
+                  <div className="flex gap-4 justify-center">
+                    <Link href={`/auth/sign-in?returnUrl=${encodeURIComponent(`/book/${slug}?fromAuth=true`)}`}>
+                      <Button type="button" variant="primary">Logga in</Button>
+                    </Link>
+                    <Link href={`/auth/sign-up?returnUrl=${encodeURIComponent(`/book/${slug}?fromAuth=true`)}`}>
+                      <Button type="button" variant="outline">Skapa konto</Button>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  className="w-full"
+                  disabled={isSubmitting || !agreedToTerms}
+                >
+                  {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
+                </Button>
+              )}
             </div>
           </div>
 
@@ -453,16 +532,30 @@ export function BookingForm({ venue }: BookingFormProps) {
                   </div>
                 )}
 
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="lg"
-                  className="w-full"
-                  disabled={isSubmitting || !agreedToTerms}
-                >
-                  {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
-                </Button>
+                {/* Login Prompt or Submit Button */}
+                {showLoginPrompt ? (
+                  <div className="space-y-4 text-center p-4 bg-[#f3f4f6] rounded-lg">
+                    <p className="text-[#374151]">Logga in för att boka</p>
+                    <div className="flex gap-4 justify-center">
+                      <Link href={`/auth/sign-in?returnUrl=${encodeURIComponent(`/book/${slug}?fromAuth=true`)}`}>
+                        <Button type="button" variant="primary">Logga in</Button>
+                      </Link>
+                      <Link href={`/auth/sign-up?returnUrl=${encodeURIComponent(`/book/${slug}?fromAuth=true`)}`}>
+                        <Button type="button" variant="outline">Skapa konto</Button>
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                    disabled={isSubmitting || !agreedToTerms}
+                  >
+                    {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
+                  </Button>
+                )}
               </div>
             </div>
           </div>
