@@ -1,7 +1,22 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 
 export async function GET() {
+  // Check rate limit
+  const rateLimitResult = await rateLimit('venue-photos', RATE_LIMITS.photoUpload)
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: RATE_LIMIT_ERROR },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
+        },
+      }
+    )
+  }
+
   const supabase = await createClient()
 
   // Get current user

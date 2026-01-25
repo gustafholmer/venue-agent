@@ -6,7 +6,10 @@ import { MOCK_VENUES, filterMockVenues, getMockAreas } from '@/lib/mock-data'
 import { getOrCreateSession } from '@/actions/agent/create-session'
 import { getSessionMessages } from '@/actions/agent/process-message'
 import { VenuesWithAgent } from '@/components/venues/venues-with-agent'
+import { generateBreadcrumbSchema, jsonLdScript } from '@/lib/structured-data'
 import type { VenueCardData } from '@/components/venues/venue-card'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://venue-agent.se'
 
 interface SearchParams {
   q?: string
@@ -163,8 +166,18 @@ async function VenuesPageContent({ searchParams }: PageProps) {
 
   const inDemoMode = isDemoMode() || !isSupabaseConfigured()
 
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Hem', url: BASE_URL },
+    { name: 'Lokaler', url: `${BASE_URL}/venues` },
+  ])
+
   return (
     <div className="min-h-screen bg-white">
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbSchema) }}
+      />
       {inDemoMode && (
         <div className="bg-[#f5f3f0] border-b border-[#e7e5e4]">
           <div className="px-4 sm:px-6 py-3">

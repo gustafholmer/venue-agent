@@ -9,6 +9,14 @@ import { PhotoGallery } from '@/components/venues/photo-gallery'
 import { Button } from '@/components/ui/button'
 import { VenueDetailMap } from '@/components/maps/venue-detail-map'
 import { VenueAssistant } from '@/components/chat/venue-assistant'
+import {
+  generateLocalBusinessSchema,
+  generateBreadcrumbSchema,
+  getPriceRange,
+  jsonLdScript,
+} from '@/lib/structured-data'
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://venue-agent.se'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -113,8 +121,40 @@ async function VenueDetailContent({ params }: PageProps) {
   const hasPricing = venue.price_per_hour || venue.price_half_day || venue.price_full_day || venue.price_evening
   const inDemoMode = isDemoMode() || !isSupabaseConfigured()
 
+  // Generate structured data
+  const localBusinessSchema = generateLocalBusinessSchema({
+    name: venue.name,
+    description: venue.description || undefined,
+    address: venue.address,
+    city: venue.city,
+    area: venue.area || undefined,
+    priceRange: getPriceRange({
+      price_per_hour: venue.price_per_hour,
+      price_half_day: venue.price_half_day,
+      price_full_day: venue.price_full_day,
+      price_evening: venue.price_evening,
+    }),
+    images: venue.photos.map((p) => p.url),
+    url: `${BASE_URL}/venues/${venue.slug || venue.id}`,
+  })
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Hem', url: BASE_URL },
+    { name: 'Lokaler', url: `${BASE_URL}/venues` },
+    { name: venue.name, url: `${BASE_URL}/venues/${venue.slug || venue.id}` },
+  ])
+
   return (
     <div className="min-h-screen bg-white">
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbSchema) }}
+      />
       {inDemoMode && <DemoModeBanner />}
       {/* Photo Gallery Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">

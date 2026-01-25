@@ -107,9 +107,33 @@ export default function CustomerBookingsPage() {
 
       {/* Loading state */}
       {isLoading && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar bokningar...</p>
+        <div className="space-y-4 animate-pulse">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+              <div className="flex flex-col sm:flex-row">
+                {/* Image skeleton */}
+                <div className="sm:w-48 h-32 sm:h-auto flex-shrink-0 bg-[#f3f4f6]" />
+                {/* Content skeleton */}
+                <div className="flex-1 p-4 sm:p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="h-6 bg-[#e5e7eb] rounded w-48 mb-2" />
+                      <div className="h-4 bg-[#e5e7eb] rounded w-32" />
+                    </div>
+                    <div className="h-6 bg-[#e5e7eb] rounded-full w-20" />
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {[1, 2, 3, 4].map((j) => (
+                      <div key={j}>
+                        <div className="h-3 bg-[#e5e7eb] rounded w-12 mb-1" />
+                        <div className="h-5 bg-[#e5e7eb] rounded w-20" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

@@ -128,9 +128,31 @@ export default function BookingsPage() {
 
       {/* Loading state */}
       {isLoading && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar bokningar...</p>
+        <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+          <div className="animate-pulse">
+            {/* Table header skeleton */}
+            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-3 flex gap-6">
+              <div className="h-4 bg-[#e5e7eb] rounded w-20" />
+              <div className="h-4 bg-[#e5e7eb] rounded w-24" />
+              <div className="h-4 bg-[#e5e7eb] rounded w-16" />
+              <div className="h-4 bg-[#e5e7eb] rounded w-16" />
+              <div className="h-4 bg-[#e5e7eb] rounded w-20" />
+            </div>
+            {/* Table rows skeleton */}
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="px-6 py-4 border-b border-[#e5e7eb] flex gap-6 items-center">
+                <div className="flex-1">
+                  <div className="h-5 bg-[#e5e7eb] rounded w-32 mb-1" />
+                  <div className="h-4 bg-[#e5e7eb] rounded w-24" />
+                </div>
+                <div className="h-5 bg-[#e5e7eb] rounded w-24" />
+                <div className="h-5 bg-[#e5e7eb] rounded w-16" />
+                <div className="h-5 bg-[#e5e7eb] rounded w-12" />
+                <div className="h-6 bg-[#e5e7eb] rounded-full w-20" />
+                <div className="h-5 bg-[#e5e7eb] rounded w-28" />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

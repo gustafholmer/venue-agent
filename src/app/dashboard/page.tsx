@@ -1,8 +1,38 @@
+import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
-export default async function DashboardPage() {
+function DashboardSkeleton() {
+  return (
+    <div className="max-w-6xl mx-auto animate-pulse">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <div className="h-8 bg-[#e5e7eb] rounded w-32 mb-2" />
+          <div className="h-5 bg-[#e5e7eb] rounded w-48" />
+        </div>
+      </div>
+
+      {/* Stats skeleton */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white border border-[#e5e7eb] rounded-xl p-4">
+            <div className="h-4 bg-[#e5e7eb] rounded w-20 mb-2" />
+            <div className="h-8 bg-[#e5e7eb] rounded w-24" />
+          </div>
+        ))}
+      </div>
+
+      {/* Content skeleton */}
+      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+        <div className="h-6 bg-[#e5e7eb] rounded w-48 mb-4" />
+        <div className="h-10 bg-[#e5e7eb] rounded w-40" />
+      </div>
+    </div>
+  )
+}
+
+async function DashboardContent() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -96,5 +126,13 @@ export default async function DashboardPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default async function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardSkeleton />}>
+      <DashboardContent />
+    </Suspense>
   )
 }

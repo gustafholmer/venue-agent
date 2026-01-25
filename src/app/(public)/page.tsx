@@ -6,6 +6,11 @@ import { HomeVenuesWithMap } from '@/components/maps/home-venues-with-map'
 import { isDemoMode } from '@/lib/demo-mode'
 import { isSupabaseConfigured, createClient } from '@/lib/supabase/server'
 import { MOCK_VENUES } from '@/lib/mock-data'
+import {
+  generateOrganizationSchema,
+  VENUE_AGENT_ORGANIZATION,
+  jsonLdScript,
+} from '@/lib/structured-data'
 import type { VenueCardData } from '@/components/venues/venue-card'
 
 async function getVenuesForHomepage(): Promise<VenueCardData[]> {
@@ -78,8 +83,15 @@ async function getVenuesForHomepage(): Promise<VenueCardData[]> {
 
 export default async function LandingPage() {
   const venues = await getVenuesForHomepage()
+  const organizationSchema = generateOrganizationSchema(VENUE_AGENT_ORGANIZATION)
+
   return (
     <div>
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationSchema) }}
+      />
       {/* Hero */}
       <section className="relative px-4 sm:px-6 pt-12 pb-16 sm:pt-20 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#fdf8f6] via-white to-[#fff7ed] -z-10" />

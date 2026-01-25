@@ -4,6 +4,7 @@ import crypto from 'crypto'
 import { createClient } from '@/lib/supabase/server'
 import { calculatePricing } from '@/lib/pricing'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
+import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 
 export interface CreateBookingInput {
   venueId: string
@@ -36,6 +37,12 @@ export async function createBookingRequest(
   input: CreateBookingInput
 ): Promise<CreateBookingResult> {
   try {
+    // Check rate limit
+    const rateLimitResult = await rateLimit('create-booking', RATE_LIMITS.createBooking)
+    if (!rateLimitResult.success) {
+      return { success: false, error: RATE_LIMIT_ERROR }
+    }
+
     const supabase = await createClient()
 
     // Validate required fields

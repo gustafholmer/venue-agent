@@ -85,9 +85,20 @@ export default function SavedVenuesPage() {
 
       {/* Loading state */}
       {isLoading && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar sparade lokaler...</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+              {/* Image skeleton */}
+              <div className="aspect-[4/3] bg-[#f3f4f6]" />
+              {/* Content skeleton */}
+              <div className="p-4">
+                <div className="h-6 bg-[#e5e7eb] rounded w-3/4 mb-2" />
+                <div className="h-4 bg-[#e5e7eb] rounded w-1/2 mb-3" />
+                <div className="h-4 bg-[#e5e7eb] rounded w-2/3 mb-2" />
+                <div className="h-5 bg-[#e5e7eb] rounded w-1/3" />
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import type { Suggestion, SuggestionType } from '@/types/agent'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
@@ -155,6 +156,20 @@ function parseSuggestions(text: string): { content: string; suggestions: Suggest
 
 export async function POST(request: NextRequest) {
   try {
+    // Check rate limit
+    const rateLimitResult = await rateLimit('venue-assistant', RATE_LIMITS.venueAssistant)
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: RATE_LIMIT_ERROR },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
+          },
+        }
+      )
+    }
+
     const body: VenueAssistantRequest = await request.json()
     const { message, venueId, isBookingPage } = body
 
