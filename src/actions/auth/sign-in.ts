@@ -4,17 +4,18 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 
-export async function signIn(formData: FormData): Promise<void> {
+export type SignInState = {
+  error: string | null
+}
+
+export async function signIn(
+  prevState: SignInState,
+  formData: FormData
+): Promise<SignInState> {
   // Check rate limit
   const rateLimitResult = await rateLimit('sign-in', RATE_LIMITS.signIn)
   if (!rateLimitResult.success) {
-    const returnUrl = formData.get('returnUrl') as string | null
-    const validReturnUrl = returnUrl && returnUrl.startsWith('/') ? returnUrl : null
-    const errorParams = new URLSearchParams({ error: RATE_LIMIT_ERROR })
-    if (validReturnUrl) {
-      errorParams.set('returnUrl', validReturnUrl)
-    }
-    redirect(`/auth/sign-in?${errorParams.toString()}`)
+    return { error: RATE_LIMIT_ERROR }
   }
 
   const supabase = await createClient()
@@ -32,12 +33,7 @@ export async function signIn(formData: FormData): Promise<void> {
   })
 
   if (error) {
-    // TODO: Handle error display properly with useFormState
-    const errorParams = new URLSearchParams({ error: error.message })
-    if (validReturnUrl) {
-      errorParams.set('returnUrl', validReturnUrl)
-    }
-    redirect(`/auth/sign-in?${errorParams.toString()}`)
+    return { error: error.message }
   }
 
   redirect(validReturnUrl || '/')
