@@ -235,7 +235,7 @@ export default function CalendarPage() {
   }
 
   const getDayClasses = (day: DayData) => {
-    const baseClasses = 'relative h-24 border border-[#e5e7eb] p-1 transition-colors'
+    const baseClasses = 'relative h-14 sm:h-24 border border-[#e5e7eb] p-1 transition-colors'
 
     if (!day.isCurrentMonth) {
       return `${baseClasses} bg-[#f9fafb] text-[#9ca3af]`
@@ -261,7 +261,7 @@ export default function CalendarPage() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-[#111827]">Kalender</h1>
           <p className="text-[#6b7280] mt-1">
@@ -391,10 +391,18 @@ export default function CalendarPage() {
                 >
                   {day.date.getDate()}
                 </span>
+                {/* Mobile dot indicator */}
+                {day.isCurrentMonth && (day.hasAcceptedBooking || day.hasPendingBooking || day.isBlocked) && (
+                  <span className={`sm:hidden inline-block w-1.5 h-1.5 rounded-full ml-1 ${
+                    day.hasAcceptedBooking ? 'bg-blue-500' :
+                    day.hasPendingBooking ? 'bg-yellow-500' :
+                    'bg-red-500'
+                  }`} />
+                )}
 
                 {/* Status indicator */}
                 {day.isCurrentMonth && (
-                  <div className="mt-1">
+                  <div className="mt-1 hidden sm:block">
                     {day.hasAcceptedBooking && (
                       <span className="text-xs text-blue-700 truncate block">
                         {day.bookingInfo?.customerName}
