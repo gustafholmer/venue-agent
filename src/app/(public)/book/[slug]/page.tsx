@@ -15,12 +15,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!result.success || !result.venue) {
     return {
-      title: 'Lokal hittades inte - Venue Agent',
+      title: 'Lokal hittades inte - Tryffle',
     }
   }
 
   return {
-    title: `Boka ${result.venue.name} - Venue Agent`,
+    title: `Boka ${result.venue.name} - Tryffle`,
     description: `Skicka en bokningsförfrågan för ${result.venue.name} i ${result.venue.area || result.venue.city}.`,
   }
 }

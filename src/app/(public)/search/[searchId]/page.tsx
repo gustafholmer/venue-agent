@@ -217,7 +217,7 @@ export default async function SearchResultsPage(props: PageProps) {
 export async function generateMetadata({ params }: PageProps) {
   const { searchId } = await params
   return {
-    title: `Sökresultat - Venue Agent`,
+    title: `Sökresultat - Tryffle`,
     description: `Se sökresultat för lokaler. Sök-ID: ${searchId}`,
   }
 }

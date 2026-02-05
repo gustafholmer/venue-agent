@@ -11,7 +11,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Venue Agent - Hitta den perfekta lokalen',
+  title: 'Tryffle - Hitta den perfekta lokalen',
   description: 'Beskriv ditt event sa hittar vi matchande lokaler med tillgangliga datum.',
 }
 

@@ -34,12 +34,12 @@ const STATUS_LABELS: Record<string, { label: string; color: string; description:
   completed: {
     label: 'Genomförd',
     color: 'bg-blue-100 text-blue-800 border-blue-200',
-    description: 'Ditt event har genomförts. Tack för att du använde Venue Agent!',
+    description: 'Ditt event har genomförts. Tack för att du använde Tryffle!',
   },
   paid_out: {
     label: 'Genomförd',
     color: 'bg-blue-100 text-blue-800 border-blue-200',
-    description: 'Ditt event har genomförts. Tack för att du använde Venue Agent!',
+    description: 'Ditt event har genomförts. Tack för att du använde Tryffle!',
   },
 }
 

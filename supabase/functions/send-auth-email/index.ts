@@ -96,11 +96,11 @@ Deno.serve(async (req) => {
 
     if (email_data.email_action_type === "signup") {
       const confirmationUrl = `${siteUrl}/auth/confirm?token_hash=${email_data.token_hash}&type=${email_data.email_action_type}`;
-      subject = "Bekräfta din e-postadress - Venue Agent";
+      subject = "Bekräfta din e-postadress - Tryffle";
       html = confirmationEmail(confirmationUrl);
     } else {
       const resetUrl = `${siteUrl}/auth/confirm?token_hash=${email_data.token_hash}&type=${email_data.email_action_type}&next=/auth/reset-password`;
-      subject = "Återställ ditt lösenord - Venue Agent";
+      subject = "Återställ ditt lösenord - Tryffle";
       html = passwordResetEmail(resetUrl);
     }
 

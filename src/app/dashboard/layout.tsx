@@ -35,7 +35,7 @@ export default async function DashboardLayout({
             href="/dashboard"
             className="font-[family-name:var(--font-playfair)] text-xl text-[#111827] hover:text-[#1e3a8a] transition-colors"
           >
-            Venue Agent
+            Tryffle
           </Link>
 
           {/* Right side actions */}

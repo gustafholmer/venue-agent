@@ -1,4 +1,4 @@
-// Base email template with Venue Agent branding
+// Base email template with Tryffle branding
 const baseTemplate = (content: string) => `
 <!DOCTYPE html>
 <html>
@@ -135,7 +135,7 @@ export const bookingAcceptedEmail = (venueName: string, eventDate: string, owner
     </div>
     <p>Logga in för att se detaljer och kommunicera med lokalägaren.</p>
     <div class="footer">
-      <p>Tack för att du använder Venue Agent!</p>
+      <p>Tack för att du använder Tryffle!</p>
     </div>
   </div>
 `);
@@ -178,7 +178,7 @@ export const confirmationEmail = (confirmationUrl: string) =>
     <h1>Bekräfta din e-postadress</h1>
   </div>
   <div class="content">
-    <p>Välkommen till Venue Agent!</p>
+    <p>Välkommen till Tryffle!</p>
     <p>Klicka på knappen nedan för att bekräfta din e-postadress och aktivera ditt konto:</p>
     <p style="text-align: center;">
       <a href="${escapeHtml(confirmationUrl)}" class="button">Bekräfta e-postadress</a>

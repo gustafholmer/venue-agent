@@ -100,10 +100,10 @@ export function jsonLdScript(schema: object): string {
 }
 
 /**
- * Default organization data for Venue Agent
+ * Default organization data for Tryffle
  */
 export const VENUE_AGENT_ORGANIZATION: OrganizationData = {
-  name: 'Venue Agent',
+  name: 'Tryffle',
   description: 'AI-driven marknadsplats för eventlokaler i Stockholm. Beskriv ditt event och hitta matchande lokaler med tillgängliga datum.',
   url: BASE_URL,
   logo: `${BASE_URL}/logo.png`,

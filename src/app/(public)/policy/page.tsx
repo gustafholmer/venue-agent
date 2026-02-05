@@ -20,7 +20,7 @@ export default function PolicyPage() {
           <div className="space-y-4 text-[#78716c] leading-relaxed">
             <p>
               <strong className="text-[#1a1a1a]">Vilka uppgifter samlar vi in?</strong><br />
-              När du använder Venue Agent kan vi samla in: e-postadress och namn (vid registrering),
+              När du använder Tryffle kan vi samla in: e-postadress och namn (vid registrering),
               sökhistorik och chattmeddelanden (för att förbättra våra rekommendationer),
               samt teknisk information som IP-adress och webbläsartyp.
             </p>
@@ -56,7 +56,7 @@ export default function PolicyPage() {
           <div className="space-y-4 text-[#78716c] leading-relaxed">
             <p>
               <strong className="text-[#1a1a1a]">Tjänsten</strong><br />
-              Venue Agent är en plattform som kopplar samman eventarrangörer med lokalägare.
+              Tryffle är en plattform som kopplar samman eventarrangörer med lokalägare.
               Vi tillhandahåller AI-driven sökning och förmedling, men är inte part i eventuella
               avtal mellan dig och lokalägaren.
             </p>
@@ -79,7 +79,7 @@ export default function PolicyPage() {
             </p>
             <p>
               <strong className="text-[#1a1a1a]">Ansvarsbegränsning</strong><br />
-              Venue Agent ansvarar inte för lokalernas kvalitet, tillgänglighet eller
+              Tryffle ansvarar inte för lokalernas kvalitet, tillgänglighet eller
               lokalägarens agerande. Vi rekommenderar att alltid bekräfta detaljer direkt
               med lokalägaren innan bokning.
             </p>
@@ -118,6 +118,6 @@ export default function PolicyPage() {
 }
 
 export const metadata = {
-  title: 'Villkor & Integritet - Venue Agent',
-  description: 'Läs om Venue Agents integritetspolicy och användarvillkor.',
+  title: 'Villkor & Integritet - Tryffle',
+  description: 'Läs om Tryffles integritetspolicy och användarvillkor.',
 }

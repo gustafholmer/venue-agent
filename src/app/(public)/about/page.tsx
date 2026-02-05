@@ -1,4 +1,4 @@
-import { AgentMascot } from '@/components/illustrations/agent-mascot'
+import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 
 export default function AboutPage() {
   return (
@@ -33,7 +33,7 @@ export default function AboutPage() {
                 </p>
                 <p className="text-[#78716c] leading-relaxed">
                   Trött på att scrolla genom hundratals eventlokaler utan att hitta rätt?
-                  Det var jag också. Därför byggde jag Venue Agent &ndash; en AI-assistent som
+                  Det var jag också. Därför byggde jag Tryffle &ndash; en AI-assistent som
                   faktiskt förstår vad du letar efter och hittar lokalen åt dig.
                 </p>
               </div>
@@ -45,10 +45,10 @@ export default function AboutPage() {
         <section className="mb-16">
           <div className="bg-[#fef3c7] rounded-2xl p-6 sm:p-8 text-center">
             <div className="w-32 h-32 mx-auto mb-6">
-              <AgentMascot className="w-full h-full" />
+              <TryffleLogo className="w-full h-full" />
             </div>
             <h2 className="text-xl font-medium text-[#1a1a1a] mb-2">
-              Venue Agent
+              Tryffle
             </h2>
             <p className="text-sm text-[#c45a3b] mb-4">
               Chief Location Officer
@@ -83,6 +83,6 @@ export default function AboutPage() {
 }
 
 export const metadata = {
-  title: 'Om oss - Venue Agent',
-  description: 'Lär känna teamet bakom Venue Agent och vår mission att förenkla lokalsökning.',
+  title: 'Om oss - Tryffle',
+  description: 'Lär känna teamet bakom Tryffle och vår mission att förenkla lokalsökning.',
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { SearchInput } from '@/components/search/search-input'
-import { AgentMascot } from '@/components/illustrations/agent-mascot'
+import { VenueBuildings } from '@/components/illustrations/venue-buildings'
 import { HomeVenuesWithMap } from '@/components/maps/home-venues-with-map'
 import { isDemoMode } from '@/lib/demo-mode'
 import { isSupabaseConfigured, createClient } from '@/lib/supabase/server'
@@ -113,9 +113,7 @@ export default async function LandingPage() {
               </div>
             </div>
             <div className="hidden lg:flex justify-center items-center">
-              <div className="w-80 h-80 bg-[#fef3c7] rounded-full flex items-center justify-center">
-                <AgentMascot className="w-60" />
-              </div>
+              <VenueBuildings className="w-80 h-72" />
             </div>
           </div>
         </div>

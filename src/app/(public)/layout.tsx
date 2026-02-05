@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { NotificationBell } from '@/components/notifications/notification-bell'
+import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 
 export default async function PublicLayout({
   children,
@@ -20,14 +21,15 @@ export default async function PublicLayout({
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="border-b border-[#e7e5e4]">
+      <header className="bg-[#e8cec8] border-b border-[#e7e5e4]">
         <div className="px-4 sm:px-6">
           <div className="flex justify-between h-14 items-center">
             <Link
               href="/"
-              className="text-lg tracking-tight text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
+              className="flex items-center gap-2 text-lg tracking-tight text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
             >
-              venue agent
+              <TryffleLogo variant="small" className="w-8 h-8" />
+              tryffle
             </Link>
 
             <nav className="flex items-center gap-6">
@@ -90,9 +92,10 @@ export default async function PublicLayout({
             <div>
               <Link
                 href="/"
-                className="text-sm text-[#1a1a1a]"
+                className="flex items-center gap-2 text-sm text-[#1a1a1a]"
               >
-                venue agent
+                <TryffleLogo variant="small" className="w-5 h-5" />
+                tryffle
               </Link>
               <p className="text-sm text-[#78716c] mt-1">
                 Din personliga lokalagent
@@ -120,7 +123,7 @@ export default async function PublicLayout({
 
           <div className="mt-8 pt-6 border-t border-[#e7e5e4]">
             <p className="text-xs text-[#78716c]">
-              &copy; {new Date().getFullYear()} Venue Agent
+              &copy; {new Date().getFullYear()} Tryffle
             </p>
           </div>
         </div>

@@ -17,7 +17,7 @@ export default function FAQPage() {
       a: 'När du hittat en lokal du gillar skickar du en förfrågan direkt till lokalägaren. De svarar vanligtvis inom 24 timmar.',
     },
     {
-      q: 'Vad kostar det att boka via Venue Agent?',
+      q: 'Vad kostar det att boka via Tryffle?',
       a: 'Det är gratis att söka och skicka förfrågningar. Vid genomförd bokning kan en mindre serviceavgift tillkomma, som alltid visas tydligt innan du bekräftar.',
     },
     {
@@ -79,6 +79,6 @@ export default function FAQPage() {
 }
 
 export const metadata = {
-  title: 'FAQ - Venue Agent',
-  description: 'Vanliga frågor om Venue Agent och hur tjänsten fungerar.',
+  title: 'FAQ - Tryffle',
+  description: 'Vanliga frågor om Tryffle och hur tjänsten fungerar.',
 }

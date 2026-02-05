@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!result.success || !result.venue) {
     return {
-      title: 'Lokal hittades inte - Venue Agent',
+      title: 'Lokal hittades inte - Tryffle',
     }
   }
 
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       } gäster.`
 
   return {
-    title: `${venue.name} - Venue Agent`,
+    title: `${venue.name} - Tryffle`,
     description,
     openGraph: {
       title: venue.name,

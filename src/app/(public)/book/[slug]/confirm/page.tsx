@@ -13,7 +13,7 @@ interface PageProps {
 }
 
 export const metadata: Metadata = {
-  title: 'Bokningsförfrågan skickad - Venue Agent',
+  title: 'Bokningsförfrågan skickad - Tryffle',
   description: 'Din bokningsförfrågan har skickats till lokalägaren.',
 }
 

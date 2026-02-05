@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback, type FormEvent, type KeyboardEvent } from 'react'
-import { AgentMascot } from '@/components/illustrations/agent-mascot'
+import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SuggestionChip } from './suggestion-chip'
 import type { AgentMessage, Suggestion } from '@/types/agent'
 
@@ -65,8 +65,8 @@ function MessageBubble({
 
   return (
     <div className="flex items-start gap-2">
-      <div className="flex-shrink-0 w-8 h-8 bg-[#fef3c7] rounded-full flex items-center justify-center overflow-hidden">
-        <AgentMascot variant="small" className="w-5 h-5" />
+      <div className="flex-shrink-0 w-8 h-8 bg-[#e8cec8] rounded-full flex items-center justify-center overflow-hidden">
+        <TryffleLogo variant="small" className="w-5 h-5" />
       </div>
       <div className="max-w-[85%]">
         <div className="bg-[#f3f4f6] text-[#111827] rounded-2xl rounded-tl-md px-3 py-2">
@@ -91,8 +91,8 @@ function MessageBubble({
 function LoadingIndicator() {
   return (
     <div className="flex items-start gap-2">
-      <div className="flex-shrink-0 w-8 h-8 bg-[#fef3c7] rounded-full flex items-center justify-center overflow-hidden">
-        <AgentMascot variant="small" className="w-5 h-5" />
+      <div className="flex-shrink-0 w-8 h-8 bg-[#e8cec8] rounded-full flex items-center justify-center overflow-hidden">
+        <TryffleLogo variant="small" className="w-5 h-5" />
       </div>
       <div className="bg-[#f3f4f6] text-[#6b7280] rounded-2xl rounded-tl-md px-3 py-2">
         <div className="flex items-center gap-2">
@@ -255,11 +255,11 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
           <div className="px-4 py-3 border-b border-white/20 bg-white/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#fef3c7] rounded-full flex items-center justify-center">
-                  <AgentMascot variant="small" className="w-6 h-6" />
+                <div className="w-10 h-10 bg-[#e8cec8] rounded-full flex items-center justify-center">
+                  <TryffleLogo variant="small" className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#111827] text-sm">Venue Agent</h3>
+                  <h3 className="font-semibold text-[#111827] text-sm">Tryffle</h3>
                   <p className="text-xs text-[#6b7280]">Fråga om {venue.name}</p>
                 </div>
               </div>
@@ -280,8 +280,8 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
             {/* Welcome message */}
             {messages.length === 0 && !isLoading && (
               <div className="flex items-start gap-2">
-                <div className="flex-shrink-0 w-8 h-8 bg-[#fef3c7] rounded-full flex items-center justify-center overflow-hidden">
-                  <AgentMascot variant="small" className="w-5 h-5" />
+                <div className="flex-shrink-0 w-8 h-8 bg-[#e8cec8] rounded-full flex items-center justify-center overflow-hidden">
+                  <TryffleLogo variant="small" className="w-5 h-5" />
                 </div>
                 <div className="bg-[#f3f4f6] text-[#111827] rounded-2xl rounded-tl-md px-3 py-2">
                   <p className="text-sm">{greeting}</p>

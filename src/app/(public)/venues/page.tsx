@@ -245,6 +245,6 @@ export default async function VenuesPage(props: PageProps) {
 }
 
 export const metadata = {
-  title: 'Lokaler - Venue Agent',
+  title: 'Lokaler - Tryffle',
   description: 'Utforska lokaler för konferenser, fester, bröllop och andra event.',
 }
