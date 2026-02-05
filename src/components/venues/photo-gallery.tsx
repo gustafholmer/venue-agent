@@ -97,7 +97,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
                   e.stopPropagation()
                   handlePrevious()
                 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-[#111827] hover:bg-white transition-colors opacity-0 group-hover:opacity-100"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#111827] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                 aria-label="Föregående bild"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,7 +109,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
                   e.stopPropagation()
                   handleNext()
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-[#111827] hover:bg-white transition-colors opacity-0 group-hover:opacity-100"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#111827] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                 aria-label="Nästa bild"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -173,7 +173,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
           {/* Close button */}
           <button
             onClick={() => setIsLightboxOpen(false)}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+            className="absolute top-4 right-4 w-11 h-11 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
             aria-label="Stäng"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

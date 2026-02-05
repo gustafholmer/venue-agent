@@ -81,7 +81,7 @@ export function MessageThread({
   }
 
   return (
-    <div className="h-[500px]">
+    <div className="h-[400px] sm:h-[500px]">
       <RealtimeChat
         bookingId={bookingId}
         currentUserId={currentUserId}

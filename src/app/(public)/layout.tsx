@@ -39,6 +39,15 @@ export default async function PublicLayout({
             <nav className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/venues"
+                className="sm:hidden inline-flex items-center justify-center w-9 h-9 rounded-full text-[#5a4a42] hover:bg-[#c45a3b]/10 hover:text-[#c45a3b] transition-all"
+                aria-label="Sök eventlokaler"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </Link>
+              <Link
+                href="/venues"
                 className="hidden sm:inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full text-[#5a4a42] hover:bg-[#c45a3b]/10 hover:text-[#c45a3b] transition-all"
               >
                 <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

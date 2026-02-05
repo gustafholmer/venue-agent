@@ -113,7 +113,7 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
 
           {/* Booking Details */}
           <div className="p-6 space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-[#6b7280]">Datum</p>
                 <p className="font-medium text-[#111827] capitalize">
