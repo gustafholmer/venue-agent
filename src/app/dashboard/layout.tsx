@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { NotificationBell } from '@/components/notifications/notification-bell'
+import { MobileMenu } from '@/components/dashboard/mobile-menu'
+import { SidebarNav } from '@/components/dashboard/sidebar-nav'
 
 export default async function DashboardLayout({
   children,
@@ -30,15 +32,16 @@ export default async function DashboardLayout({
       {/* Top header bar */}
       <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#e5e7eb] z-40">
         <div className="h-full px-4 lg:px-6 flex items-center justify-between">
-          {/* Logo / Brand */}
-          <Link
-            href="/dashboard"
-            className="font-[family-name:var(--font-playfair)] text-xl text-[#111827] hover:text-[#1e3a8a] transition-colors"
-          >
-            Tryffle
-          </Link>
+          <div className="flex items-center gap-2">
+            <MobileMenu />
+            <Link
+              href="/dashboard"
+              className="font-[family-name:var(--font-playfair)] text-xl text-[#111827] hover:text-[#1e3a8a] transition-colors"
+            >
+              Tryffle
+            </Link>
+          </div>
 
-          {/* Right side actions */}
           <div className="flex items-center gap-3">
             <NotificationBell />
             <span className="text-sm text-[#6b7280] hidden sm:block">
@@ -54,58 +57,9 @@ export default async function DashboardLayout({
         </div>
       </header>
 
-      {/* Sidebar */}
+      {/* Desktop sidebar */}
       <aside className="fixed left-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-white border-r border-[#e5e7eb] p-4 hidden lg:block">
-        <nav className="space-y-1">
-          <Link
-            href="/dashboard"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Översikt
-          </Link>
-          <Link
-            href="/dashboard/venue"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Min lokal
-          </Link>
-          <Link
-            href="/dashboard/venue/photos"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6] pl-6 text-sm"
-          >
-            Bilder
-          </Link>
-          <Link
-            href="/dashboard/bookings"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Bokningar
-          </Link>
-          <Link
-            href="/dashboard/calendar"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Kalender
-          </Link>
-          <Link
-            href="/dashboard/reviews"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Recensioner
-          </Link>
-          <Link
-            href="/dashboard/payouts"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Utbetalningar
-          </Link>
-          <Link
-            href="/dashboard/settings"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
-          >
-            Inställningar
-          </Link>
-        </nav>
+        <SidebarNav />
       </aside>
 
       {/* Main content */}
