@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -88,32 +88,38 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
     }
   }, [searchParams, slug])
 
-  // Fetch availability for current and next 2 months on load
-  useEffect(() => {
-    async function fetchAvailability() {
-      const now = new Date()
-      const allBlocked: string[] = []
-      const allBooked: string[] = []
+  // Track which months have been fetched
+  const [fetchedMonths, setFetchedMonths] = useState<Set<string>>(new Set())
+  const [isLoadingMonth, setIsLoadingMonth] = useState(false)
 
-      // Fetch for current month and next 2 months
-      for (let i = 0; i < 3; i++) {
-        const date = new Date(now.getFullYear(), now.getMonth() + i, 1)
-        const result = await getVenueAvailability(
-          venue.id,
-          date.getFullYear(),
-          date.getMonth() + 1
-        )
-        if (result.success && result.data) {
-          allBlocked.push(...result.data.blockedDates)
-          allBooked.push(...result.data.bookedDates)
-        }
+  // Fetch availability for a single month
+  const fetchMonthAvailability = useCallback(async (year: number, month: number) => {
+    const key = `${year}-${month}`
+    if (fetchedMonths.has(key)) return
+
+    setIsLoadingMonth(true)
+    try {
+      const result = await getVenueAvailability(venue.id, year, month)
+      if (result.success && result.data) {
+        setBlockedDates((prev) => [...prev, ...result.data!.blockedDates])
+        setBookedDates((prev) => [...prev, ...result.data!.bookedDates])
       }
-
-      setBlockedDates(allBlocked)
-      setBookedDates(allBooked)
+      setFetchedMonths((prev) => new Set(prev).add(key))
+    } finally {
+      setIsLoadingMonth(false)
     }
-    fetchAvailability()
-  }, [venue.id])
+  }, [venue.id, fetchedMonths])
+
+  // Fetch current month on mount
+  useEffect(() => {
+    const now = new Date()
+    fetchMonthAvailability(now.getFullYear(), now.getMonth() + 1)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle calendar month navigation
+  const handleMonthChange = useCallback((year: number, month: number) => {
+    fetchMonthAvailability(year, month)
+  }, [fetchMonthAvailability])
 
   // Calculate pricing
   const basePrice =
@@ -237,6 +243,8 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   onChange={setEventDate}
                   blockedDates={blockedDates}
                   bookedDates={bookedDates}
+                  onMonthChange={handleMonthChange}
+                  isLoadingMonth={isLoadingMonth}
                 />
               </div>
 

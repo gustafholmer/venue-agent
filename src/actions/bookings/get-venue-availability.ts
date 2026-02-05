@@ -22,38 +22,38 @@ export async function getVenueAvailability(
     const startDateStr = startDate.toISOString().split('T')[0]
     const endDateStr = endDate.toISOString().split('T')[0]
 
-    // Get blocked dates for this month
-    const { data: blockedDates, error: blockedError } = await supabase
-      .from('venue_blocked_dates')
-      .select('blocked_date')
-      .eq('venue_id', venueId)
-      .gte('blocked_date', startDateStr)
-      .lte('blocked_date', endDateStr)
+    // Run both queries in parallel
+    const [blockedResult, bookingsResult] = await Promise.all([
+      supabase
+        .from('venue_blocked_dates')
+        .select('blocked_date')
+        .eq('venue_id', venueId)
+        .gte('blocked_date', startDateStr)
+        .lte('blocked_date', endDateStr),
+      supabase
+        .from('booking_requests')
+        .select('event_date')
+        .eq('venue_id', venueId)
+        .in('status', ['accepted', 'pending'])
+        .gte('event_date', startDateStr)
+        .lte('event_date', endDateStr),
+    ])
 
-    if (blockedError) {
-      console.error('Error fetching blocked dates:', blockedError)
+    if (blockedResult.error) {
+      console.error('Error fetching blocked dates:', blockedResult.error)
       return { success: false, error: 'Kunde inte hämta tillgänglighet' }
     }
 
-    // Get bookings (accepted and pending) for this month
-    const { data: bookings, error: bookingsError } = await supabase
-      .from('booking_requests')
-      .select('event_date')
-      .eq('venue_id', venueId)
-      .in('status', ['accepted', 'pending'])
-      .gte('event_date', startDateStr)
-      .lte('event_date', endDateStr)
-
-    if (bookingsError) {
-      console.error('Error fetching bookings:', bookingsError)
+    if (bookingsResult.error) {
+      console.error('Error fetching bookings:', bookingsResult.error)
       return { success: false, error: 'Kunde inte hämta bokningar' }
     }
 
     return {
       success: true,
       data: {
-        blockedDates: blockedDates?.map((d) => d.blocked_date) || [],
-        bookedDates: bookings?.map((b) => b.event_date) || [],
+        blockedDates: blockedResult.data?.map((d) => d.blocked_date) || [],
+        bookedDates: bookingsResult.data?.map((b) => b.event_date) || [],
       },
     }
   } catch (error) {

@@ -9,6 +9,8 @@ interface DatePickerProps {
   bookedDates?: string[]
   minDate?: string
   className?: string
+  onMonthChange?: (year: number, month: number) => void
+  isLoadingMonth?: boolean
 }
 
 const WEEKDAYS = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön']
@@ -24,6 +26,8 @@ export function DatePicker({
   bookedDates = [],
   minDate,
   className = '',
+  onMonthChange,
+  isLoadingMonth,
 }: DatePickerProps) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -88,6 +92,9 @@ export function DatePicker({
     } else {
       setCurrentMonth(currentMonth - 1)
     }
+    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1
+    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear
+    onMonthChange?.(newYear, newMonth + 1)
   }
 
   const goToNextMonth = () => {
@@ -97,6 +104,9 @@ export function DatePicker({
     } else {
       setCurrentMonth(currentMonth + 1)
     }
+    const newMonth = currentMonth === 11 ? 0 : currentMonth + 1
+    const newYear = currentMonth === 11 ? currentYear + 1 : currentYear
+    onMonthChange?.(newYear, newMonth + 1)
   }
 
   // Check if we can go to previous month (not before current month)
@@ -122,7 +132,7 @@ export function DatePicker({
   }
 
   return (
-    <div className={`bg-white border border-[#e5e7eb] rounded-xl p-4 ${className}`}>
+    <div className={`relative bg-white border border-[#e5e7eb] rounded-xl p-4 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <button
@@ -164,6 +174,15 @@ export function DatePicker({
           </div>
         ))}
       </div>
+
+      {isLoadingMonth && (
+        <div className="absolute inset-0 bg-white/60 flex items-center justify-center rounded-xl z-10">
+          <svg className="animate-spin h-6 w-6 text-[#6b7280]" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+        </div>
+      )}
 
       {/* Days grid */}
       <div className="grid grid-cols-7 gap-1">
