@@ -185,15 +185,17 @@ export function DatePicker({
               disabled={isDisabled}
               onClick={() => onChange(dateStr)}
               className={`
-                h-10 rounded-lg text-sm font-medium transition-colors
+                relative h-10 rounded-lg text-sm font-medium transition-colors
                 ${isSelected
                   ? 'bg-[#1e3a8a] text-white'
-                  : isDisabled
-                    ? 'text-[#d1d5db] cursor-not-allowed'
-                    : 'text-[#374151] hover:bg-[#f3f4f6]'
+                  : isBlocked
+                    ? 'bg-red-50 text-red-300 cursor-not-allowed line-through'
+                    : isBooked
+                      ? 'bg-amber-50 text-amber-400 cursor-not-allowed'
+                      : isDisabled
+                        ? 'text-[#d1d5db] cursor-not-allowed'
+                        : 'text-[#374151] hover:bg-[#f3f4f6]'
                 }
-                ${isBlocked && !isSelected ? 'line-through' : ''}
-                ${isBooked && !isSelected ? 'bg-[#fef2f2] text-[#dc2626]' : ''}
               `}
               title={
                 isBlocked
@@ -204,6 +206,12 @@ export function DatePicker({
               }
             >
               {day}
+              {isBooked && !isSelected && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400" />
+              )}
+              {isBlocked && !isSelected && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red-400" />
+              )}
             </button>
           )
         })}
@@ -216,8 +224,16 @@ export function DatePicker({
           <span>Valt datum</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-[#fef2f2] border border-[#fecaca] rounded" />
-          <span>Ej tillgänglig</span>
+          <div className="w-4 h-4 bg-red-50 border border-red-200 rounded relative">
+            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-red-400" />
+          </div>
+          <span>Blockerat</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-amber-50 border border-amber-200 rounded relative">
+            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-amber-400" />
+          </div>
+          <span>Bokad</span>
         </div>
       </div>
     </div>
