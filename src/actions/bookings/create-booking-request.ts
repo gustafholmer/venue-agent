@@ -119,33 +119,7 @@ export async function createBookingRequest(
       }
     }
 
-    // Check if date is blocked
-    const { data: blockedDate } = await supabase
-      .from('venue_blocked_dates')
-      .select('id')
-      .eq('venue_id', input.venueId)
-      .eq('blocked_date', input.eventDate)
-      .single()
-
-    if (blockedDate) {
-      return { success: false, error: 'Valt datum är inte tillgängligt' }
-    }
-
-    // Check if date already has an accepted or pending booking
-    const { data: existingBooking } = await supabase
-      .from('booking_requests')
-      .select('id, status')
-      .eq('venue_id', input.venueId)
-      .eq('event_date', input.eventDate)
-      .in('status', ['accepted', 'pending'])
-      .single()
-
-    if (existingBooking) {
-      return { success: false, error: 'Valt datum är redan bokat' }
-    }
-
     // Calculate price server-side (never trust frontend)
-    // Use price_full_day as default, fall back to others
     const basePrice =
       venue.price_full_day ||
       venue.price_half_day ||
@@ -168,34 +142,41 @@ export async function createBookingRequest(
     // Generate verification token for secure public access
     const verificationToken = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
 
-    // Create the booking request
-    const { data: booking, error: bookingError } = await supabase
-      .from('booking_requests')
-      .insert({
-        venue_id: input.venueId,
-        customer_id: user.id,
-        event_type: input.eventType,
-        event_description: input.eventDescription || null,
-        guest_count: input.guestCount,
-        event_date: input.eventDate,
-        start_time: input.startTime,
-        end_time: input.endTime,
-        customer_name: input.customerName.trim(),
-        customer_email: input.customerEmail.trim().toLowerCase(),
-        customer_phone: input.customerPhone?.trim() || null,
-        company_name: input.companyName?.trim() || null,
-        status: 'pending',
-        base_price: pricing.basePrice,
-        platform_fee: pricing.platformFee,
-        total_price: pricing.totalPrice,
-        venue_payout: pricing.venuePayout,
-        verification_token: verificationToken,
+    // Atomic booking creation with race condition protection
+    const { data: rpcResult, error: rpcError } = await supabase
+      .rpc('create_booking_if_available', {
+        p_venue_id: input.venueId,
+        p_event_date: input.eventDate,
+        p_customer_id: user.id,
+        p_event_type: input.eventType,
+        p_event_description: input.eventDescription || null,
+        p_guest_count: input.guestCount,
+        p_start_time: input.startTime,
+        p_end_time: input.endTime,
+        p_customer_name: input.customerName.trim(),
+        p_customer_email: input.customerEmail.trim().toLowerCase(),
+        p_customer_phone: input.customerPhone?.trim() || null,
+        p_company_name: input.companyName?.trim() || null,
+        p_base_price: pricing.basePrice,
+        p_platform_fee: pricing.platformFee,
+        p_total_price: pricing.totalPrice,
+        p_venue_payout: pricing.venuePayout,
+        p_verification_token: verificationToken,
       })
-      .select('id')
-      .single()
 
-    if (bookingError || !booking) {
-      console.error('Error creating booking:', bookingError)
+    if (rpcError) {
+      console.error('Booking RPC error:', rpcError)
+      return { success: false, error: 'Kunde inte skapa bokningsförfrågan' }
+    }
+
+    const row = rpcResult?.[0]
+    if (!row?.booking_id) {
+      if (row?.error_code === 'date_blocked') {
+        return { success: false, error: 'Valt datum är inte tillgängligt' }
+      }
+      if (row?.error_code === 'date_booked') {
+        return { success: false, error: 'Valt datum är redan bokat' }
+      }
       return { success: false, error: 'Kunde inte skapa bokningsförfrågan' }
     }
 
@@ -205,7 +186,7 @@ export async function createBookingRequest(
       category: 'booking_request',
       headline: 'Ny bokningsförfrågan',
       body: `${input.customerName} vill boka ${venue.name} den ${formatDate(input.eventDate)}`,
-      reference: { kind: 'booking', id: booking.id },
+      reference: { kind: 'booking', id: row.booking_id },
       author: user?.id,
       extra: {
         customer_name: input.customerName,
@@ -217,7 +198,7 @@ export async function createBookingRequest(
 
     return {
       success: true,
-      bookingId: booking.id,
+      bookingId: row.booking_id,
       verificationToken,
     }
   } catch (error) {
