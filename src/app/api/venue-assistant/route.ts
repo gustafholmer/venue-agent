@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { withRetry } from '@/lib/gemini/retry'
+import { trackEvent } from '@/lib/analytics'
 import type { Suggestion, SuggestionType } from '@/types/agent'
 import { EVENT_TYPES, TIME_OPTIONS } from '@/lib/constants'
 
@@ -194,6 +195,8 @@ export async function POST(request: NextRequest) {
 
     const responseText = result.response.text()
     const { content, suggestions } = parseSuggestions(responseText)
+
+    trackEvent('venue_assistant_used', { venue_id: venueId })
 
     return NextResponse.json({
       message: content,

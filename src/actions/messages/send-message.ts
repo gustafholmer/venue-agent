@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
+import { trackEvent } from '@/lib/analytics'
 import type { Message } from '@/types/database'
 
 export interface SendMessageResult {
@@ -114,6 +115,8 @@ export async function sendMessage(
         },
       })
     }
+
+    trackEvent('message_sent', { booking_id: bookingId }, user.id)
 
     return {
       success: true,

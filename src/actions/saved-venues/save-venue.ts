@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { trackEvent } from '@/lib/analytics'
 
 // UUID format validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -51,6 +52,8 @@ export async function saveVenue(venueId: string): Promise<{
 
     revalidatePath('/account/saved')
     revalidatePath(`/venues/${venueId}`)
+
+    trackEvent('venue_saved', { venue_id: venueId }, user.id)
 
     return { success: true }
   } catch (error) {
