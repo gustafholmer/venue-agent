@@ -97,7 +97,7 @@ export async function createBookingRequest(
     // Fetch venue to verify it exists and is published
     const { data: venue, error: venueError } = await supabase
       .from('venues')
-      .select('id, name, owner_id, status, price_per_hour, price_half_day, price_full_day, price_evening, min_guests')
+      .select('id, name, owner_id, status, price_per_hour, price_half_day, price_full_day, price_evening, min_guests, capacity_standing, capacity_seated, capacity_conference')
       .eq('id', input.venueId)
       .single()
 
@@ -114,6 +114,19 @@ export async function createBookingRequest(
       return {
         success: false,
         error: `Minsta antal gäster för denna lokal är ${venue.min_guests}`,
+      }
+    }
+
+    // Check maximum capacity
+    const maxCapacity = Math.max(
+      venue.capacity_standing || 0,
+      venue.capacity_seated || 0,
+      venue.capacity_conference || 0
+    )
+    if (maxCapacity > 0 && input.guestCount > maxCapacity) {
+      return {
+        success: false,
+        error: `Lokalen rymmer max ${maxCapacity} gäster`,
       }
     }
 
