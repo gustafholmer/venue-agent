@@ -7,7 +7,8 @@
       "Skill(superpowers:brainstorm)",
       "WebSearch",
       "Skill(superpowers:systematic-debugging)",
-      "mcp__plugin_episodic-memory_episodic-memory__search"
+      "mcp__plugin_episodic-memory_episodic-memory__search",
+      "mcp__plugin_superpowers-chrome_chrome__use_browser"
     ]
   }
 }
