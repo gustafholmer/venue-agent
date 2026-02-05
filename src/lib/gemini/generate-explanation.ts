@@ -1,15 +1,10 @@
 import { geminiModel } from './client'
+import { withRetry } from './retry'
 import type { Venue } from '@/types/database'
 import type { ParsedFilters } from '@/types/preferences'
 
-interface ExplanationInput {
-  venue: Pick<Venue, 'name' | 'description' | 'area' | 'capacity_standing' | 'capacity_seated' | 'price_evening' | 'amenities' | 'venue_types' | 'vibes'>
-  filters: ParsedFilters
-  vibe_description: string
-}
-
 interface BatchExplanationInput {
-  venues: Array<ExplanationInput['venue'] & { id: string }>
+  venues: Array<Pick<Venue, 'name' | 'description' | 'area' | 'capacity_standing' | 'capacity_seated' | 'price_evening' | 'amenities' | 'venue_types' | 'vibes'> & { id: string }>
   filters: ParsedFilters
   vibe_description: string
 }
@@ -48,6 +43,7 @@ export async function generateExplanationsBatch(
     return result
   }
 
+  const model = geminiModel
   const { venues, filters, vibe_description } = input
 
   const venuesJson = JSON.stringify(
@@ -78,7 +74,7 @@ export async function generateExplanationsBatch(
     .replace('{venues_json}', venuesJson)
 
   try {
-    const response = await geminiModel.generateContent(prompt)
+    const response = await withRetry(() => model.generateContent(prompt))
     const text = response.response.text().trim()
 
     // Strip markdown code fences if present, then parse JSON

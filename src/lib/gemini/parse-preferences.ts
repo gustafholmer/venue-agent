@@ -1,4 +1,5 @@
 import { geminiModel } from './client'
+import { withRetry } from './retry'
 import { ParsedFiltersSchema, type ParsedPreferences } from '@/types/preferences'
 
 const PARSE_PROMPT = `Du är en expert på eventlokaler i Stockholm.
@@ -47,7 +48,8 @@ export async function parsePreferences(input: string): Promise<ParsedPreferences
     throw new Error('Gemini API key not configured')
   }
 
-  const result = await geminiModel.generateContent(PARSE_PROMPT + '\n\n' + input)
+  const model = geminiModel
+  const result = await withRetry(() => model.generateContent(PARSE_PROMPT + '\n\n' + input))
   const response = result.response.text()
 
   // Extract JSON from response

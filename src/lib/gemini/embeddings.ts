@@ -1,4 +1,5 @@
 import { embeddingModel } from './client'
+import { withRetry } from './retry'
 
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
 
@@ -29,7 +30,8 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     return cached.embedding
   }
 
-  const result = await embeddingModel.embedContent(text)
+  const model = embeddingModel
+  const result = await withRetry(() => model.embedContent(text))
   const embedding = result.embedding.values
 
   // Store in cache

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
+import { withRetry } from '@/lib/gemini/retry'
 import type { Suggestion, SuggestionType } from '@/types/agent'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
@@ -193,13 +194,13 @@ export async function POST(request: NextRequest) {
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
     const systemPrompt = buildSystemPrompt(venue, isBookingPage)
 
-    const result = await model.generateContent({
+    const result = await withRetry(() => model.generateContent({
       contents: [
         { role: 'user', parts: [{ text: systemPrompt }] },
         { role: 'model', parts: [{ text: 'Förstått! Jag hjälper gärna till med frågor om lokalen.' }] },
         { role: 'user', parts: [{ text: message }] },
       ],
-    })
+    }))
 
     const responseText = result.response.text()
     const { content, suggestions } = parseSuggestions(responseText)
