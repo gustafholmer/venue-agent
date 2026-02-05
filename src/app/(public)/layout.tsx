@@ -29,10 +29,10 @@ export default async function PublicLayout({
               className="flex items-center gap-2.5 group"
             >
               <div className="relative">
-                <TryffleLogo variant="small" className="w-9 h-9 transition-transform duration-200 group-hover:scale-110" />
+                <TryffleLogo variant="small" className="w-12 h-12 transition-transform duration-200 group-hover:scale-110" />
               </div>
-              <span className="text-lg font-medium tracking-tight text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
-                tryffle
+              <span className="text-2xl font-medium tracking-tight text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
+                Tryffle
               </span>
             </Link>
 
@@ -99,7 +99,7 @@ export default async function PublicLayout({
                 className="flex items-center gap-2 text-sm text-[#fef3c7]"
               >
                 <TryffleLogo variant="small" className="w-5 h-5" />
-                tryffle
+                Tryffle
               </Link>
               <p className="text-sm text-[#a8977a] mt-1">
                 Din personliga lokalagent

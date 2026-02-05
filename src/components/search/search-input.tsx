@@ -88,12 +88,12 @@ export function SearchInput({
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           aria-label="Sök eventlokal"
-          className="w-full h-14 pl-5 pr-14 text-[#1a1a1a] bg-white border border-[#e7e5e4] rounded-full shadow-sm focus:border-[#c45a3b] focus:shadow-md focus:outline-none transition-all placeholder:text-[#a8a29e]"
+          className="w-full h-16 pl-6 pr-16 text-base text-[#1a1a1a] bg-white border-2 border-[#c45a3b]/30 rounded-full shadow-md focus:border-[#c45a3b] focus:shadow-lg focus:outline-none transition-all placeholder:text-[#a8a29e]"
         />
         <button
           type="submit"
           disabled={!query.trim() || isSubmitting}
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-[#c45a3b] text-white rounded-full hover:bg-[#a84832] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-[#c45a3b] text-white rounded-full hover:bg-[#a84832] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           aria-label="Sök"
         >
           {isSubmitting ? (

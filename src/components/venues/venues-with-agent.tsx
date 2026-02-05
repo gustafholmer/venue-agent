@@ -251,10 +251,10 @@ export function VenuesWithAgent({
         }`}>
           {/* Results header */}
           <div className="mb-6">
-            <h1 className="text-xl sm:text-2xl text-[#1a1a1a] mb-1">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-1">
               {hasAgentResults ? 'Agentens förslag' : 'Eventlokaler'}
             </h1>
-            <p className="text-sm text-[#78716c]">
+            <p className="text-base text-[#78716c]">
               {displayVenues.length} {displayVenues.length === 1 ? 'lokal' : 'lokaler'}
               {hasAgentResults && ' matchar din sökning'}
               {!hasAgentResults && hasFilters && ' matchar dina filter'}
@@ -271,7 +271,7 @@ export function VenuesWithAgent({
 
           {/* Venue grid */}
           {displayVenues.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
               {displayVenues.map((venue) => (
                 <div
                   key={venue.id}

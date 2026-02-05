@@ -39,7 +39,7 @@ export function VenueCard({ venue }: VenueCardProps) {
   return (
     <Link href={href} className="group block">
       {/* Image */}
-      <div className="aspect-[3/2] bg-[#f5f3f0] mb-3 overflow-hidden">
+      <div className="aspect-[4/3] bg-[#f5f3f0] mb-2 overflow-hidden rounded-sm">
         {venue.primaryPhotoUrl ? (
           <img
             src={venue.primaryPhotoUrl}
@@ -55,14 +55,14 @@ export function VenueCard({ venue }: VenueCardProps) {
 
       {/* Content */}
       <div>
-        <h3 className="text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
+        <h3 className="text-base font-medium text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors leading-snug">
           {venue.name}
         </h3>
-        <p className="text-sm text-[#78716c] mt-0.5">
+        <p className="text-xs text-[#78716c] mt-0.5">
           {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
           {formatCapacity(venue) && ` · ${formatCapacity(venue)}`}
         </p>
-        <p className="text-sm text-[#1a1a1a] mt-1">
+        <p className="text-xs text-[#1a1a1a] mt-0.5">
           {formatPrice(venue)}
         </p>
       </div>

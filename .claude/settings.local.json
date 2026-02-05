@@ -6,7 +6,8 @@
       "Skill(superpowers:subagent-driven-development)",
       "Skill(superpowers:brainstorm)",
       "WebSearch",
-      "Skill(superpowers:systematic-debugging)"
+      "Skill(superpowers:systematic-debugging)",
+      "mcp__plugin_episodic-memory_episodic-memory__search"
     ]
   }
 }

@@ -81,7 +81,7 @@ export function HomeVenuesWithMap({ venues }: HomeVenuesWithMapProps) {
           mobileView === 'list' ? 'block' : 'hidden lg:block'
         }`}>
           <div className="hidden lg:flex items-end justify-between mb-6">
-            <h2 className="text-sm uppercase tracking-widest text-[#78716c]">
+            <h2 className="text-base uppercase tracking-widest text-[#78716c]">
               Lokaler
             </h2>
             <Link
@@ -92,7 +92,7 @@ export function HomeVenuesWithMap({ venues }: HomeVenuesWithMapProps) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
             {venues.map((venue) => (
               <div
                 key={venue.id}
