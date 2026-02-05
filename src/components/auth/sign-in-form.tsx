@@ -57,7 +57,7 @@ export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={isPending}>
+        <Button type="submit" className="w-full" loading={isPending}>
           {isPending ? 'Loggar in...' : 'Logga in'}
         </Button>
       </form>

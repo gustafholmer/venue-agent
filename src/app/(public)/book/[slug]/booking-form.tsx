@@ -420,8 +420,11 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
 
               {/* Error Message */}
               {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  {error}
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-start gap-2">
+                  <span className="flex-1">{error}</span>
+                  <button onClick={() => setError(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stäng">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
                 </div>
               )}
 
@@ -444,7 +447,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   variant="primary"
                   size="lg"
                   className="w-full"
-                  disabled={isSubmitting || !agreedToTerms}
+                  loading={isSubmitting} disabled={!agreedToTerms}
                 >
                   {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
                 </Button>
@@ -527,8 +530,11 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
 
                 {/* Error Message */}
                 {error && (
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                    {error}
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-start gap-2">
+                    <span className="flex-1">{error}</span>
+                    <button onClick={() => setError(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stäng">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
                   </div>
                 )}
 
@@ -551,7 +557,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                     variant="primary"
                     size="lg"
                     className="w-full"
-                    disabled={isSubmitting || !agreedToTerms}
+                    loading={isSubmitting} disabled={!agreedToTerms}
                   >
                     {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
                   </Button>

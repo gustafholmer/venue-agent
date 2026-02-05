@@ -238,7 +238,7 @@ export default function PhotosPage() {
           type="button"
           variant="outline"
           onClick={() => fileInputRef.current?.click()}
-          disabled={isUploading}
+          loading={isUploading}
         >
           {isUploading ? 'Laddar upp...' : 'Valj filer'}
         </Button>

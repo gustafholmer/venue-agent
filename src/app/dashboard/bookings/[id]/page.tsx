@@ -250,7 +250,7 @@ export default function BookingDetailPage() {
           <div className="flex gap-3 mt-6 pt-6 border-t border-[#e5e7eb]">
             <Button
               onClick={handleAccept}
-              disabled={isSubmitting}
+              loading={isSubmitting}
               className="flex-1 sm:flex-none"
             >
               {isSubmitting ? 'Bearbetar...' : 'Godkänna'}
@@ -474,7 +474,7 @@ export default function BookingDetailPage() {
               </Button>
               <Button
                 onClick={handleDecline}
-                disabled={isSubmitting || !declineReason.trim()}
+                loading={isSubmitting} disabled={!declineReason.trim()}
                 className="flex-1 bg-red-600 hover:bg-red-700"
               >
                 {isSubmitting ? 'Nekar...' : 'Neka förfrågan'}

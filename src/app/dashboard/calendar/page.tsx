@@ -483,7 +483,7 @@ export default function CalendarPage() {
               </Button>
               <Button
                 onClick={handleBlockRange}
-                disabled={isUpdating || !rangeStartDate || !rangeEndDate}
+                loading={isUpdating} disabled={!rangeStartDate || !rangeEndDate}
                 className="flex-1"
               >
                 {isUpdating ? 'Blockerar...' : 'Blockera'}
