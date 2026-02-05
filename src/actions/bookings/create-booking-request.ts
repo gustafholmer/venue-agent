@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { calculatePricing } from '@/lib/pricing'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
+import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
 
 export interface CreateBookingInput {
   venueId: string
@@ -26,9 +27,6 @@ interface CreateBookingResult {
   verificationToken?: string
   error?: string
 }
-
-// Allowed event types (validated server-side)
-const ALLOWED_EVENT_TYPES = ['aw', 'konferens', 'fest', 'workshop', 'middag', 'foretag', 'privat', 'annat']
 
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -69,7 +67,7 @@ export async function createBookingRequest(
     }
 
     // Validate event type against allowed values
-    if (!ALLOWED_EVENT_TYPES.includes(input.eventType.toLowerCase())) {
+    if (!ALLOWED_EVENT_TYPE_VALUES.includes(input.eventType.toLowerCase())) {
       return { success: false, error: 'Ogiltig eventtyp' }
     }
     if (!input.guestCount || input.guestCount < 1) {

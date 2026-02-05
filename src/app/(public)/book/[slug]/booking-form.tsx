@@ -15,28 +15,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { VenueAssistant } from '@/components/chat/venue-assistant'
+import { EVENT_TYPES, TIME_OPTIONS } from '@/lib/constants'
 
 interface BookingFormProps {
   venue: VenueWithDetails
   initialUser: { id: string; email?: string } | null
 }
-
-const EVENT_TYPES = [
-  { value: 'aw', label: 'AW / Afterwork' },
-  { value: 'konferens', label: 'Konferens' },
-  { value: 'fest', label: 'Fest / Firande' },
-  { value: 'workshop', label: 'Workshop' },
-  { value: 'middag', label: 'Middag / Bankett' },
-  { value: 'foretag', label: 'Företagsevent' },
-  { value: 'privat', label: 'Privat tillställning' },
-  { value: 'annat', label: 'Annat' },
-]
-
-const TIME_OPTIONS = [
-  '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
-  '14:00', '15:00', '16:00', '17:00', '18:00', '19:00',
-  '20:00', '21:00', '22:00', '23:00',
-]
 
 export function BookingForm({ venue, initialUser }: BookingFormProps) {
   const router = useRouter()

@@ -9,54 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { updateVenue } from '@/actions/venues/update-venue'
 import { publishVenue, getPublishValidation, type PublishValidationError } from '@/actions/venues/publish-venue'
 import { unpublishVenue } from '@/actions/venues/unpublish-venue'
-
-const VENUE_TYPES = [
-  { value: 'konferens', label: 'Konferens' },
-  { value: 'fest', label: 'Fest' },
-  { value: 'aw', label: 'AW' },
-  { value: 'workshop', label: 'Workshop' },
-  { value: 'fotografering', label: 'Fotografering' },
-  { value: 'mote', label: 'Mote' },
-  { value: 'middag', label: 'Middag' },
-]
-
-const VIBES = [
-  { value: 'modern', label: 'Modern' },
-  { value: 'klassisk', label: 'Klassisk' },
-  { value: 'industriell', label: 'Industriell' },
-  { value: 'intim', label: 'Intim' },
-  { value: 'festlig', label: 'Festlig' },
-  { value: 'professionell', label: 'Professionell' },
-]
-
-const AREAS = [
-  'Sodermalm',
-  'Vasastan',
-  'Ostermalm',
-  'Kungsholmen',
-  'Norrmalm',
-  'Gamla Stan',
-  'Djurgarden',
-  'Hammarby Sjostad',
-  'Hagerstrom',
-  'Solna',
-  'Sundbyberg',
-]
-
-const AMENITIES = [
-  { value: 'projektor', label: 'Projektor' },
-  { value: 'ljudsystem', label: 'Ljudsystem' },
-  { value: 'mikrofon', label: 'Mikrofon' },
-  { value: 'whiteboard', label: 'Whiteboard' },
-  { value: 'wifi', label: 'WiFi' },
-  { value: 'parkering', label: 'Parkering' },
-  { value: 'kok', label: 'Kok' },
-  { value: 'bar', label: 'Bar' },
-  { value: 'utomhus', label: 'Utomhus' },
-  { value: 'scen', label: 'Scen' },
-  { value: 'garderob', label: 'Garderob' },
-  { value: 'handikappanpassad', label: 'Handikappanpassad' },
-]
+import { VENUE_TYPES, VIBES, AREAS, AMENITIES } from '@/lib/constants'
 
 interface VenueData {
   id: string
