@@ -1,15 +1,17 @@
 import { headers } from 'next/headers'
+import { createServiceClient } from '@/lib/supabase/service'
+import { isDemoMode } from '@/lib/demo-mode'
+
+// ---------------------------------------------------------------------------
+// In-memory fallback (used in demo mode or when DB is unavailable)
+// ---------------------------------------------------------------------------
 
 interface RateLimitEntry {
   count: number
   resetTime: number
 }
 
-// In-memory store for rate limiting
-// Note: Resets on serverless cold starts, which is acceptable for abuse prevention
 const store = new Map<string, RateLimitEntry>()
-
-// Clean up old entries every 5 minutes to prevent memory leaks
 const CLEANUP_INTERVAL = 5 * 60 * 1000
 let lastCleanup = Date.now()
 
@@ -25,54 +27,7 @@ function cleanup() {
   }
 }
 
-export interface RateLimitConfig {
-  /** Maximum number of requests allowed in the window */
-  limit: number
-  /** Time window in milliseconds */
-  windowMs: number
-}
-
-export interface RateLimitResult {
-  success: boolean
-  remaining: number
-  resetTime: number
-}
-
-/**
- * Get client IP address from request headers
- */
-export async function getClientIp(): Promise<string> {
-  const headersList = await headers()
-
-  // Check common proxy headers
-  const forwardedFor = headersList.get('x-forwarded-for')
-  if (forwardedFor) {
-    // x-forwarded-for can contain multiple IPs, take the first one
-    return forwardedFor.split(',')[0].trim()
-  }
-
-  const realIp = headersList.get('x-real-ip')
-  if (realIp) {
-    return realIp
-  }
-
-  // Vercel-specific header
-  const vercelForwardedFor = headersList.get('x-vercel-forwarded-for')
-  if (vercelForwardedFor) {
-    return vercelForwardedFor.split(',')[0].trim()
-  }
-
-  // Fallback - shouldn't happen in production
-  return 'unknown'
-}
-
-/**
- * Check rate limit for a given identifier
- * @param identifier - Unique identifier (usually IP + endpoint)
- * @param config - Rate limit configuration
- * @returns Rate limit result with success status and remaining requests
- */
-export function checkRateLimit(
+function inMemoryRateLimit(
   identifier: string,
   config: RateLimitConfig
 ): RateLimitResult {
@@ -112,11 +67,91 @@ export function checkRateLimit(
   }
 }
 
+// ---------------------------------------------------------------------------
+// Public types
+// ---------------------------------------------------------------------------
+
+export interface RateLimitConfig {
+  /** Maximum number of requests allowed in the window */
+  limit: number
+  /** Time window in milliseconds */
+  windowMs: number
+}
+
+export interface RateLimitResult {
+  success: boolean
+  remaining: number
+  resetTime: number
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
 /**
- * Rate limit middleware for API routes
- * @param endpoint - Endpoint name for tracking
- * @param config - Rate limit configuration
- * @returns Rate limit result
+ * Get client IP address from request headers
+ */
+export async function getClientIp(): Promise<string> {
+  const headersList = await headers()
+
+  // Check common proxy headers
+  const forwardedFor = headersList.get('x-forwarded-for')
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim()
+  }
+
+  const realIp = headersList.get('x-real-ip')
+  if (realIp) {
+    return realIp
+  }
+
+  // Vercel-specific header
+  const vercelForwardedFor = headersList.get('x-vercel-forwarded-for')
+  if (vercelForwardedFor) {
+    return vercelForwardedFor.split(',')[0].trim()
+  }
+
+  return 'unknown'
+}
+
+// ---------------------------------------------------------------------------
+// Supabase-backed rate limiting
+// ---------------------------------------------------------------------------
+
+async function supabaseRateLimit(
+  identifier: string,
+  config: RateLimitConfig
+): Promise<RateLimitResult> {
+  const supabase = createServiceClient()
+
+  const { data, error } = await supabase.rpc('check_rate_limit', {
+    p_identifier: identifier,
+    p_limit: config.limit,
+    p_window_ms: config.windowMs,
+  })
+
+  if (error || !data || (Array.isArray(data) && data.length === 0)) {
+    // Fall back to in-memory on any DB error
+    console.warn('[rate-limit] Supabase RPC failed, falling back to in-memory:', error?.message)
+    return inMemoryRateLimit(identifier, config)
+  }
+
+  const row = Array.isArray(data) ? data[0] : data
+
+  return {
+    success: row.allowed,
+    remaining: row.remaining,
+    resetTime: new Date(row.reset_at).getTime(),
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Main export
+// ---------------------------------------------------------------------------
+
+/**
+ * Rate limit middleware for API routes.
+ * Uses Supabase for persistence across cold starts, with in-memory fallback.
  */
 export async function rateLimit(
   endpoint: string,
@@ -124,10 +159,18 @@ export async function rateLimit(
 ): Promise<RateLimitResult> {
   const ip = await getClientIp()
   const identifier = `${ip}:${endpoint}`
-  return checkRateLimit(identifier, config)
+
+  if (isDemoMode()) {
+    return inMemoryRateLimit(identifier, config)
+  }
+
+  return supabaseRateLimit(identifier, config)
 }
 
+// ---------------------------------------------------------------------------
 // Predefined rate limit configurations
+// ---------------------------------------------------------------------------
+
 export const RATE_LIMITS = {
   /** Venue assistant API - 20 requests per minute */
   venueAssistant: { limit: 20, windowMs: 60 * 1000 },
