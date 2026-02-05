@@ -1,6 +1,7 @@
 'use server'
 
 import crypto from 'crypto'
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { calculatePricing } from '@/lib/pricing'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
@@ -30,8 +31,13 @@ interface CreateBookingResult {
 // Allowed event types (validated server-side)
 const ALLOWED_EVENT_TYPES = ['aw', 'konferens', 'fest', 'workshop', 'middag', 'foretag', 'privat', 'annat']
 
-// Email validation regex
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MAX_LENGTHS = {
+  customerName: 200,
+  customerEmail: 254,
+  customerPhone: 30,
+  companyName: 200,
+  eventDescription: 5000,
+} as const
 
 export async function createBookingRequest(
   input: CreateBookingInput
@@ -82,8 +88,26 @@ export async function createBookingRequest(
       return { success: false, error: 'Ange din e-postadress' }
     }
 
+    // Validate input lengths
+    if (input.customerName.trim().length > MAX_LENGTHS.customerName) {
+      return { success: false, error: `Namn får max vara ${MAX_LENGTHS.customerName} tecken` }
+    }
+    if (input.customerEmail.trim().length > MAX_LENGTHS.customerEmail) {
+      return { success: false, error: 'Ogiltig e-postadress' }
+    }
+    if (input.customerPhone && input.customerPhone.trim().length > MAX_LENGTHS.customerPhone) {
+      return { success: false, error: `Telefonnummer får max vara ${MAX_LENGTHS.customerPhone} tecken` }
+    }
+    if (input.companyName && input.companyName.trim().length > MAX_LENGTHS.companyName) {
+      return { success: false, error: `Företagsnamn får max vara ${MAX_LENGTHS.companyName} tecken` }
+    }
+    if (input.eventDescription && input.eventDescription.length > MAX_LENGTHS.eventDescription) {
+      return { success: false, error: `Eventbeskrivning får max vara ${MAX_LENGTHS.eventDescription} tecken` }
+    }
+
     // Validate email format
-    if (!EMAIL_REGEX.test(input.customerEmail)) {
+    const emailResult = z.string().email().safeParse(input.customerEmail.trim())
+    if (!emailResult.success) {
       return { success: false, error: 'Ogiltig e-postadress' }
     }
 
@@ -99,7 +123,7 @@ export async function createBookingRequest(
     // Fetch venue to verify it exists and is published
     const { data: venue, error: venueError } = await supabase
       .from('venues')
-      .select('id, name, owner_id, status, price_per_hour, price_half_day, price_full_day, price_evening, min_guests')
+      .select('id, name, owner_id, status, price_per_hour, price_half_day, price_full_day, price_evening, min_guests, capacity_standing, capacity_seated, capacity_conference')
       .eq('id', input.venueId)
       .single()
 
@@ -116,6 +140,19 @@ export async function createBookingRequest(
       return {
         success: false,
         error: `Minsta antal gäster för denna lokal är ${venue.min_guests}`,
+      }
+    }
+
+    // Check max capacity
+    const maxCapacity = Math.max(
+      venue.capacity_standing || 0,
+      venue.capacity_seated || 0,
+      venue.capacity_conference || 0
+    )
+    if (maxCapacity > 0 && input.guestCount > maxCapacity) {
+      return {
+        success: false,
+        error: `Lokalen har max kapacitet för ${maxCapacity} gäster`,
       }
     }
 
