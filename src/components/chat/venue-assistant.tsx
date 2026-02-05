@@ -265,7 +265,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 flex items-center justify-center text-[#6b7280] hover:text-[#111827] hover:bg-[#e5e7eb] rounded-full transition-colors"
+                className="w-10 h-10 flex items-center justify-center text-[#6b7280] hover:text-[#111827] hover:bg-[#e5e7eb] rounded-full transition-colors"
                 aria-label="Stäng"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
