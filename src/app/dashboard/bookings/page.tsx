@@ -107,7 +107,7 @@ export default function BookingsPage() {
             <button
               key={tab.value}
               onClick={() => handleTabChange(tab.value)}
-              className={`px-6 py-3 text-sm font-medium transition-colors ${
+              className={`px-6 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                 activeTab === tab.value
                   ? 'text-[#1e3a8a] border-b-2 border-[#1e3a8a] -mb-[1px]'
                   : 'text-[#6b7280] hover:text-[#374151]'
@@ -129,32 +129,49 @@ export default function BookingsPage() {
 
       {/* Loading state */}
       {isLoading && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
-          <div className="animate-pulse">
-            {/* Table header skeleton */}
-            <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-3 flex gap-6">
-              <div className="h-4 bg-[#e5e7eb] rounded w-20" />
-              <div className="h-4 bg-[#e5e7eb] rounded w-24" />
-              <div className="h-4 bg-[#e5e7eb] rounded w-16" />
-              <div className="h-4 bg-[#e5e7eb] rounded w-16" />
-              <div className="h-4 bg-[#e5e7eb] rounded w-20" />
-            </div>
-            {/* Table rows skeleton */}
+        <>
+          {/* Mobile skeleton */}
+          <div className="lg:hidden bg-white border border-[#e5e7eb] rounded-xl overflow-hidden divide-y divide-[#e5e7eb]">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="px-6 py-4 border-b border-[#e5e7eb] flex gap-6 items-center">
-                <div className="flex-1">
-                  <div className="h-5 bg-[#e5e7eb] rounded w-32 mb-1" />
-                  <div className="h-4 bg-[#e5e7eb] rounded w-24" />
+              <div key={i} className="p-4 animate-pulse">
+                <div className="flex justify-between mb-3">
+                  <div className="h-5 bg-[#e5e7eb] rounded w-32" />
+                  <div className="h-6 bg-[#e5e7eb] rounded-full w-20" />
                 </div>
-                <div className="h-5 bg-[#e5e7eb] rounded w-24" />
-                <div className="h-5 bg-[#e5e7eb] rounded w-16" />
-                <div className="h-5 bg-[#e5e7eb] rounded w-12" />
-                <div className="h-6 bg-[#e5e7eb] rounded-full w-20" />
-                <div className="h-5 bg-[#e5e7eb] rounded w-28" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-[#e5e7eb] rounded w-full" />
+                  <div className="h-4 bg-[#e5e7eb] rounded w-3/4" />
+                  <div className="h-4 bg-[#e5e7eb] rounded w-1/2" />
+                </div>
               </div>
             ))}
           </div>
-        </div>
+          {/* Desktop skeleton */}
+          <div className="hidden lg:block bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+            <div className="animate-pulse">
+              <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-6 py-3 flex gap-6">
+                <div className="h-4 bg-[#e5e7eb] rounded w-20" />
+                <div className="h-4 bg-[#e5e7eb] rounded w-24" />
+                <div className="h-4 bg-[#e5e7eb] rounded w-16" />
+                <div className="h-4 bg-[#e5e7eb] rounded w-16" />
+                <div className="h-4 bg-[#e5e7eb] rounded w-20" />
+              </div>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="px-6 py-4 border-b border-[#e5e7eb] flex gap-6 items-center">
+                  <div className="flex-1">
+                    <div className="h-5 bg-[#e5e7eb] rounded w-32 mb-1" />
+                    <div className="h-4 bg-[#e5e7eb] rounded w-24" />
+                  </div>
+                  <div className="h-5 bg-[#e5e7eb] rounded w-24" />
+                  <div className="h-5 bg-[#e5e7eb] rounded w-16" />
+                  <div className="h-5 bg-[#e5e7eb] rounded w-12" />
+                  <div className="h-6 bg-[#e5e7eb] rounded-full w-20" />
+                  <div className="h-5 bg-[#e5e7eb] rounded w-28" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
       )}
 
       {/* Empty state */}
