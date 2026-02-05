@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { getVenueBySlug } from '@/actions/venues/get-venue-by-slug'
 import { createClient } from '@/lib/supabase/server'
 import { BookingForm } from './booking-form'
+import { trackEvent } from '@/lib/analytics'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -44,6 +45,8 @@ async function BookingPageContent({ params }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const initialUser = user ? { id: user.id, email: user.email } : null
+
+  trackEvent('booking_started', { venue_id: venue.id, slug }, initialUser?.id)
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">

@@ -9,6 +9,7 @@ import { isGeminiConfigured } from '@/lib/gemini/client'
 import type { ParsedFilters } from '@/types/preferences'
 import type { VenueResult } from '@/types/agent'
 import type { Database } from '@/types/database'
+import { trackEvent } from '@/lib/analytics'
 
 type MatchedVenue = Database['public']['Functions']['match_venues']['Returns'][number]
 type BatchAvailabilityResult = Database['public']['Functions']['check_venues_availability_batch']['Returns'][number]
@@ -166,6 +167,7 @@ export async function searchVenues(
 ): Promise<SearchVenuesResult> {
   try {
     const { filters, vibeDescription, limit = 10 } = input
+    trackEvent('search_started', { query_text: vibeDescription })
     const offset = input.offset || 0
 
     // Check if we're in demo mode or services not configured
@@ -321,6 +323,11 @@ export async function searchVenues(
       matchReason: explanationsMap.get(venue.id) || 'Matchar dina sökkriterier.',
       imageUrl: photoMap.get(venue.id),
     }))
+
+    trackEvent('search_completed', {
+      result_count: venueResults.length,
+      query_text: vibeDescription,
+    })
 
     return {
       success: true,

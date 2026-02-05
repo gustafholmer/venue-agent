@@ -7,6 +7,7 @@ import { calculatePricing } from '@/lib/pricing'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
+import { trackEvent } from '@/lib/analytics'
 
 export interface CreateBookingInput {
   venueId: string
@@ -230,6 +231,12 @@ export async function createBookingRequest(
         guest_count: input.guestCount,
       },
     })
+
+    trackEvent('booking_completed', {
+      venue_id: input.venueId,
+      event_type: input.eventType,
+      guest_count: input.guestCount,
+    }, user.id)
 
     return {
       success: true,

@@ -4,6 +4,7 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { getMockVenueBySlug, getMockPhotosForVenue } from '@/lib/mock-data'
 import type { Venue, VenuePhoto, Review } from '@/types/database'
+import { trackEvent } from '@/lib/analytics'
 
 export interface VenueWithDetails extends Venue {
   photos: VenuePhoto[]
@@ -107,6 +108,8 @@ export async function getVenueBySlug(slugOrId: string): Promise<GetVenueResult> 
       const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0)
       averageRating = Math.round((totalRating / reviews.length) * 10) / 10
     }
+
+    trackEvent('venue_viewed', { venue_id: venue.id, slug: slugOrId })
 
     return {
       success: true,
