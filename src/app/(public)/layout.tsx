@@ -90,43 +90,43 @@ export default async function PublicLayout({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#e7e5e4] mt-auto">
+      <footer className="bg-[#2a1f1a] mt-auto">
         <div className="px-4 sm:px-6 py-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
               <Link
                 href="/"
-                className="flex items-center gap-2 text-sm text-[#1a1a1a]"
+                className="flex items-center gap-2 text-sm text-[#fef3c7]"
               >
                 <TryffleLogo variant="small" className="w-5 h-5" />
                 tryffle
               </Link>
-              <p className="text-sm text-[#78716c] mt-1">
+              <p className="text-sm text-[#a8977a] mt-1">
                 Din personliga lokalagent
               </p>
             </div>
 
-            <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#78716c]">
-              <Link href="/venues" className="hover:text-[#1a1a1a] transition-colors">
+            <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#a8977a]">
+              <Link href="/venues" className="hover:text-[#fef3c7] transition-colors">
                 Sök eventlokaler
               </Link>
-              <Link href="/auth/register/venue" className="hover:text-[#1a1a1a] transition-colors">
+              <Link href="/auth/register/venue" className="hover:text-[#fef3c7] transition-colors">
                 Lista din eventlokal
               </Link>
-              <Link href="/faq" className="hover:text-[#1a1a1a] transition-colors">
+              <Link href="/faq" className="hover:text-[#fef3c7] transition-colors">
                 FAQ
               </Link>
-              <Link href="/about" className="hover:text-[#1a1a1a] transition-colors">
+              <Link href="/about" className="hover:text-[#fef3c7] transition-colors">
                 Om oss
               </Link>
-              <Link href="/policy" className="hover:text-[#1a1a1a] transition-colors">
+              <Link href="/policy" className="hover:text-[#fef3c7] transition-colors">
                 Villkor
               </Link>
             </nav>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[#e7e5e4]">
-            <p className="text-xs text-[#78716c]">
+          <div className="mt-8 pt-6 border-t border-[#3d2f27]">
+            <p className="text-xs text-[#6b5c4f]">
               &copy; {new Date().getFullYear()} Tryffle
             </p>
           </div>
