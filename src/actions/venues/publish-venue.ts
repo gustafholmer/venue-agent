@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
+import { trackEvent } from '@/lib/analytics'
 
 export interface PublishValidationError {
   field: string
@@ -118,6 +119,8 @@ export async function publishVenue(): Promise<PublishVenueResult> {
       errors: [{ field: 'server', message: 'Kunde inte publicera lokalen' }],
     }
   }
+
+  trackEvent('venue_published', { venue_id: venue.id }, user.id)
 
   return { success: true }
 }

@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
+import { trackEvent } from '@/lib/analytics'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
@@ -109,5 +110,6 @@ export async function uploadPhoto(formData: FormData) {
   }
 
   revalidatePath('/dashboard/venue/photos')
+  trackEvent('venue_photo_uploaded', { venue_id: venue.id }, user.id)
   return { success: true, photoId }
 }

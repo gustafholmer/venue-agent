@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { trackEvent } from '@/lib/analytics'
 
 export async function createVenue(formData: FormData) {
   const { createClient } = await import('@/lib/supabase/server')
@@ -125,6 +126,8 @@ export async function createVenue(formData: FormData) {
     console.error('Error creating venue:', error)
     return redirect('/dashboard/venue/new?error=create_failed')
   }
+
+  trackEvent('venue_listed', {}, user.id)
 
   return redirect('/dashboard/venue?success=venue_created')
 }
