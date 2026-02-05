@@ -4,14 +4,14 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { MOCK_VENUES, filterMockVenues } from '@/lib/mock-data'
 import { generateEmbedding } from '@/lib/gemini/embeddings'
-import { generateExplanation } from '@/lib/gemini/generate-explanation'
+import { generateExplanationsBatch } from '@/lib/gemini/generate-explanation'
 import { isGeminiConfigured } from '@/lib/gemini/client'
 import type { ParsedFilters } from '@/types/preferences'
 import type { VenueResult } from '@/types/agent'
 import type { Database } from '@/types/database'
 
 type MatchedVenue = Database['public']['Functions']['match_venues']['Returns'][number]
-type AvailabilityResult = Database['public']['Functions']['check_venue_availability']['Returns'][number]
+type BatchAvailabilityResult = Database['public']['Functions']['check_venues_availability_batch']['Returns'][number]
 
 export interface SearchVenuesInput {
   filters: ParsedFilters
@@ -252,33 +252,27 @@ export async function searchVenues(
       })
     }
 
-    // Step 5: Check availability for preferred dates
+    // Step 5: Batch check availability for preferred dates
     let availabilityMap = new Map<string, string[]>()
 
     if (filters.preferred_dates && filters.preferred_dates.length > 0) {
-      // Check availability for each venue
-      const availabilityPromises = filteredVenues.map(async (venue) => {
-        const { data: availability } = await supabase.rpc(
-          'check_venue_availability',
-          {
-            p_venue_id: venue.id,
-            p_dates: filters.preferred_dates!,
-          }
-        )
-
-        if (availability) {
-          const availableDates = (availability as AvailabilityResult[])
-            .filter((a) => a.is_available)
-            .map((a) => a.check_date)
-          return { venueId: venue.id, availableDates }
+      const { data: batchAvailability } = await supabase.rpc(
+        'check_venues_availability_batch',
+        {
+          p_venue_ids: venueIds,
+          p_dates: filters.preferred_dates,
         }
-        return { venueId: venue.id, availableDates: [] }
-      })
+      )
 
-      const availabilityResults = await Promise.all(availabilityPromises)
-      availabilityResults.forEach((result) => {
-        availabilityMap.set(result.venueId, result.availableDates)
-      })
+      if (batchAvailability) {
+        for (const row of batchAvailability as BatchAvailabilityResult[]) {
+          if (row.is_available) {
+            const existing = availabilityMap.get(row.venue_id) || []
+            existing.push(row.check_date)
+            availabilityMap.set(row.venue_id, existing)
+          }
+        }
+      }
 
       // Filter out venues with no available dates
       filteredVenues = filteredVenues.filter((venue) => {
@@ -287,48 +281,38 @@ export async function searchVenues(
       })
     }
 
-    // Step 6: Generate AI explanations for each match
-    const venueResults: VenueResult[] = await Promise.all(
-      filteredVenues.map(async (venue) => {
-        // Generate explanation
-        let matchReason: string
-        try {
-          matchReason = await generateExplanation({
-            venue: {
-              name: venue.name,
-              description: venue.description,
-              area: venue.area,
-              capacity_standing: venue.capacity_standing,
-              capacity_seated: venue.capacity_seated,
-              price_evening: venue.price_evening,
-              amenities: venue.amenities,
-              venue_types: venue.venue_types,
-              vibes: venue.vibes,
-            },
-            filters,
-            vibe_description: vibeDescription,
-          })
-        } catch (error) {
-          console.error('Error generating explanation for venue:', venue.id, error)
-          matchReason = 'Matchar dina sokkriterier.'
-        }
+    // Step 6: Batch generate AI explanations
+    const explanationsMap = await generateExplanationsBatch({
+      venues: filteredVenues.map((venue) => ({
+        id: venue.id,
+        name: venue.name,
+        description: venue.description,
+        area: venue.area,
+        capacity_standing: venue.capacity_standing,
+        capacity_seated: venue.capacity_seated,
+        price_evening: venue.price_evening,
+        amenities: venue.amenities,
+        venue_types: venue.venue_types,
+        vibes: venue.vibes,
+      })),
+      filters,
+      vibe_description: vibeDescription,
+    })
 
-        return {
-          id: venue.id,
-          name: venue.name,
-          slug: venue.slug,
-          area: venue.area || 'Stockholm',
-          price: venue.price_evening || venue.price_full_day || 0,
-          capacity: Math.max(
-            venue.capacity_standing || 0,
-            venue.capacity_seated || 0
-          ),
-          availableDates: availabilityMap.get(venue.id),
-          matchReason,
-          imageUrl: photoMap.get(venue.id),
-        }
-      })
-    )
+    const venueResults: VenueResult[] = filteredVenues.map((venue) => ({
+      id: venue.id,
+      name: venue.name,
+      slug: venue.slug,
+      area: venue.area || 'Stockholm',
+      price: venue.price_evening || venue.price_full_day || 0,
+      capacity: Math.max(
+        venue.capacity_standing || 0,
+        venue.capacity_seated || 0
+      ),
+      availableDates: availabilityMap.get(venue.id),
+      matchReason: explanationsMap.get(venue.id) || 'Matchar dina sökkriterier.',
+      imageUrl: photoMap.get(venue.id),
+    }))
 
     return {
       success: true,

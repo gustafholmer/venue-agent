@@ -632,6 +632,17 @@ export interface Database {
           is_available: boolean
         }[]
       }
+      check_venues_availability_batch: {
+        Args: {
+          p_venue_ids: string[]
+          p_dates: string[]
+        }
+        Returns: {
+          venue_id: string
+          check_date: string
+          is_available: boolean
+        }[]
+      }
     }
   }
 }
