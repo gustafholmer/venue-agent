@@ -167,7 +167,6 @@ export async function searchVenues(
 ): Promise<SearchVenuesResult> {
   try {
     const { filters, vibeDescription, limit = 10 } = input
-    trackEvent('search_started', { query_text: vibeDescription })
     const offset = input.offset || 0
 
     // Check if we're in demo mode or services not configured
@@ -178,6 +177,8 @@ export async function searchVenues(
         hasMore: false,
       }
     }
+
+    trackEvent('search_started', { query_text: vibeDescription })
 
     const supabase = await createClient()
 
