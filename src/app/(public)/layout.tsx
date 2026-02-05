@@ -21,21 +21,25 @@ export default async function PublicLayout({
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-[#e8cec8] border-b border-[#e7e5e4]">
+      <header className="relative bg-gradient-to-r from-[#e8cec8] via-[#f0ddd6] to-[#e4d5cf] border-b border-[#d4bfb6]">
         <div className="px-4 sm:px-6">
-          <div className="flex justify-between h-14 items-center">
+          <div className="flex justify-between h-16 items-center">
             <Link
               href="/"
-              className="flex items-center gap-2 text-lg tracking-tight text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
+              className="flex items-center gap-2.5 group"
             >
-              <TryffleLogo variant="small" className="w-8 h-8" />
-              tryffle
+              <div className="relative">
+                <TryffleLogo variant="small" className="w-9 h-9 transition-transform duration-200 group-hover:scale-110" />
+              </div>
+              <span className="text-lg font-medium tracking-tight text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
+                tryffle
+              </span>
             </Link>
 
-            <nav className="flex items-center gap-6">
+            <nav className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/venues"
-                className="inline-flex items-center gap-1.5 text-sm text-[#78716c] hover:text-[#1a1a1a] transition-colors hidden sm:inline-flex"
+                className="hidden sm:inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full text-[#5a4a42] hover:bg-[#c45a3b]/10 hover:text-[#c45a3b] transition-all"
               >
                 <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -44,7 +48,7 @@ export default async function PublicLayout({
               </Link>
               <Link
                 href="/auth/register/venue"
-                className="inline-flex items-center gap-1.5 text-sm text-[#78716c] hover:text-[#1a1a1a] transition-colors hidden sm:inline-flex"
+                className="hidden sm:inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full text-[#5a4a42] hover:bg-[#7b4a6b]/10 hover:text-[#7b4a6b] transition-all"
               >
                 <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -53,11 +57,11 @@ export default async function PublicLayout({
               </Link>
 
               {user ? (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <NotificationBell />
                   <Link
                     href="/dashboard"
-                    className="inline-flex items-center gap-1.5 text-sm text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-full bg-[#c45a3b] text-white hover:bg-[#a84832] transition-colors shadow-sm"
                   >
                     <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -68,7 +72,7 @@ export default async function PublicLayout({
               ) : (
                 <Link
                   href="/auth/sign-in"
-                  className="inline-flex items-center gap-1.5 text-sm text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-full bg-[#c45a3b] text-white hover:bg-[#a84832] transition-colors shadow-sm"
                 >
                   <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
