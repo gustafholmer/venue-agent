@@ -317,7 +317,7 @@ export default function PhotosPage() {
           onClick={() => fileInputRef.current?.click()}
           loading={isUploading}
         >
-          {isUploading ? 'Laddar upp...' : 'Valj filer'}
+          Välj filer
         </Button>
 
         <p className="text-sm text-[#6b7280] mt-3">

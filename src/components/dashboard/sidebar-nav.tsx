@@ -2,17 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
-const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Översikt' },
-  { href: '/dashboard/venue', label: 'Min lokal' },
-  { href: '/dashboard/venue/photos', label: 'Bilder', indent: true },
-  { href: '/dashboard/bookings', label: 'Bokningar' },
-  { href: '/dashboard/calendar', label: 'Kalender' },
-  { href: '/dashboard/reviews', label: 'Recensioner' },
-  { href: '/dashboard/payouts', label: 'Utbetalningar' },
-  { href: '/dashboard/settings', label: 'Inställningar' },
-]
+import { NAV_ITEMS } from './nav-items'
 
 export function SidebarNav() {
   const pathname = usePathname()

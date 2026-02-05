@@ -492,7 +492,7 @@ export default function CalendarPage() {
                 loading={isUpdating} disabled={!rangeStartDate || !rangeEndDate}
                 className="flex-1"
               >
-                {isUpdating ? 'Blockerar...' : 'Blockera'}
+                Blockera
               </Button>
             </div>
           </div>

@@ -59,7 +59,7 @@ export function SignUpForm({ returnUrl, signInLink }: SignUpFormProps) {
         </div>
 
         <Button type="submit" className="w-full" loading={isPending}>
-          {isPending ? 'Skapar konto...' : 'Skapa konto'}
+          Skapa konto
         </Button>
       </form>
 

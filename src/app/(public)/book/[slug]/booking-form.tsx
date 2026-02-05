@@ -449,7 +449,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   className="w-full"
                   loading={isSubmitting} disabled={!agreedToTerms}
                 >
-                  {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
+                  Skicka bokningsförfrågan
                 </Button>
               )}
             </div>
@@ -559,7 +559,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                     className="w-full"
                     loading={isSubmitting} disabled={!agreedToTerms}
                   >
-                    {isSubmitting ? 'Skickar...' : 'Skicka bokningsförfrågan'}
+                    Skicka bokningsförfrågan
                   </Button>
                 )}
               </div>

@@ -60,7 +60,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         {...props}
       >
-        {loading && <Spinner />}
+        {loading && !asChild && <Spinner />}
         {children}
       </Comp>
     )

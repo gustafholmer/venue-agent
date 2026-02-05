@@ -259,7 +259,7 @@ export default function BookingDetailPage() {
               loading={isSubmitting}
               className="flex-1 sm:flex-none"
             >
-              {isSubmitting ? 'Bearbetar...' : 'Godkänna'}
+              Godkänna
             </Button>
             <Button
               variant="outline"
@@ -483,7 +483,7 @@ export default function BookingDetailPage() {
                 loading={isSubmitting} disabled={!declineReason.trim()}
                 className="flex-1 bg-red-600 hover:bg-red-700"
               >
-                {isSubmitting ? 'Nekar...' : 'Neka förfrågan'}
+                Neka förfrågan
               </Button>
             </div>
           </div>
