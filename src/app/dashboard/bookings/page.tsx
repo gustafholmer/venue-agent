@@ -102,7 +102,7 @@ export default function BookingsPage() {
 
       {/* Filter tabs */}
       <div className="bg-white border border-[#e5e7eb] rounded-xl mb-6">
-        <div className="flex border-b border-[#e5e7eb]">
+        <div className="flex overflow-x-auto border-b border-[#e5e7eb]">
           {STATUS_TABS.map((tab) => (
             <button
               key={tab.value}
@@ -180,81 +180,130 @@ export default function BookingsPage() {
 
       {/* Bookings list */}
       {!isLoading && !error && bookings.length > 0 && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-[#f9fafb] border-b border-[#e5e7eb]">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
-                    Kund
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
-                    Eventdatum
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
-                    Typ
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
-                    Gäster
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
-                    Skapad
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+        <>
+          {/* Mobile card layout */}
+          <div className="lg:hidden bg-white border border-[#e5e7eb] rounded-xl overflow-hidden divide-y divide-[#e5e7eb]">
+            {bookings.map((booking) => {
+              const status = STATUS_LABELS[booking.status] || { label: booking.status, color: 'bg-gray-100 text-gray-800' }
+              const eventType = EVENT_TYPE_LABELS[booking.event_type || ''] || booking.event_type || '-'
 
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#e5e7eb]">
-                {bookings.map((booking) => {
-                  const status = STATUS_LABELS[booking.status] || { label: booking.status, color: 'bg-gray-100 text-gray-800' }
-                  const eventType = EVENT_TYPE_LABELS[booking.event_type || ''] || booking.event_type || '-'
-
-                  return (
-                    <tr key={booking.id} className="hover:bg-[#f9fafb] transition-colors">
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-medium text-[#111827]">{booking.customer_name}</p>
-                          {booking.company_name && (
-                            <p className="text-sm text-[#6b7280]">{booking.company_name}</p>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-[#374151]">
-                        {formatDate(booking.event_date)}
-                      </td>
-                      <td className="px-6 py-4 text-[#374151]">
-                        {eventType}
-                      </td>
-                      <td className="px-6 py-4 text-[#374151]">
-                        {booking.guest_count || '-'}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${status.color}`}>
-                          {status.label}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-[#6b7280]">
-                        {formatDateTime(booking.created_at)}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <Link
-                          href={`/dashboard/bookings/${booking.id}`}
-                          className="text-[#1e3a8a] hover:text-[#1e40af] font-medium text-sm"
-                        >
-                          Visa detaljer
-                        </Link>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+              return (
+                <div key={booking.id} className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <p className="font-medium text-[#111827]">{booking.customer_name}</p>
+                      {booking.company_name && (
+                        <p className="text-sm text-[#6b7280]">{booking.company_name}</p>
+                      )}
+                    </div>
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${status.color}`}>
+                      {status.label}
+                    </span>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-[#6b7280]">Eventdatum</span>
+                      <span className="text-[#374151]">{formatDate(booking.event_date)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#6b7280]">Typ</span>
+                      <span className="text-[#374151]">{eventType}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#6b7280]">Gäster</span>
+                      <span className="text-[#374151]">{booking.guest_count || '-'}</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-[#e5e7eb]">
+                    <Link
+                      href={`/dashboard/bookings/${booking.id}`}
+                      className="text-[#1e3a8a] hover:text-[#1e40af] font-medium text-sm"
+                    >
+                      Visa detaljer
+                    </Link>
+                  </div>
+                </div>
+              )
+            })}
           </div>
-        </div>
+
+          {/* Desktop table layout */}
+          <div className="hidden lg:block bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-[#f9fafb] border-b border-[#e5e7eb]">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+                      Kund
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+                      Eventdatum
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+                      Typ
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+                      Gäster
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+                      Skapad
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-[#6b7280] uppercase tracking-wider">
+
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e5e7eb]">
+                  {bookings.map((booking) => {
+                    const status = STATUS_LABELS[booking.status] || { label: booking.status, color: 'bg-gray-100 text-gray-800' }
+                    const eventType = EVENT_TYPE_LABELS[booking.event_type || ''] || booking.event_type || '-'
+
+                    return (
+                      <tr key={booking.id} className="hover:bg-[#f9fafb] transition-colors">
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="font-medium text-[#111827]">{booking.customer_name}</p>
+                            {booking.company_name && (
+                              <p className="text-sm text-[#6b7280]">{booking.company_name}</p>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-[#374151]">
+                          {formatDate(booking.event_date)}
+                        </td>
+                        <td className="px-6 py-4 text-[#374151]">
+                          {eventType}
+                        </td>
+                        <td className="px-6 py-4 text-[#374151]">
+                          {booking.guest_count || '-'}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${status.color}`}>
+                            {status.label}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-[#6b7280]">
+                          {formatDateTime(booking.created_at)}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Link
+                            href={`/dashboard/bookings/${booking.id}`}
+                            className="text-[#1e3a8a] hover:text-[#1e40af] font-medium text-sm"
+                          >
+                            Visa detaljer
+                          </Link>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
     </div>
   )
