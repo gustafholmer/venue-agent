@@ -17,11 +17,13 @@ export interface SearchVenuesInput {
   filters: ParsedFilters
   vibeDescription: string
   limit?: number
+  offset?: number
 }
 
 export interface SearchVenuesResult {
   success: boolean
   venues?: VenueResult[]
+  hasMore?: boolean
   error?: string
 }
 
@@ -164,12 +166,14 @@ export async function searchVenues(
 ): Promise<SearchVenuesResult> {
   try {
     const { filters, vibeDescription, limit = 10 } = input
+    const offset = input.offset || 0
 
     // Check if we're in demo mode or services not configured
     if (isDemoMode() || !isSupabaseConfigured() || !isGeminiConfigured()) {
       return {
         success: true,
         venues: searchMockVenues(input),
+        hasMore: false,
       }
     }
 
@@ -187,6 +191,7 @@ export async function searchVenues(
       return {
         success: true,
         venues: searchMockVenues(input),
+        hasMore: false,
       }
     }
 
@@ -196,7 +201,7 @@ export async function searchVenues(
       'match_venues',
       {
         query_embedding: embedding,
-        match_count: limit * 3, // Fetch extra to account for filtering
+        match_count: (offset + limit) * 3 + limit, // Fetch extra to account for filtering
       }
     )
 
@@ -212,6 +217,7 @@ export async function searchVenues(
       return {
         success: true,
         venues: [],
+        hasMore: false,
       }
     }
 
@@ -228,12 +234,14 @@ export async function searchVenues(
     filteredVenues = filterVenuesByArea(filteredVenues, filters.areas)
 
     // Take only the top results after filtering
-    filteredVenues = filteredVenues.slice(0, limit)
+    const hasMore = filteredVenues.length > offset + limit
+    filteredVenues = filteredVenues.slice(offset, offset + limit)
 
     if (filteredVenues.length === 0) {
       return {
         success: true,
         venues: [],
+        hasMore: false,
       }
     }
 
@@ -317,6 +325,7 @@ export async function searchVenues(
     return {
       success: true,
       venues: venueResults,
+      hasMore,
     }
   } catch (error) {
     console.error('Error in searchVenues:', error)
