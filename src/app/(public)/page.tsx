@@ -113,7 +113,7 @@ export default async function LandingPage() {
               </div>
             </div>
             <div className="hidden lg:flex justify-center items-center">
-              <VenueBuildings className="w-80 h-72" />
+              <VenueBuildings className="w-full max-w-xl" />
             </div>
           </div>
         </div>
