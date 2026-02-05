@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { withRetry } from '@/lib/gemini/retry'
 import type { Suggestion, SuggestionType } from '@/types/agent'
+import { EVENT_TYPES, TIME_OPTIONS } from '@/lib/constants'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
 
@@ -84,17 +85,6 @@ function buildVenueContext(venue: VenueData): string {
   return parts.join('\n')
 }
 
-const EVENT_TYPES = [
-  { value: 'aw', label: 'AW / Afterwork' },
-  { value: 'konferens', label: 'Konferens' },
-  { value: 'fest', label: 'Fest / Firande' },
-  { value: 'workshop', label: 'Workshop' },
-  { value: 'middag', label: 'Middag / Bankett' },
-  { value: 'foretag', label: 'Företagsevent' },
-  { value: 'privat', label: 'Privat tillställning' },
-  { value: 'annat', label: 'Annat' },
-]
-
 function buildSystemPrompt(venue: VenueData, isBookingPage: boolean): string {
   const venueContext = buildVenueContext(venue)
 
@@ -127,7 +117,7 @@ Om användaren beskriver sitt event (t.ex. "Vi ska ha AW för 30 personer på fr
 </suggestions>
 
 Giltiga eventType-värden: ${EVENT_TYPES.map(t => `"${t.value}"`).join(', ')}
-Giltiga tider: 08:00, 09:00, 10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00, 21:00, 22:00, 23:00
+Giltiga tider: ${TIME_OPTIONS.join(', ')}
 Datum ska vara i formatet YYYY-MM-DD
 
 Föreslå ENDAST värden som användaren nämner eller som logiskt följer. Gissa inte.`
