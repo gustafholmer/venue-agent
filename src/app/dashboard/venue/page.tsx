@@ -373,13 +373,15 @@ export default function VenueEditPage() {
 
       {/* Success/Error messages */}
       {successMessage && (
-        <div className="mb-6 p-4 bg-[#d1fae5] border border-[#10b981] rounded-lg text-[#065f46]">
-          {successMessage}
+        <div className="mb-6 p-4 bg-[#d1fae5] border border-[#10b981] rounded-lg text-[#065f46] flex items-start gap-2">
+          <span className="flex-1">{successMessage}</span>
+          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stäng"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
       )}
       {errorMessage && (
-        <div className="mb-6 p-4 bg-[#fee2e2] border border-[#ef4444] rounded-lg text-[#991b1b]">
-          {errorMessage}
+        <div className="mb-6 p-4 bg-[#fee2e2] border border-[#ef4444] rounded-lg text-[#991b1b] flex items-start gap-2">
+          <span className="flex-1">{errorMessage}</span>
+          <button onClick={() => setErrorMessage(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stäng"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
       )}
 
@@ -781,9 +783,9 @@ export default function VenueEditPage() {
 
           <Button
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            {isSubmitting ? 'Sparar...' : 'Spara andringar'}
+            Spara andringar
           </Button>
         </div>
       </div>

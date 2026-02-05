@@ -603,9 +603,10 @@ export default function NewVenuePage() {
               <Button
                 type="button"
                 onClick={handleSubmit}
-                disabled={isSubmitting || !canProceed()}
+                loading={isSubmitting}
+                disabled={!canProceed()}
               >
-                {isSubmitting ? 'Sparar...' : 'Spara som utkast'}
+                Spara som utkast
               </Button>
             ) : (
               <Button

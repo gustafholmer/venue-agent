@@ -180,19 +180,20 @@ export default function SettingsPage() {
 
           {message && (
             <div
-              className={`p-3 rounded-lg text-sm ${
+              className={`p-3 rounded-lg text-sm flex items-start gap-2 ${
                 message.type === 'success'
                   ? 'bg-green-50 text-green-700 border border-green-200'
                   : 'bg-red-50 text-red-700 border border-red-200'
               }`}
             >
-              {message.text}
+              <span className="flex-1">{message.text}</span>
+              <button onClick={() => setMessage(null)} className={`flex-shrink-0 p-1 rounded ${message.type === 'success' ? 'hover:bg-green-100' : 'hover:bg-red-100'}`} aria-label="Stäng"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
           )}
 
           <div className="pt-2">
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? 'Sparar...' : 'Spara ändringar'}
+            <Button type="submit" loading={isSaving}>
+              Spara ändringar
             </Button>
           </div>
         </form>

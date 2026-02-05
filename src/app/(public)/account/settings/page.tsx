@@ -204,8 +204,8 @@ export default function AccountSettingsPage() {
           </div>
 
           <div className="pt-2">
-            <Button type="submit" disabled={isSavingProfile}>
-              {isSavingProfile ? 'Sparar...' : 'Spara ändringar'}
+            <Button type="submit" loading={isSavingProfile}>
+              Spara ändringar
             </Button>
           </div>
         </form>
@@ -284,8 +284,8 @@ export default function AccountSettingsPage() {
         </div>
 
         <div className="pt-6">
-          <Button onClick={handleSavePreferences} disabled={isSavingPrefs}>
-            {isSavingPrefs ? 'Sparar...' : 'Spara aviseringsinställningar'}
+          <Button onClick={handleSavePreferences} loading={isSavingPrefs}>
+            Spara aviseringsinställningar
           </Button>
         </div>
       </div>
