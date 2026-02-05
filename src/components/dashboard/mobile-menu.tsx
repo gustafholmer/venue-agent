@@ -14,7 +14,7 @@ export function MobileMenu() {
       {/* Hamburger button - visible only below lg */}
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden p-2.5 -ml-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
+        className="lg:hidden p-3 -ml-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
         aria-label="Öppna meny"
       >
         <svg className="w-5 h-5 text-[#374151]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
