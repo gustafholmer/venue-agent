@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getSearchById } from '@/actions/search/save-search'
@@ -18,10 +19,12 @@ function VenueResultCard({ venue }: { venue: VenueResult }) {
       {/* Image */}
       <div className="aspect-[4/3] bg-[#f9fafb] relative overflow-hidden">
         {venue.imageUrl ? (
-          <img
+          <Image
             src={venue.imageUrl}
             alt={venue.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
@@ -218,6 +221,10 @@ export async function generateMetadata({ params }: PageProps) {
   const { searchId } = await params
   return {
     title: `Sökresultat - Tryffle`,
-    description: `Se sökresultat för lokaler. Sök-ID: ${searchId}`,
+    description: `Se sökresultat för lokaler.`,
+    robots: {
+      index: false,
+      follow: true,
+    },
   }
 }

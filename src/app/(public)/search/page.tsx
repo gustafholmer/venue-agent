@@ -98,4 +98,8 @@ export default async function SearchPage(props: SearchPageProps) {
 export const metadata = {
   title: 'Sök lokal - Tryffle',
   description: 'Beskriv ditt event och låt vår AI hitta matchande lokaler.',
+  robots: {
+    index: false,
+    follow: true,
+  },
 }

@@ -1,3 +1,5 @@
+import { generateFAQSchema, jsonLdScript } from '@/lib/structured-data'
+
 export default function FAQPage() {
   const faqs = [
     {
@@ -30,8 +32,14 @@ export default function FAQPage() {
     },
   ]
 
+  const faqSchema = generateFAQSchema(faqs.map((item) => ({ question: item.q, answer: item.a })))
+
   return (
     <div className="px-4 sm:px-6 py-12 sm:py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqSchema) }}
+      />
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

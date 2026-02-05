@@ -16,6 +16,7 @@ export interface LocalBusinessData {
   priceRange?: string
   images?: string[]
   url: string
+  aggregateRating?: AggregateRatingData
 }
 
 export interface BreadcrumbItem {
@@ -73,6 +74,14 @@ export function generateLocalBusinessSchema(data: LocalBusinessData): object {
     schema.image = data.images
   }
 
+  if (data.aggregateRating && data.aggregateRating.reviewCount > 0) {
+    schema.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: data.aggregateRating.ratingValue,
+      reviewCount: data.aggregateRating.reviewCount,
+    }
+  }
+
   return schema
 }
 
@@ -88,6 +97,34 @@ export function generateBreadcrumbSchema(items: BreadcrumbItem[]): object {
       position: index + 1,
       name: item.name,
       item: item.url,
+    })),
+  }
+}
+
+export interface AggregateRatingData {
+  ratingValue: number
+  reviewCount: number
+}
+
+export interface FAQItem {
+  question: string
+  answer: string
+}
+
+/**
+ * Generate FAQPage schema for the FAQ page
+ */
+export function generateFAQSchema(items: FAQItem[]): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
     })),
   }
 }

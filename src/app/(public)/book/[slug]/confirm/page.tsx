@@ -15,6 +15,10 @@ interface PageProps {
 export const metadata: Metadata = {
   title: 'Bokningsförfrågan skickad - Tryffle',
   description: 'Din bokningsförfrågan har skickats till lokalägaren.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 function formatDate(dateStr: string): string {

@@ -42,7 +42,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${venue.name} - Tryffle`,
     description,
+    alternates: {
+      canonical: `/venues/${slug}`,
+    },
     openGraph: {
+      title: venue.name,
+      description,
+      images: venue.photos[0]?.url ? [venue.photos[0].url] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
       title: venue.name,
       description,
       images: venue.photos[0]?.url ? [venue.photos[0].url] : undefined,
@@ -136,6 +145,9 @@ async function VenueDetailContent({ params }: PageProps) {
     }),
     images: venue.photos.map((p) => p.url),
     url: `${BASE_URL}/venues/${venue.slug || venue.id}`,
+    aggregateRating: venue.averageRating && venue.reviewCount
+      ? { ratingValue: venue.averageRating, reviewCount: venue.reviewCount }
+      : undefined,
   })
 
   const breadcrumbSchema = generateBreadcrumbSchema([

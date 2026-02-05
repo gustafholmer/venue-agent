@@ -10,9 +10,30 @@ const playfair = Playfair_Display({
   style: ['normal', 'italic']
 })
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://venue-agent.se'
+
 export const metadata: Metadata = {
-  title: 'Tryffle - Hitta den perfekta lokalen',
-  description: 'Beskriv ditt event sa hittar vi matchande lokaler med tillgangliga datum.',
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: 'Tryffle - Hitta den perfekta lokalen',
+    template: '%s | Tryffle',
+  },
+  description: 'Beskriv ditt event så hittar vi matchande lokaler med tillgängliga datum.',
+  openGraph: {
+    type: 'website',
+    locale: 'sv_SE',
+    siteName: 'Tryffle',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+  },
 }
 
 export default function RootLayout({

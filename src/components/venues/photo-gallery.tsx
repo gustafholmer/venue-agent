@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import Image from 'next/image'
 import type { VenuePhoto } from '@/types/database'
 
 interface PhotoGalleryProps {
@@ -72,10 +73,13 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
           className="relative aspect-[16/9] bg-[#f9fafb] rounded-xl overflow-hidden cursor-pointer group"
           onClick={() => setIsLightboxOpen(true)}
         >
-          <img
-            src={selectedPhoto?.url}
+          <Image
+            src={selectedPhoto?.url || ''}
             alt={selectedPhoto?.alt_text || venueName}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            priority
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
 
           {/* View all photos overlay */}
@@ -130,16 +134,18 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
               <button
                 key={photo.id}
                 onClick={() => setSelectedIndex(index)}
-                className={`aspect-square rounded-lg overflow-hidden transition-all ${
+                className={`relative aspect-square rounded-lg overflow-hidden transition-all ${
                   index === selectedIndex
                     ? 'ring-2 ring-[#1e3a8a] ring-offset-2'
                     : 'opacity-70 hover:opacity-100'
                 }`}
               >
-                <img
+                <Image
                   src={photo.url}
                   alt={photo.alt_text || `${venueName} - Bild ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="120px"
+                  className="object-cover"
                 />
                 {/* Show +X more overlay on the last thumbnail */}
                 {index === 5 && allPhotos.length > 6 && (
@@ -231,16 +237,18 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
                   e.stopPropagation()
                   setSelectedIndex(index)
                 }}
-                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden transition-all ${
+                className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden transition-all ${
                   index === selectedIndex
                     ? 'ring-2 ring-white'
                     : 'opacity-50 hover:opacity-100'
                 }`}
               >
-                <img
+                <Image
                   src={photo.url}
                   alt={photo.alt_text || `${venueName} - Bild ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="64px"
+                  className="object-cover"
                 />
               </button>
             ))}

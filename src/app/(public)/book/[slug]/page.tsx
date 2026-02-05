@@ -22,6 +22,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `Boka ${result.venue.name} - Tryffle`,
     description: `Skicka en bokningsförfrågan för ${result.venue.name} i ${result.venue.area || result.venue.city}.`,
+    robots: {
+      index: false,
+      follow: true,
+    },
   }
 }
 

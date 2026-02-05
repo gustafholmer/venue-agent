@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export interface VenueCardData {
   id: string
@@ -39,12 +40,14 @@ export function VenueCard({ venue }: VenueCardProps) {
   return (
     <Link href={href} className="group block">
       {/* Image */}
-      <div className="aspect-[4/3] bg-[#f5f3f0] mb-2 overflow-hidden rounded-sm">
+      <div className="relative aspect-[4/3] bg-[#f5f3f0] mb-2 overflow-hidden rounded-sm">
         {venue.primaryPhotoUrl ? (
-          <img
+          <Image
             src={venue.primaryPhotoUrl}
             alt={venue.name}
-            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
