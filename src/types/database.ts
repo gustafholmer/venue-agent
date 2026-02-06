@@ -6,7 +6,6 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export type UserRole = 'customer' | 'venue_owner' | 'admin'
 export type BookingStatus = 'pending' | 'accepted' | 'declined' | 'cancelled' | 'completed' | 'paid_out'
 export type VenueStatus = 'draft' | 'published' | 'paused'
 export type NotificationType =
@@ -23,7 +22,7 @@ export interface Database {
           email: string
           full_name: string | null
           phone: string | null
-          user_type: UserRole
+          roles: string[]
           company_name: string | null
           org_number: string | null
           stripe_account_id: string | null
@@ -36,7 +35,7 @@ export interface Database {
           email: string
           full_name?: string | null
           phone?: string | null
-          user_type?: UserRole
+          roles?: string[]
           company_name?: string | null
           org_number?: string | null
           stripe_account_id?: string | null
@@ -49,7 +48,7 @@ export interface Database {
           email?: string
           full_name?: string | null
           phone?: string | null
-          user_type?: UserRole
+          roles?: string[]
           company_name?: string | null
           org_number?: string | null
           stripe_account_id?: string | null
@@ -666,3 +665,7 @@ export type SavedVenue = Tables<'saved_venues'>
 export type SharedList = Tables<'shared_lists'>
 export type Review = Tables<'reviews'>
 export type AgentSession = Tables<'agent_sessions'>
+
+export function hasRole(profile: { roles: string[] }, role: string): boolean {
+  return profile.roles.includes(role)
+}
