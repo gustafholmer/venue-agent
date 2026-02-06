@@ -4,7 +4,7 @@ import { useActionState } from 'react'
 import { signUp, type SignUpState } from '@/actions/auth/sign-up'
 import { Button } from '@/components/ui/button'
 
-interface SignUpFormProps {
+interface SignUpFormPrivateProps {
   returnUrl: string | null
   signInLink: string
 }
@@ -13,12 +13,13 @@ const initialState: SignUpState = {
   error: null,
 }
 
-export function SignUpForm({ returnUrl, signInLink }: SignUpFormProps) {
+export function SignUpFormPrivate({ returnUrl, signInLink }: SignUpFormPrivateProps) {
   const [state, formAction, isPending] = useActionState(signUp, initialState)
 
   return (
     <>
       <form action={formAction} className="space-y-4">
+        <input type="hidden" name="accountType" value="private" />
         {returnUrl && (
           <input type="hidden" name="returnUrl" value={returnUrl} />
         )}
@@ -30,8 +31,21 @@ export function SignUpForm({ returnUrl, signInLink }: SignUpFormProps) {
         )}
 
         <div>
+          <label htmlFor="fullName" className="block text-sm text-[#374151] mb-1.5">
+            Fullständigt namn*
+          </label>
+          <input
+            id="fullName"
+            name="fullName"
+            type="text"
+            required
+            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+          />
+        </div>
+
+        <div>
           <label htmlFor="email" className="block text-sm text-[#374151] mb-1.5">
-            E-post
+            E-post*
           </label>
           <input
             id="email"
@@ -44,8 +58,20 @@ export function SignUpForm({ returnUrl, signInLink }: SignUpFormProps) {
         </div>
 
         <div>
+          <label htmlFor="phone" className="block text-sm text-[#374151] mb-1.5">
+            Telefon
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+          />
+        </div>
+
+        <div>
           <label htmlFor="password" className="block text-sm text-[#374151] mb-1.5">
-            Lösenord
+            Lösenord*
           </label>
           <input
             id="password"

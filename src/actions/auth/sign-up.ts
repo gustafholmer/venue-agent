@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
@@ -21,6 +22,11 @@ export async function signUp(
 
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const accountType = formData.get('accountType') as string
+  const fullName = (formData.get('fullName') || formData.get('contactPerson')) as string
+  const phone = formData.get('phone') as string | null
+  const companyName = formData.get('companyName') as string | null
+  const orgNumber = formData.get('orgNumber') as string | null
 
   if (!email || !password) {
     return { error: 'E-post och lösenord krävs.' }
@@ -30,11 +36,28 @@ export async function signUp(
     return { error: 'Lösenordet måste vara minst 8 tecken.' }
   }
 
+  if (!fullName) {
+    return { error: 'Namn krävs.' }
+  }
+
+  if (accountType === 'company') {
+    if (!companyName) {
+      return { error: 'Företagsnamn krävs.' }
+    }
+    if (!orgNumber) {
+      return { error: 'Organisationsnummer krävs.' }
+    }
+    const orgNumberRegex = /^\d{6}-?\d{4}$/
+    if (!orgNumberRegex.test(orgNumber)) {
+      return { error: 'Ogiltigt organisationsnummer. Ange i formatet 556123-4567.' }
+    }
+  }
+
   const supabase = await createClient()
   const headersList = await headers()
   const origin = headersList.get('origin') || 'http://localhost:3000'
 
-  const { error } = await supabase.auth.signUp({
+  const { data: authData, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -44,6 +67,28 @@ export async function signUp(
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (authData.user) {
+    const serviceClient = createServiceClient()
+
+    const profileData: Record<string, string | null> = {
+      full_name: fullName,
+      phone: phone || null,
+    }
+
+    if (accountType === 'company') {
+      profileData.company_name = companyName!
+      profileData.org_number = orgNumber!
+    }
+
+    const { error: profileError } = await serviceClient
+      .from('profiles')
+      .upsert({ id: authData.user.id, email, ...profileData }, { onConflict: 'id' })
+
+    if (profileError) {
+      console.error('Profile update error:', profileError)
+    }
   }
 
   redirect('/auth/confirm')
