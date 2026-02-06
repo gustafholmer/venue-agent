@@ -51,8 +51,8 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps) {
 
         <p className="text-center text-sm text-[#6b7280] mt-8">
           Vill du lista din lokal?{' '}
-          <Link href="/auth/register/venue" className="text-[#1e3a8a] hover:underline">
-            Registrera dig här
+          <Link href="/auth/sign-up/company" className="text-[#1e3a8a] hover:underline">
+            Registrera dig som företag
           </Link>
         </p>
 

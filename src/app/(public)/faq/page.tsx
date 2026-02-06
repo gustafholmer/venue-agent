@@ -24,7 +24,7 @@ export default function FAQPage() {
     },
     {
       q: 'Jag äger en lokal – hur lägger jag upp den?',
-      a: 'Klicka på "Lista din eventlokal" i menyn och skapa ett konto. Det är kostnadsfritt att lista din lokal.',
+      a: 'Klicka på "Lista eventlokal" i menyn och skapa ett företagskonto. Som företag kan du både boka och lista lokaler.',
     },
     {
       q: 'Hur kontaktar jag supporten?',
