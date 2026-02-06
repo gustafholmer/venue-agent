@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { signUp, type SignUpState } from '@/actions/auth/sign-up'
 import { Button } from '@/components/ui/button'
 
@@ -13,8 +13,15 @@ const initialState: SignUpState = {
   error: null,
 }
 
+function generateTestOrgNumber(): string {
+  const part1 = String(Math.floor(Math.random() * 1000000)).padStart(6, '0')
+  const part2 = String(Math.floor(Math.random() * 10000)).padStart(4, '0')
+  return `${part1}-${part2}`
+}
+
 export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyProps) {
   const [state, formAction, isPending] = useActionState(signUp, initialState)
+  const [testOrgNumber] = useState(() => generateTestOrgNumber())
 
   return (
     <>
@@ -66,6 +73,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             type="text"
             required
             maxLength={11}
+            defaultValue={testOrgNumber}
             placeholder="556123-4567"
             className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
           />
