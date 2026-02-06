@@ -52,8 +52,8 @@ export function SignUpForm({ returnUrl, signInLink }: SignUpFormProps) {
             name="password"
             type="password"
             required
-            minLength={6}
-            placeholder="Minst 6 tecken"
+            minLength={8}
+            placeholder="Minst 8 tecken"
             className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
           />
         </div>

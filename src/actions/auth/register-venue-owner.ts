@@ -1,10 +1,13 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export async function registerVenueOwner(formData: FormData) {
   const supabase = await createClient()
+  const headersList = await headers()
+  const origin = headersList.get('origin') || 'http://localhost:3000'
 
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -23,6 +26,9 @@ export async function registerVenueOwner(formData: FormData) {
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      emailRedirectTo: `${origin}/auth/callback?next=/dashboard`,
+    },
   })
 
   if (authError) {
@@ -51,5 +57,5 @@ export async function registerVenueOwner(formData: FormData) {
     return redirect('/auth/register/venue?error=' + encodeURIComponent('Failed to update profile'))
   }
 
-  redirect('/dashboard')
+  redirect('/auth/confirm')
 }
