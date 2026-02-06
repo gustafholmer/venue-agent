@@ -1,5 +1,3 @@
-import { TryffleLogo } from '@/components/illustrations/agent-mascot'
-
 export default function AboutPage() {
   return (
     <div className="px-4 sm:px-6 py-12 sm:py-20">
@@ -41,40 +39,16 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Mascot section */}
-        <section className="mb-16">
-          <div className="bg-[#fef3c7] rounded-2xl p-6 sm:p-8 text-center">
-            <div className="w-32 h-32 mx-auto mb-6">
-              <TryffleLogo className="w-full h-full" />
-            </div>
-            <h2 className="text-xl font-medium text-[#1a1a1a] mb-2">
-              Tryffle
-            </h2>
-            <p className="text-sm text-[#c45a3b] mb-4">
-              Chief Location Officer
-            </p>
-            <p className="text-[#78716c] leading-relaxed max-w-md mx-auto">
-              Jag är den som gör det tunga jobbet här. Medan Gustaf dricker kaffe
-              letar jag igenom alla lokaler, analyserar dina önskemål och hittar
-              den perfekta matchen. Jag sover aldrig. Jag klagar aldrig.
-              Jag älskar mitt jobb.
-            </p>
-            <p className="text-sm text-[#a8a29e] mt-4 italic">
-              (Gustaf tvingade mig att skriva det där sista)
-            </p>
-          </div>
-        </section>
-
         {/* Mission */}
         <section className="text-center">
           <h2 className="text-sm uppercase tracking-widest text-[#78716c] mb-4">
             Vår mission
           </h2>
           <p className="text-xl sm:text-2xl text-[#1a1a1a] leading-relaxed">
-            Att göra det lika enkelt att hitta en eventlokal som att beställa en pizza.
+            Att bli Sveriges självklara plattform för eventlokaler &ndash; där varje bokning börjar.
           </p>
-          <p className="text-[#78716c] mt-4">
-            Fast utan ananasen. Vi dömer inte.
+          <p className="text-[#78716c] mt-4 leading-relaxed">
+            Vi bygger infrastrukturen som kopplar samman lokaler med de som behöver dem. Smartare sök, bättre matchning, enklare bokning.
           </p>
         </section>
       </div>
