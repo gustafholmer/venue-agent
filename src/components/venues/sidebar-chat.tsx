@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback, type FormEvent, type KeyboardEvent } from 'react'
 import { processAgentMessage } from '@/actions/agent/process-message'
-import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import type { AgentMessage, AgentState, VenueResult } from '@/types/agent'
 
 interface SidebarChatProps {
@@ -49,9 +48,6 @@ function MessageBubble({ message }: { message: AgentMessage }) {
 
   return (
     <div className="flex items-start gap-3">
-      <div className="flex-shrink-0 w-10 h-10 bg-[#e8cec8] rounded-full flex items-center justify-center overflow-hidden">
-        <TryffleLogo variant="small" className="w-7 h-7" />
-      </div>
       <div className="max-w-[80%] bg-[#f5f3f0] text-[#1a1a1a] rounded-2xl rounded-tl-md px-3 py-2">
         <p className="whitespace-pre-wrap text-sm">{message.content}</p>
         {message.venues && message.venues.length > 0 && (
@@ -248,9 +244,6 @@ export function SidebarChat({
       <div className={`flex-1 overflow-y-auto px-3 py-4 space-y-3 ${!isExpanded ? 'hidden lg:block' : ''}`}>
         {messages.length === 0 && !isLoading && (
           <div className="flex items-start gap-3 py-4">
-            <div className="flex-shrink-0 w-10 h-10 bg-[#e8cec8] rounded-full flex items-center justify-center overflow-hidden">
-              <TryffleLogo variant="small" className="w-7 h-7" />
-            </div>
             <div className="bg-[#f5f3f0] rounded-2xl rounded-tl-md px-3 py-2 flex-1">
               <p className="text-sm text-[#1a1a1a]">
                 Hej! Beskriv ditt event så hittar jag din eventlokal åt dig.
