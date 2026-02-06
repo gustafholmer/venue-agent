@@ -17,14 +17,9 @@ export default async function AccountLayout({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, email, user_type')
+    .select('full_name, email, roles')
     .eq('id', user.id)
     .single()
-
-  // Only customers can access this area
-  if (profile?.user_type === 'venue_owner') {
-    redirect('/dashboard')
-  }
 
   return (
     <div className="min-h-screen bg-[#f9fafb]">
