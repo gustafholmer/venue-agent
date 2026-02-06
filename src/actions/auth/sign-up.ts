@@ -47,6 +47,10 @@ export async function signUp(
     if (!orgNumber) {
       return { error: 'Organisationsnummer krävs.' }
     }
+    const orgNumberRegex = /^\d{6}-?\d{4}$/
+    if (!orgNumberRegex.test(orgNumber)) {
+      return { error: 'Ogiltigt organisationsnummer. Ange i formatet 556123-4567.' }
+    }
   }
 
   const supabase = await createClient()
@@ -80,8 +84,7 @@ export async function signUp(
 
     const { error: profileError } = await serviceClient
       .from('profiles')
-      .update(profileData)
-      .eq('id', authData.user.id)
+      .upsert({ id: authData.user.id, email, ...profileData }, { onConflict: 'id' })
 
     if (profileError) {
       console.error('Profile update error:', profileError)
