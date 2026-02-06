@@ -19,11 +19,11 @@ export default async function DashboardLayout({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('user_type, company_name, full_name')
+    .select('roles, company_name, full_name')
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.user_type !== 'venue_owner') {
+  if (!profile || !profile.roles.includes('venue_owner')) {
     redirect('/')
   }
 

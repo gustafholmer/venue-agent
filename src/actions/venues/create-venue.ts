@@ -22,11 +22,11 @@ export async function createVenue(formData: FormData) {
   // Verify user is a venue owner
   const { data: profile } = await supabase
     .from('profiles')
-    .select('user_type')
+    .select('roles')
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.user_type !== 'venue_owner') {
+  if (!profile || !profile.roles.includes('venue_owner')) {
     return redirect('/')
   }
 

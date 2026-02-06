@@ -130,11 +130,11 @@ INSERT INTO auth.users (
 -- Profiles (auto-created by trigger, but we override with more details)
 -- ============================================================================
 
-INSERT INTO profiles (id, email, full_name, phone, user_type, company_name, org_number) VALUES
-  ('11111111-1111-1111-1111-111111111111', 'owner@test.com', 'Anna Andersson', '+46701234567', 'venue_owner', 'Andersson Events AB', '5591234567'),
-  ('22222222-2222-2222-2222-222222222222', 'owner2@test.com', 'Erik Eriksson', '+46707654321', 'venue_owner', 'Eriksson Lokaler AB', '5599876543'),
-  ('33333333-3333-3333-3333-333333333333', 'customer@test.com', 'Maria Svensson', '+46709998877', 'customer', NULL, NULL),
-  ('44444444-4444-4444-4444-444444444444', 'customer2@test.com', 'Johan Johansson', '+46701112233', 'customer', 'Johansson Consulting', NULL);
+INSERT INTO profiles (id, email, full_name, phone, roles, company_name, org_number) VALUES
+  ('11111111-1111-1111-1111-111111111111', 'owner@test.com', 'Anna Andersson', '+46701234567', '{customer,venue_owner}', 'Andersson Events AB', '5591234567'),
+  ('22222222-2222-2222-2222-222222222222', 'owner2@test.com', 'Erik Eriksson', '+46707654321', '{customer,venue_owner}', 'Eriksson Lokaler AB', '5599876543'),
+  ('33333333-3333-3333-3333-333333333333', 'customer@test.com', 'Maria Svensson', '+46709998877', '{customer}', NULL, NULL),
+  ('44444444-4444-4444-4444-444444444444', 'customer2@test.com', 'Johan Johansson', '+46701112233', '{customer}', 'Johansson Consulting', NULL);
 
 -- ============================================================================
 -- Venues

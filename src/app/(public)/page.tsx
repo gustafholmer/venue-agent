@@ -259,7 +259,7 @@ export default async function LandingPage() {
                 Lista din lokal kostnadsfritt och nå kunder som aktivt letar efter en plats för sitt event.
               </p>
               <Link
-                href="/auth/register/venue"
+                href="/auth/sign-up/company"
                 className="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-[#c45a3b] font-medium rounded-full hover:bg-[#fef3c7] transition-colors shadow-sm"
               >
                 Kom igång

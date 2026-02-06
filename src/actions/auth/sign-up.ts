@@ -72,7 +72,7 @@ export async function signUp(
   if (authData.user) {
     const serviceClient = createServiceClient()
 
-    const profileData: Record<string, string | null> = {
+    const profileData: Record<string, string | string[] | null> = {
       full_name: fullName,
       phone: phone || null,
     }
@@ -80,6 +80,9 @@ export async function signUp(
     if (accountType === 'company') {
       profileData.company_name = companyName!
       profileData.org_number = orgNumber!
+      profileData.roles = ['customer', 'venue_owner']
+    } else {
+      profileData.roles = ['customer']
     }
 
     const { error: profileError } = await serviceClient
