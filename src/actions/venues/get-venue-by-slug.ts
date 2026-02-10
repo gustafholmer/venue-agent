@@ -3,20 +3,11 @@
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { getMockVenueBySlug, getMockPhotosForVenue } from '@/lib/mock-data'
-import type { Venue, VenuePhoto, Review } from '@/types/database'
+import type { Venue, VenuePhoto } from '@/types/database'
 import { trackEvent } from '@/lib/analytics'
 
 export interface VenueWithDetails extends Venue {
   photos: VenuePhoto[]
-  reviews: ReviewWithProfile[]
-  averageRating: number | null
-  reviewCount: number
-}
-
-interface ReviewWithProfile extends Review {
-  profile: {
-    full_name: string | null
-  } | null
 }
 
 export interface GetVenueResult {
@@ -45,9 +36,6 @@ export async function getVenueBySlug(slugOrId: string): Promise<GetVenueResult> 
         venue: {
           ...mockVenue,
           photos: mockPhotos,
-          reviews: [],
-          averageRating: null,
-          reviewCount: 0,
         },
       }
     }
@@ -90,25 +78,6 @@ export async function getVenueBySlug(slugOrId: string): Promise<GetVenueResult> 
       .order('is_primary', { ascending: false })
       .order('sort_order', { ascending: true })
 
-    // Fetch reviews with profile information
-    const { data: reviews } = await supabase
-      .from('reviews')
-      .select(`
-        *,
-        profile:profiles!reviews_customer_id_fkey(full_name)
-      `)
-      .eq('venue_id', venue.id)
-      .order('created_at', { ascending: false })
-
-    // Calculate average rating
-    let averageRating: number | null = null
-    const reviewCount = reviews?.length || 0
-
-    if (reviews && reviews.length > 0) {
-      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0)
-      averageRating = Math.round((totalRating / reviews.length) * 10) / 10
-    }
-
     trackEvent('venue_viewed', { venue_id: venue.id, slug: slugOrId })
 
     return {
@@ -116,9 +85,6 @@ export async function getVenueBySlug(slugOrId: string): Promise<GetVenueResult> 
       venue: {
         ...venue,
         photos: photos || [],
-        reviews: (reviews as ReviewWithProfile[]) || [],
-        averageRating,
-        reviewCount,
       },
     }
   } catch (error) {

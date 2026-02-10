@@ -64,40 +64,6 @@ function formatPrice(price: number | null): string {
   return `${price.toLocaleString('sv-SE')} SEK`
 }
 
-function StarRating({ rating }: { rating: number }) {
-  const fullStars = Math.floor(rating)
-  const hasHalfStar = rating % 1 >= 0.5
-
-  return (
-    <div className="flex items-center gap-0.5">
-      {[...Array(5)].map((_, i) => (
-        <svg
-          key={i}
-          className={`w-5 h-5 ${
-            i < fullStars
-              ? 'text-yellow-400'
-              : i === fullStars && hasHalfStar
-              ? 'text-yellow-400'
-              : 'text-[#d1d5db]'
-          }`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-    </div>
-  )
-}
-
-function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('sv-SE', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
 function DemoModeBanner() {
   return (
     <div className="bg-amber-50 border-b border-amber-200">
@@ -145,9 +111,6 @@ async function VenueDetailContent({ params }: PageProps) {
     }),
     images: venue.photos.map((p) => p.url),
     url: `${BASE_URL}/venues/${venue.slug || venue.id}`,
-    aggregateRating: venue.averageRating && venue.reviewCount
-      ? { ratingValue: venue.averageRating, reviewCount: venue.reviewCount }
-      : undefined,
   })
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -201,15 +164,6 @@ async function VenueDetailContent({ params }: PageProps) {
                   </svg>
                   {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
                 </span>
-                {venue.averageRating && (
-                  <span className="flex items-center gap-1">
-                    <StarRating rating={venue.averageRating} />
-                    <span className="ml-1">
-                      {venue.averageRating} ({venue.reviewCount}{' '}
-                      {venue.reviewCount === 1 ? 'recension' : 'recensioner'})
-                    </span>
-                  </span>
-                )}
               </div>
             </div>
 
@@ -368,43 +322,6 @@ async function VenueDetailContent({ params }: PageProps) {
               )}
             </div>
 
-            {/* Reviews */}
-            {venue.reviews && venue.reviews.length > 0 && (
-              <div>
-                <h2 className="text-lg font-semibold text-[#111827] mb-4">
-                  Recensioner ({venue.reviewCount})
-                </h2>
-                <div className="space-y-6">
-                  {venue.reviews.map((review) => (
-                    <div key={review.id} className="border-b border-[#e5e7eb] pb-6 last:border-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 bg-[#1e3a8a] rounded-full flex items-center justify-center text-white font-medium">
-                          {review.profile?.full_name?.[0]?.toUpperCase() || 'G'}
-                        </div>
-                        <div>
-                          <p className="font-medium text-[#111827]">
-                            {review.profile?.full_name || 'Anonym gäst'}
-                          </p>
-                          <p className="text-sm text-[#6b7280]">{formatDate(review.created_at)}</p>
-                        </div>
-                      </div>
-                      <div className="ml-13">
-                        <StarRating rating={review.rating} />
-                        {review.review_text && (
-                          <p className="mt-2 text-[#374151]">{review.review_text}</p>
-                        )}
-                        {review.venue_response && (
-                          <div className="mt-3 pl-4 border-l-2 border-[#1e3a8a]">
-                            <p className="text-sm font-medium text-[#1e3a8a] mb-1">Svar från lokalen</p>
-                            <p className="text-sm text-[#374151]">{review.venue_response}</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Right Column - Pricing & CTA */}

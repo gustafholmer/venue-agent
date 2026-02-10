@@ -9,7 +9,6 @@ interface NotificationPreferencesData {
   email_new_message?: boolean
   email_new_match?: boolean
   email_reminders?: boolean
-  email_review_request?: boolean
 }
 
 export async function updateNotificationPreferences(data: NotificationPreferencesData): Promise<{
@@ -104,7 +103,6 @@ export async function getNotificationPreferences(): Promise<{
       email_new_message: true,
       email_new_match: true,
       email_reminders: true,
-      email_review_request: true,
     }
 
     return {

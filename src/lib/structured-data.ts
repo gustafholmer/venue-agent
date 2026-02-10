@@ -16,7 +16,6 @@ export interface LocalBusinessData {
   priceRange?: string
   images?: string[]
   url: string
-  aggregateRating?: AggregateRatingData
 }
 
 export interface BreadcrumbItem {
@@ -74,14 +73,6 @@ export function generateLocalBusinessSchema(data: LocalBusinessData): object {
     schema.image = data.images
   }
 
-  if (data.aggregateRating && data.aggregateRating.reviewCount > 0) {
-    schema.aggregateRating = {
-      '@type': 'AggregateRating',
-      ratingValue: data.aggregateRating.ratingValue,
-      reviewCount: data.aggregateRating.reviewCount,
-    }
-  }
-
   return schema
 }
 
@@ -99,11 +90,6 @@ export function generateBreadcrumbSchema(items: BreadcrumbItem[]): object {
       item: item.url,
     })),
   }
-}
-
-export interface AggregateRatingData {
-  ratingValue: number
-  reviewCount: number
 }
 
 export interface FAQItem {

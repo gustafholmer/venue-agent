@@ -10,7 +10,7 @@ export type BookingStatus = 'pending' | 'accepted' | 'declined' | 'cancelled' | 
 export type VenueStatus = 'draft' | 'published' | 'paused'
 export type NotificationType =
   | 'booking_request' | 'booking_accepted' | 'booking_declined' | 'booking_cancelled'
-  | 'new_message' | 'new_match' | 'payment_completed' | 'payout_sent' | 'review_request'
+  | 'new_message' | 'new_match' | 'payment_completed' | 'payout_sent'
 export type EntityType = 'booking' | 'venue' | 'message' | 'search'
 
 export interface Database {
@@ -448,7 +448,6 @@ export interface Database {
           email_new_message: boolean
           email_new_match: boolean
           email_reminders: boolean
-          email_review_request: boolean
           updated_at: string
         }
         Insert: {
@@ -458,7 +457,6 @@ export interface Database {
           email_new_message?: boolean
           email_new_match?: boolean
           email_reminders?: boolean
-          email_review_request?: boolean
           updated_at?: string
         }
         Update: {
@@ -468,7 +466,6 @@ export interface Database {
           email_new_message?: boolean
           email_new_match?: boolean
           email_reminders?: boolean
-          email_review_request?: boolean
           updated_at?: string
         }
       }
@@ -522,38 +519,6 @@ export interface Database {
           venue_ids?: string[]
           created_at?: string
           expires_at?: string
-        }
-      }
-      reviews: {
-        Row: {
-          id: string
-          booking_request_id: string
-          venue_id: string
-          customer_id: string
-          rating: number
-          review_text: string | null
-          venue_response: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          booking_request_id: string
-          venue_id: string
-          customer_id: string
-          rating: number
-          review_text?: string | null
-          venue_response?: string | null
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          booking_request_id?: string
-          venue_id?: string
-          customer_id?: string
-          rating?: number
-          review_text?: string | null
-          venue_response?: string | null
-          created_at?: string
         }
       }
       agent_sessions: {
@@ -663,7 +628,6 @@ export type Notification = Tables<'notifications'>
 export type NotificationPreference = Tables<'notification_preferences'>
 export type SavedVenue = Tables<'saved_venues'>
 export type SharedList = Tables<'shared_lists'>
-export type Review = Tables<'reviews'>
 export type AgentSession = Tables<'agent_sessions'>
 
 export function hasRole(profile: { roles: string[] }, role: string): boolean {
