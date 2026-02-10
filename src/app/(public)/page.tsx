@@ -101,7 +101,7 @@ export default async function LandingPage() {
               <p className="text-sm uppercase tracking-widest text-[#c45a3b] mb-4">
                 Din personliga lokalagent
               </p>
-              <h1 className="text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] leading-[1.1] tracking-tight text-[#1a1a1a]">
+              <h1 className="font-[family-name:var(--font-heading)] text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] leading-[1.1] tracking-tight text-[#1a1a1a]">
                 Berätta vad du söker.<br />
                 <span className="text-[#78716c]">Vår agent hittar eventlokalen.</span>
               </h1>

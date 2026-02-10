@@ -233,7 +233,7 @@ export default function CustomerBookingDetailPage() {
           <div className="flex-1 p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-semibold text-[#1a1a1a]">
+                <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
                   {booking.venue.name}
                 </h1>
                 <p className="text-[#78716c] mt-1">

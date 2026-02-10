@@ -94,7 +94,7 @@ export default function BookingsPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Bokningar</h1>
+        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Bokningar</h1>
         <p className="text-[#78716c] mt-1">
           Hantera bokningsförfrågningar för din lokal
         </p>

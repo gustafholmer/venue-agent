@@ -143,7 +143,7 @@ async function VenueDetailContent({ params }: PageProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Header */}
             <div>
-              <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
+              <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
                 {venue.name}
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-[#78716c]">

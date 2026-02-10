@@ -268,7 +268,7 @@ export function VenuesWithAgent({
         }`}>
           {/* Results header */}
           <div className="mb-6">
-            <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-1">
+            <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-1">
               {hasAgentResults ? 'Agentens förslag' : 'Eventlokaler'}
             </h1>
             <p className="text-base text-[#78716c]">

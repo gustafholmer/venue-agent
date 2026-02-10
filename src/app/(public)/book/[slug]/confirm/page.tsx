@@ -81,7 +81,7 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
               />
             </svg>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
+          <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
             Din förfrågan har skickats!
           </h1>
           <p className="text-[#78716c]">

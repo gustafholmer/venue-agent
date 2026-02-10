@@ -54,7 +54,7 @@ export default async function AccountPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#1a1a1a]">
+        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
           Välkommen, {profile?.full_name || 'till ditt konto'}!
         </h1>
         <p className="text-[#78716c] mt-1">

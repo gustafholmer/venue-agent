@@ -21,7 +21,7 @@ export default async function SignUpPrivatePage({ searchParams }: PageProps) {
           Tillbaka
         </Link>
 
-        <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[#1a1a1a] text-center mb-8">
+        <h1 className="font-[family-name:var(--font-heading)] text-3xl text-[#1a1a1a] text-center mb-8">
           Skapa konto som privatperson
         </h1>
 

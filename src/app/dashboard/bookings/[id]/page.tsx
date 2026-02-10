@@ -239,7 +239,7 @@ export default function BookingDetailPage() {
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#1a1a1a]">
+            <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
               Bokning från {booking.customer_name}
             </h1>
             <p className="text-[#78716c] mt-1">

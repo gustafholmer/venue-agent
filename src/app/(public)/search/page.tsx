@@ -42,7 +42,7 @@ async function SearchContent({ searchParams }: SearchPageProps) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-xl font-semibold text-[#1a1a1a] mb-2">
+          <h1 className="font-[family-name:var(--font-heading)] text-xl font-semibold text-[#1a1a1a] mb-2">
             Något gick fel
           </h1>
           <p className="text-[#78716c]">

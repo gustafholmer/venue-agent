@@ -40,7 +40,7 @@ export default async function PublicLayout({
               <div className="relative">
                 <TryffleLogo variant="small" className="w-12 h-12 transition-transform duration-200 group-hover:scale-110" />
               </div>
-              <span className="text-2xl font-medium tracking-tight text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
+              <span className="text-2xl font-[family-name:var(--font-heading)] tracking-tight text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
                 Tryffle
               </span>
             </Link>

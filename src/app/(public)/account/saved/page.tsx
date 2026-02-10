@@ -70,7 +70,7 @@ export default function SavedVenuesPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Sparade lokaler</h1>
+        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Sparade lokaler</h1>
         <p className="text-[#78716c] mt-1">
           Dina favoritlokaler på ett ställe
         </p>

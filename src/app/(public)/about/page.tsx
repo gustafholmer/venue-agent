@@ -7,7 +7,7 @@ export default function AboutPage() {
           <p className="text-sm uppercase tracking-widest text-[#c45a3b] mb-4">
             Om oss
           </p>
-          <h1 className="text-3xl sm:text-4xl text-[#1a1a1a] mb-4">
+          <h1 className="font-[family-name:var(--font-heading)] text-3xl sm:text-4xl text-[#1a1a1a] mb-4">
             Människan bakom agenten
           </h1>
           <p className="text-[#78716c]">

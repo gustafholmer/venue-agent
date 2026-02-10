@@ -38,7 +38,7 @@ export function MobileMenu() {
       >
         {/* Panel header */}
         <div className="flex items-center justify-between h-14 px-4 border-b border-[#e7e5e4]">
-          <span className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a]">
+          <span className="font-[family-name:var(--font-heading)] text-xl text-[#1a1a1a]">
             Tryffle
           </span>
           <button

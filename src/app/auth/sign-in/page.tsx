@@ -22,7 +22,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           Tillbaka
         </Link>
 
-        <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[#1a1a1a] text-center mb-8">Välkommen tillbaka</h1>
+        <h1 className="font-[family-name:var(--font-heading)] text-3xl text-[#1a1a1a] text-center mb-8">Välkommen tillbaka</h1>
         <SignInForm returnUrl={validReturnUrl} signUpLink={signUpLink} />
       </div>
       <AuthSkyline className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[48rem] max-w-none opacity-[0.12] pointer-events-none" />

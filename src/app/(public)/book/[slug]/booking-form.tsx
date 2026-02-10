@@ -202,7 +202,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
           </svg>
           Tillbaka till {venue.name}
         </Link>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a]">
+        <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a]">
           Skicka bokningsförfrågan
         </h1>
       </div>

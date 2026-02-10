@@ -36,7 +36,7 @@ export default async function DashboardLayout({
             <MobileMenu />
             <Link
               href="/dashboard"
-              className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
+              className="font-[family-name:var(--font-heading)] text-xl text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
             >
               Tryffle
             </Link>

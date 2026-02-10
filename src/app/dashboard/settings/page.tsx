@@ -111,7 +111,7 @@ export default function SettingsPage() {
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Inställningar</h1>
+        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Inställningar</h1>
         <p className="text-[#78716c] mt-1">
           Hantera din profil och kontoinställningar
         </p>

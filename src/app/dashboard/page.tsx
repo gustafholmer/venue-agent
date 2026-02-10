@@ -64,7 +64,7 @@ async function DashboardContent() {
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-[#1a1a1a]">Dashboard</h1>
+          <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Dashboard</h1>
           <p className="text-[#78716c]">
             {venue ? venue.name : 'Ingen lokal ännu'}
           </p>

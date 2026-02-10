@@ -7,7 +7,7 @@ export default function PolicyPage() {
           <p className="text-sm uppercase tracking-widest text-[#c45a3b] mb-4">
             Juridiskt
           </p>
-          <h1 className="text-3xl sm:text-4xl text-[#1a1a1a]">
+          <h1 className="font-[family-name:var(--font-heading)] text-3xl sm:text-4xl text-[#1a1a1a]">
             Villkor &amp; Integritet
           </h1>
         </div>

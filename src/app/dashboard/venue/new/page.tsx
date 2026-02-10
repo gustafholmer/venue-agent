@@ -142,7 +142,7 @@ export default function NewVenuePage() {
         >
           &larr; Tillbaka till dashboard
         </a>
-        <h1 className="text-2xl font-semibold text-[#1a1a1a] mt-4">
+        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a] mt-4">
           Skapa ny lokal
         </h1>
         <p className="text-[#78716c] mt-1">

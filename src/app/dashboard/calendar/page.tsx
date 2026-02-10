@@ -263,7 +263,7 @@ export default function CalendarPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-[#1a1a1a]">Kalender</h1>
+          <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Kalender</h1>
           <p className="text-[#78716c] mt-1">
             Hantera tillganglighet och se bokningar
           </p>

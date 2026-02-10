@@ -28,7 +28,7 @@ export async function Nav() {
     <nav className="bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between h-14 items-center">
-          <a href="/" className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a]">
+          <a href="/" className="font-[family-name:var(--font-heading)] text-xl text-[#1a1a1a]">
             Bostadsagent
           </a>
 
