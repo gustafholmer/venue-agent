@@ -235,10 +235,10 @@ export default function CalendarPage() {
   }
 
   const getDayClasses = (day: DayData) => {
-    const baseClasses = 'relative h-14 sm:h-24 border border-[#e5e7eb] p-1 transition-colors'
+    const baseClasses = 'relative h-14 sm:h-24 border border-[#e7e5e4] p-1 transition-colors'
 
     if (!day.isCurrentMonth) {
-      return `${baseClasses} bg-[#f9fafb] text-[#9ca3af]`
+      return `${baseClasses} bg-[#faf9f7] text-[#a8a29e]`
     }
 
     if (day.hasAcceptedBooking) {
@@ -263,8 +263,8 @@ export default function CalendarPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-[#111827]">Kalender</h1>
-          <p className="text-[#6b7280] mt-1">
+          <h1 className="text-2xl font-semibold text-[#1a1a1a]">Kalender</h1>
+          <p className="text-[#78716c] mt-1">
             Hantera tillganglighet och se bokningar
           </p>
         </div>
@@ -301,41 +301,41 @@ export default function CalendarPage() {
       )}
 
       {/* Legend */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-4 mb-6">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-4 mb-6">
         <div className="flex flex-wrap gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded bg-white border border-[#e5e7eb]"></div>
-            <span className="text-sm text-[#374151]">Tillganglig</span>
+            <div className="w-4 h-4 rounded bg-white border border-[#e7e5e4]"></div>
+            <span className="text-sm text-[#57534e]">Tillganglig</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-red-100 border border-red-300"></div>
-            <span className="text-sm text-[#374151]">Blockerad</span>
+            <span className="text-sm text-[#57534e]">Blockerad</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-blue-100 border border-blue-300"></div>
-            <span className="text-sm text-[#374151]">Accepterad bokning</span>
+            <span className="text-sm text-[#57534e]">Accepterad bokning</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-yellow-100 border border-yellow-300"></div>
-            <span className="text-sm text-[#374151]">Ventande bokning</span>
+            <span className="text-sm text-[#57534e]">Ventande bokning</span>
           </div>
         </div>
       </div>
 
       {/* Calendar */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl overflow-hidden">
         {/* Month navigation */}
-        <div className="flex items-center justify-between p-4 border-b border-[#e5e7eb]">
+        <div className="flex items-center justify-between p-4 border-b border-[#e7e5e4]">
           <button
             onClick={handlePrevMonth}
             className="p-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
             aria-label="Foregaende manad"
           >
-            <svg className="w-5 h-5 text-[#374151]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 className="text-lg font-semibold text-[#111827]">
+          <h2 className="text-lg font-semibold text-[#1a1a1a]">
             {SWEDISH_MONTHS[month - 1]} {year}
           </h2>
           <button
@@ -343,18 +343,18 @@ export default function CalendarPage() {
             className="p-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
             aria-label="Nasta manad"
           >
-            <svg className="w-5 h-5 text-[#374151]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>
 
         {/* Day names header */}
-        <div className="grid grid-cols-7 border-b border-[#e5e7eb]">
+        <div className="grid grid-cols-7 border-b border-[#e7e5e4]">
           {SWEDISH_DAYS.map(day => (
             <div
               key={day}
-              className="p-2 text-center text-sm font-medium text-[#6b7280] bg-[#f9fafb]"
+              className="p-2 text-center text-sm font-medium text-[#78716c] bg-[#faf9f7]"
             >
               {day}
             </div>
@@ -364,8 +364,8 @@ export default function CalendarPage() {
         {/* Calendar grid */}
         {isLoading ? (
           <div className="p-12 text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-            <p className="text-[#6b7280] mt-2">Laddar kalender...</p>
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
+            <p className="text-[#78716c] mt-2">Laddar kalender...</p>
           </div>
         ) : (
           <div className="grid grid-cols-7">
@@ -385,7 +385,7 @@ export default function CalendarPage() {
                 <span
                   className={`inline-flex items-center justify-center w-7 h-7 text-sm ${
                     day.dateStr === today
-                      ? 'bg-[#1e3a8a] text-white rounded-full'
+                      ? 'bg-[#c45a3b] text-white rounded-full'
                       : ''
                   }`}
                 >
@@ -425,8 +425,8 @@ export default function CalendarPage() {
       </div>
 
       {/* Instructions */}
-      <div className="mt-6 p-4 bg-[#f9fafb] rounded-lg">
-        <p className="text-sm text-[#6b7280]">
+      <div className="mt-6 p-4 bg-[#faf9f7] rounded-lg">
+        <p className="text-sm text-[#78716c]">
           <strong>Tips:</strong> Klicka pa ett datum for att blockera eller avblockera det.
           Datum med bokningar kan inte andras har. Anvand &ldquo;Blockera flera dagar&rdquo; for att blockera ett datumintervall.
         </p>
@@ -437,12 +437,12 @@ export default function CalendarPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#111827]">Blockera flera dagar</h3>
+              <h3 className="text-lg font-semibold text-[#1a1a1a]">Blockera flera dagar</h3>
               <button
                 onClick={() => setShowBlockModal(false)}
                 className="p-1 hover:bg-[#f3f4f6] rounded-lg transition-colors"
               >
-                <svg className="w-5 h-5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#78716c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -450,31 +450,31 @@ export default function CalendarPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[#374151] mb-1">
+                <label className="block text-sm font-medium text-[#57534e] mb-1">
                   Startdatum
                 </label>
                 <input
                   type="date"
                   value={rangeStartDate}
                   onChange={(e) => setRangeStartDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#374151] mb-1">
+                <label className="block text-sm font-medium text-[#57534e] mb-1">
                   Slutdatum
                 </label>
                 <input
                   type="date"
                   value={rangeEndDate}
                   onChange={(e) => setRangeEndDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#374151] mb-1">
+                <label className="block text-sm font-medium text-[#57534e] mb-1">
                   Anledning (valfritt)
                 </label>
                 <input
@@ -482,7 +482,7 @@ export default function CalendarPage() {
                   value={blockReason}
                   onChange={(e) => setBlockReason(e.target.value)}
                   placeholder="T.ex. Semester, Renovering..."
-                  className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
                 />
               </div>
             </div>
@@ -510,7 +510,7 @@ export default function CalendarPage() {
       {/* Loading overlay */}
       {isUpdating && (
         <div className="fixed inset-0 bg-white/50 flex items-center justify-center z-40">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
         </div>
       )}
     </div>

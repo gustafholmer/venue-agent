@@ -28,14 +28,14 @@ export async function Nav() {
     <nav className="bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between h-14 items-center">
-          <a href="/" className="font-[family-name:var(--font-playfair)] text-xl text-[#111827]">
+          <a href="/" className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a]">
             Bostadsagent
           </a>
 
           <div className="flex items-center gap-3">
             {user ? (
               <>
-                <span className="text-sm text-[#6b7280] hidden sm:block">{user.email}</span>
+                <span className="text-sm text-[#78716c] hidden sm:block">{user.email}</span>
                 {demoMode ? (
                   <Button variant="ghost" size="sm" disabled>
                     Logga ut

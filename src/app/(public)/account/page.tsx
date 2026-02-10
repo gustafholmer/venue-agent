@@ -54,31 +54,31 @@ export default async function AccountPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#111827]">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a]">
           Välkommen, {profile?.full_name || 'till ditt konto'}!
         </h1>
-        <p className="text-[#6b7280] mt-1">
+        <p className="text-[#78716c] mt-1">
           Här är en översikt över dina bokningar och sparade lokaler
         </p>
       </div>
 
       {/* Stats cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
-          <div className="text-2xl font-semibold text-[#111827]">{stats.total}</div>
-          <div className="text-sm text-[#6b7280]">Totala bokningar</div>
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
+          <div className="text-2xl font-semibold text-[#1a1a1a]">{stats.total}</div>
+          <div className="text-sm text-[#78716c]">Totala bokningar</div>
         </div>
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
           <div className="text-2xl font-semibold text-yellow-600">{stats.pending}</div>
-          <div className="text-sm text-[#6b7280]">Väntande</div>
+          <div className="text-sm text-[#78716c]">Väntande</div>
         </div>
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
           <div className="text-2xl font-semibold text-green-600">{stats.accepted}</div>
-          <div className="text-sm text-[#6b7280]">Godkända</div>
+          <div className="text-sm text-[#78716c]">Godkända</div>
         </div>
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
-          <div className="text-2xl font-semibold text-[#1e3a8a]">{savedVenuesCount || 0}</div>
-          <div className="text-sm text-[#6b7280]">Sparade lokaler</div>
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
+          <div className="text-2xl font-semibold text-[#c45a3b]">{savedVenuesCount || 0}</div>
+          <div className="text-sm text-[#78716c]">Sparade lokaler</div>
         </div>
       </div>
 
@@ -86,63 +86,63 @@ export default async function AccountPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Link
           href="/search"
-          className="bg-white border border-[#e5e7eb] rounded-xl p-6 hover:shadow-md transition-shadow group"
+          className="bg-white border border-[#e7e5e4] rounded-xl p-6 hover:shadow-md transition-shadow group"
         >
-          <div className="w-10 h-10 bg-[#1e3a8a]/10 rounded-lg flex items-center justify-center mb-3">
-            <svg className="w-5 h-5 text-[#1e3a8a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 bg-[#c45a3b]/10 rounded-lg flex items-center justify-center mb-3">
+            <svg className="w-5 h-5 text-[#c45a3b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-          <h3 className="font-medium text-[#111827] group-hover:text-[#1e3a8a] transition-colors">
+          <h3 className="font-medium text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
             Sök lokal
           </h3>
-          <p className="text-sm text-[#6b7280] mt-1">
+          <p className="text-sm text-[#78716c] mt-1">
             Hitta den perfekta lokalen för ditt event
           </p>
         </Link>
 
         <Link
           href="/account/bookings"
-          className="bg-white border border-[#e5e7eb] rounded-xl p-6 hover:shadow-md transition-shadow group"
+          className="bg-white border border-[#e7e5e4] rounded-xl p-6 hover:shadow-md transition-shadow group"
         >
-          <div className="w-10 h-10 bg-[#1e3a8a]/10 rounded-lg flex items-center justify-center mb-3">
-            <svg className="w-5 h-5 text-[#1e3a8a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 bg-[#c45a3b]/10 rounded-lg flex items-center justify-center mb-3">
+            <svg className="w-5 h-5 text-[#c45a3b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="font-medium text-[#111827] group-hover:text-[#1e3a8a] transition-colors">
+          <h3 className="font-medium text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
             Mina bokningar
           </h3>
-          <p className="text-sm text-[#6b7280] mt-1">
+          <p className="text-sm text-[#78716c] mt-1">
             Se och hantera dina bokningar
           </p>
         </Link>
 
         <Link
           href="/account/saved"
-          className="bg-white border border-[#e5e7eb] rounded-xl p-6 hover:shadow-md transition-shadow group"
+          className="bg-white border border-[#e7e5e4] rounded-xl p-6 hover:shadow-md transition-shadow group"
         >
-          <div className="w-10 h-10 bg-[#1e3a8a]/10 rounded-lg flex items-center justify-center mb-3">
-            <svg className="w-5 h-5 text-[#1e3a8a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 bg-[#c45a3b]/10 rounded-lg flex items-center justify-center mb-3">
+            <svg className="w-5 h-5 text-[#c45a3b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </div>
-          <h3 className="font-medium text-[#111827] group-hover:text-[#1e3a8a] transition-colors">
+          <h3 className="font-medium text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors">
             Sparade lokaler
           </h3>
-          <p className="text-sm text-[#6b7280] mt-1">
+          <p className="text-sm text-[#78716c] mt-1">
             Se dina favoritlokaler
           </p>
         </Link>
       </div>
 
       {/* Recent bookings */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-[#e5e7eb] flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-[#111827]">Senaste bokningar</h2>
+      <div className="bg-white border border-[#e7e5e4] rounded-xl overflow-hidden">
+        <div className="p-6 border-b border-[#e7e5e4] flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-[#1a1a1a]">Senaste bokningar</h2>
           <Link
             href="/account/bookings"
-            className="text-sm text-[#1e3a8a] hover:text-[#1e40af]"
+            className="text-sm text-[#c45a3b] hover:text-[#1e40af]"
           >
             Visa alla
           </Link>
@@ -151,23 +151,23 @@ export default async function AccountPage() {
         {recentBookings.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-[#f3f4f6] rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-8 h-8 text-[#a8a29e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-[#111827] mb-2">Inga bokningar ännu</h3>
-            <p className="text-[#6b7280] mb-4">
+            <h3 className="text-lg font-medium text-[#1a1a1a] mb-2">Inga bokningar ännu</h3>
+            <p className="text-[#78716c] mb-4">
               Du har inte gjort några bokningar ännu
             </p>
             <Link
               href="/search"
-              className="inline-flex items-center justify-center px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#1e40af] transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-[#c45a3b] text-white rounded-lg hover:bg-[#b3512f] transition-colors"
             >
               Sök lokal
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-[#e5e7eb]">
+          <div className="divide-y divide-[#e7e5e4]">
             {recentBookings.map((booking) => {
               const status = STATUS_LABELS[booking.status] || { label: booking.status, color: 'bg-gray-100 text-gray-800' }
 
@@ -175,7 +175,7 @@ export default async function AccountPage() {
                 <Link
                   key={booking.id}
                   href={`/account/bookings/${booking.id}`}
-                  className="flex items-center gap-4 p-4 hover:bg-[#f9fafb] transition-colors"
+                  className="flex items-center gap-4 p-4 hover:bg-[#faf9f7] transition-colors"
                 >
                   {/* Venue image */}
                   <div className="w-16 h-16 flex-shrink-0 bg-[#f3f4f6] rounded-lg overflow-hidden">
@@ -196,10 +196,10 @@ export default async function AccountPage() {
 
                   {/* Booking info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-[#111827] truncate">
+                    <h3 className="font-medium text-[#1a1a1a] truncate">
                       {booking.venue.name}
                     </h3>
-                    <p className="text-sm text-[#6b7280]">
+                    <p className="text-sm text-[#78716c]">
                       {formatDate(booking.event_date)} - {booking.guest_count || '?'} gäster
                     </p>
                   </div>
@@ -210,7 +210,7 @@ export default async function AccountPage() {
                   </span>
 
                   {/* Arrow */}
-                  <svg className="w-5 h-5 text-[#9ca3af] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-5 h-5 text-[#a8a29e] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>

@@ -138,14 +138,14 @@ export default function NewVenuePage() {
       <div className="mb-8">
         <a
           href="/dashboard"
-          className="text-sm text-[#6b7280] hover:text-[#1e3a8a]"
+          className="text-sm text-[#78716c] hover:text-[#c45a3b]"
         >
           &larr; Tillbaka till dashboard
         </a>
-        <h1 className="text-2xl font-semibold text-[#111827] mt-4">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a] mt-4">
           Skapa ny lokal
         </h1>
-        <p className="text-[#6b7280] mt-1">
+        <p className="text-[#78716c] mt-1">
           Fyll i information om din lokal. Du kan spara som utkast och publicera senare.
         </p>
       </div>
@@ -158,8 +158,8 @@ export default function NewVenuePage() {
               <div
                 className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
                   currentStep >= step.id
-                    ? 'bg-[#1e3a8a] text-white'
-                    : 'bg-[#e5e7eb] text-[#6b7280]'
+                    ? 'bg-[#c45a3b] text-white'
+                    : 'bg-[#e7e5e4] text-[#78716c]'
                 }`}
               >
                 {step.id}
@@ -167,8 +167,8 @@ export default function NewVenuePage() {
               <span
                 className={`ml-2 text-sm hidden sm:inline ${
                   currentStep >= step.id
-                    ? 'text-[#111827] font-medium'
-                    : 'text-[#6b7280]'
+                    ? 'text-[#1a1a1a] font-medium'
+                    : 'text-[#78716c]'
                 }`}
               >
                 {step.title}
@@ -176,7 +176,7 @@ export default function NewVenuePage() {
               {index < STEPS.length - 1 && (
                 <div
                   className={`w-8 md:w-12 h-0.5 mx-2 ${
-                    currentStep > step.id ? 'bg-[#1e3a8a]' : 'bg-[#e5e7eb]'
+                    currentStep > step.id ? 'bg-[#c45a3b]' : 'bg-[#e7e5e4]'
                   }`}
                 />
               )}
@@ -186,14 +186,14 @@ export default function NewVenuePage() {
       </div>
 
       {/* Form card */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
         {/* Step 1: Basic Info */}
         {currentStep === 1 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-[#111827]">Grundlaggande information</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Grundlaggande information</h2>
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="name" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Namn pa lokalen *
               </label>
               <Input
@@ -206,7 +206,7 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="description" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Beskrivning
               </label>
               <Textarea
@@ -219,7 +219,7 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#374151] mb-2">
+              <label className="block text-sm font-medium text-[#57534e] mb-2">
                 Typ av evenemang
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -228,24 +228,24 @@ export default function NewVenuePage() {
                     key={type.value}
                     className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
                       formData.venue_types.includes(type.value)
-                        ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-                        : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+                        ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                        : 'border-[#e7e5e4] hover:border-[#a8a29e]'
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={formData.venue_types.includes(type.value)}
                       onChange={() => toggleArrayField('venue_types', type.value)}
-                      className="w-4 h-4 text-[#1e3a8a] border-[#d1d5db] rounded focus:ring-[#1e3a8a]"
+                      className="w-4 h-4 text-[#c45a3b] border-[#d1d5db] rounded focus:ring-[#c45a3b]"
                     />
-                    <span className="text-sm text-[#374151]">{type.label}</span>
+                    <span className="text-sm text-[#57534e]">{type.label}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#374151] mb-2">
+              <label className="block text-sm font-medium text-[#57534e] mb-2">
                 Stil/kansla
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -254,17 +254,17 @@ export default function NewVenuePage() {
                     key={vibe.value}
                     className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
                       formData.vibes.includes(vibe.value)
-                        ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-                        : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+                        ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                        : 'border-[#e7e5e4] hover:border-[#a8a29e]'
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={formData.vibes.includes(vibe.value)}
                       onChange={() => toggleArrayField('vibes', vibe.value)}
-                      className="w-4 h-4 text-[#1e3a8a] border-[#d1d5db] rounded focus:ring-[#1e3a8a]"
+                      className="w-4 h-4 text-[#c45a3b] border-[#d1d5db] rounded focus:ring-[#c45a3b]"
                     />
-                    <span className="text-sm text-[#374151]">{vibe.label}</span>
+                    <span className="text-sm text-[#57534e]">{vibe.label}</span>
                   </label>
                 ))}
               </div>
@@ -275,10 +275,10 @@ export default function NewVenuePage() {
         {/* Step 2: Location */}
         {currentStep === 2 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-[#111827]">Plats</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Plats</h2>
 
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="address" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Adress *
               </label>
               <Input
@@ -291,14 +291,14 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label htmlFor="area" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="area" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Omrade
               </label>
               <select
                 id="area"
                 value={formData.area}
                 onChange={e => updateField('area', e.target.value)}
-                className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1f2937] focus:outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
               >
                 <option value="">Valj omrade</option>
                 {AREAS.map(area => (
@@ -310,7 +310,7 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="city" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Stad
               </label>
               <Input
@@ -326,11 +326,11 @@ export default function NewVenuePage() {
         {/* Step 3: Capacity */}
         {currentStep === 3 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-[#111827]">Kapacitet</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Kapacitet</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="capacity_standing" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="capacity_standing" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Staende kapacitet
                 </label>
                 <Input
@@ -344,7 +344,7 @@ export default function NewVenuePage() {
               </div>
 
               <div>
-                <label htmlFor="capacity_seated" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="capacity_seated" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Sittande kapacitet
                 </label>
                 <Input
@@ -358,7 +358,7 @@ export default function NewVenuePage() {
               </div>
 
               <div>
-                <label htmlFor="capacity_conference" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="capacity_conference" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Konferenskapacitet
                 </label>
                 <Input
@@ -372,7 +372,7 @@ export default function NewVenuePage() {
               </div>
 
               <div>
-                <label htmlFor="min_guests" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="min_guests" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Minsta antal gaster
                 </label>
                 <Input
@@ -391,11 +391,11 @@ export default function NewVenuePage() {
         {/* Step 4: Pricing */}
         {currentStep === 4 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-[#111827]">Priser</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Priser</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="price_per_hour" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_per_hour" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris per timme (SEK)
                 </label>
                 <Input
@@ -409,7 +409,7 @@ export default function NewVenuePage() {
               </div>
 
               <div>
-                <label htmlFor="price_half_day" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_half_day" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris halvdag (SEK)
                 </label>
                 <Input
@@ -423,7 +423,7 @@ export default function NewVenuePage() {
               </div>
 
               <div>
-                <label htmlFor="price_full_day" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_full_day" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris heldag (SEK)
                 </label>
                 <Input
@@ -437,7 +437,7 @@ export default function NewVenuePage() {
               </div>
 
               <div>
-                <label htmlFor="price_evening" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_evening" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris kvall (SEK)
                 </label>
                 <Input
@@ -452,7 +452,7 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label htmlFor="price_notes" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="price_notes" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Prisanteckningar
               </label>
               <Textarea
@@ -469,7 +469,7 @@ export default function NewVenuePage() {
         {/* Step 5: Amenities */}
         {currentStep === 5 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-[#111827]">Faciliteter</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Faciliteter</h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {AMENITIES.map(amenity => (
@@ -477,17 +477,17 @@ export default function NewVenuePage() {
                   key={amenity.value}
                   className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
                     formData.amenities.includes(amenity.value)
-                      ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-                      : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+                      ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                      : 'border-[#e7e5e4] hover:border-[#a8a29e]'
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={formData.amenities.includes(amenity.value)}
                     onChange={() => toggleArrayField('amenities', amenity.value)}
-                    className="w-4 h-4 text-[#1e3a8a] border-[#d1d5db] rounded focus:ring-[#1e3a8a]"
+                    className="w-4 h-4 text-[#c45a3b] border-[#d1d5db] rounded focus:ring-[#c45a3b]"
                   />
-                  <span className="text-sm text-[#374151]">{amenity.label}</span>
+                  <span className="text-sm text-[#57534e]">{amenity.label}</span>
                 </label>
               ))}
             </div>
@@ -497,10 +497,10 @@ export default function NewVenuePage() {
         {/* Step 6: Contact */}
         {currentStep === 6 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-[#111827]">Kontaktuppgifter</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Kontaktuppgifter</h2>
 
             <div>
-              <label htmlFor="contact_email" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="contact_email" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 E-post
               </label>
               <Input
@@ -513,7 +513,7 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label htmlFor="contact_phone" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="contact_phone" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Telefon
               </label>
               <Input
@@ -526,7 +526,7 @@ export default function NewVenuePage() {
             </div>
 
             <div>
-              <label htmlFor="website" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="website" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Webbplats
               </label>
               <Input
@@ -541,7 +541,7 @@ export default function NewVenuePage() {
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#e5e7eb]">
+        <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#e7e5e4]">
           <Button
             type="button"
             variant="ghost"

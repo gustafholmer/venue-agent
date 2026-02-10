@@ -65,7 +65,7 @@ function MessageBubble({
   return (
     <div className="flex items-start gap-2">
       <div className="max-w-[85%]">
-        <div className="bg-[#f3f4f6] text-[#111827] rounded-2xl rounded-tl-md px-3 py-2">
+        <div className="bg-[#f3f4f6] text-[#1a1a1a] rounded-2xl rounded-tl-md px-3 py-2">
           <p className="whitespace-pre-wrap text-sm">{message.content}</p>
         </div>
         {message.suggestions && message.suggestions.length > 0 && onApplySuggestion && formSetters && (
@@ -87,12 +87,12 @@ function MessageBubble({
 function LoadingIndicator() {
   return (
     <div className="flex items-start gap-2">
-      <div className="bg-[#f3f4f6] text-[#6b7280] rounded-2xl rounded-tl-md px-3 py-2">
+      <div className="bg-[#f3f4f6] text-[#78716c] rounded-2xl rounded-tl-md px-3 py-2">
         <div className="flex items-center gap-2">
           <div className="flex gap-1">
-            <span className="w-1.5 h-1.5 bg-[#9ca3af] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-1.5 h-1.5 bg-[#9ca3af] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-1.5 h-1.5 bg-[#9ca3af] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <span className="w-1.5 h-1.5 bg-[#a8a29e] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <span className="w-1.5 h-1.5 bg-[#a8a29e] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+            <span className="w-1.5 h-1.5 bg-[#a8a29e] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
         </div>
       </div>
@@ -249,13 +249,13 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div>
-                  <h3 className="font-semibold text-[#111827] text-sm">Tryffle</h3>
-                  <p className="text-xs text-[#6b7280]">Fråga om {venue.name}</p>
+                  <h3 className="font-semibold text-[#1a1a1a] text-sm">Tryffle</h3>
+                  <p className="text-xs text-[#78716c]">Fråga om {venue.name}</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-10 h-10 flex items-center justify-center text-[#6b7280] hover:text-[#111827] hover:bg-[#e5e7eb] rounded-full transition-colors"
+                className="w-10 h-10 flex items-center justify-center text-[#78716c] hover:text-[#1a1a1a] hover:bg-[#e7e5e4] rounded-full transition-colors"
                 aria-label="Stäng"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -270,7 +270,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
             {/* Welcome message */}
             {messages.length === 0 && !isLoading && (
               <div className="flex items-start gap-2">
-                <div className="bg-[#f3f4f6] text-[#111827] rounded-2xl rounded-tl-md px-3 py-2">
+                <div className="bg-[#f3f4f6] text-[#1a1a1a] rounded-2xl rounded-tl-md px-3 py-2">
                   <p className="text-sm">{greeting}</p>
                 </div>
               </div>
@@ -301,7 +301,7 @@ export function VenueAssistant({ venue, formSetters, isBookingPage = false }: Ve
                   onKeyDown={handleKeyDown}
                   placeholder="Skriv din fråga..."
                   disabled={isLoading}
-                  className="flex-1 h-10 px-3 text-sm border border-[#e5e7eb] rounded-full focus:outline-none focus:border-[#c45a3b] disabled:opacity-50"
+                  className="flex-1 h-10 px-3 text-sm border border-[#e7e5e4] rounded-full focus:outline-none focus:border-[#c45a3b] disabled:opacity-50"
                 />
                 <button
                   type="submit"

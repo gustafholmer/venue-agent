@@ -73,23 +73,23 @@ export default function CustomerBookingsPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#111827]">Mina bokningar</h1>
-        <p className="text-[#6b7280] mt-1">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Mina bokningar</h1>
+        <p className="text-[#78716c] mt-1">
           Se och hantera dina bokningsförfrågningar
         </p>
       </div>
 
       {/* Filter tabs */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl mb-6">
-        <div className="flex overflow-x-auto border-b border-[#e5e7eb]">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl mb-6">
+        <div className="flex overflow-x-auto border-b border-[#e7e5e4]">
           {STATUS_TABS.map((tab) => (
             <button
               key={tab.value}
               onClick={() => handleTabChange(tab.value)}
               className={`flex-shrink-0 px-6 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab.value
-                  ? 'text-[#1e3a8a] border-b-2 border-[#1e3a8a] -mb-[1px]'
-                  : 'text-[#6b7280] hover:text-[#374151]'
+                  ? 'text-[#c45a3b] border-b-2 border-[#c45a3b] -mb-[1px]'
+                  : 'text-[#78716c] hover:text-[#57534e]'
               }`}
             >
               {tab.label}
@@ -109,7 +109,7 @@ export default function CustomerBookingsPage() {
       {isLoading && (
         <div className="space-y-4 animate-pulse">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden">
+            <div key={i} className="bg-white border border-[#e7e5e4] rounded-xl overflow-hidden">
               <div className="flex flex-col sm:flex-row">
                 {/* Image skeleton */}
                 <div className="sm:w-48 h-32 sm:h-auto flex-shrink-0 bg-[#f3f4f6]" />
@@ -117,16 +117,16 @@ export default function CustomerBookingsPage() {
                 <div className="flex-1 p-4 sm:p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <div className="h-6 bg-[#e5e7eb] rounded w-48 mb-2" />
-                      <div className="h-4 bg-[#e5e7eb] rounded w-32" />
+                      <div className="h-6 bg-[#e7e5e4] rounded w-48 mb-2" />
+                      <div className="h-4 bg-[#e7e5e4] rounded w-32" />
                     </div>
-                    <div className="h-6 bg-[#e5e7eb] rounded-full w-20" />
+                    <div className="h-6 bg-[#e7e5e4] rounded-full w-20" />
                   </div>
                   <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {[1, 2, 3, 4].map((j) => (
                       <div key={j}>
-                        <div className="h-3 bg-[#e5e7eb] rounded w-12 mb-1" />
-                        <div className="h-5 bg-[#e5e7eb] rounded w-20" />
+                        <div className="h-3 bg-[#e7e5e4] rounded w-12 mb-1" />
+                        <div className="h-5 bg-[#e7e5e4] rounded w-20" />
                       </div>
                     ))}
                   </div>
@@ -139,18 +139,18 @@ export default function CustomerBookingsPage() {
 
       {/* Empty state */}
       {!isLoading && !error && bookings.length === 0 && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
           <div className="w-16 h-16 mx-auto mb-4 bg-[#f3f4f6] rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-8 h-8 text-[#a8a29e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-[#111827] mb-2">
+          <h3 className="text-lg font-medium text-[#1a1a1a] mb-2">
             {activeTab === 'all'
               ? 'Inga bokningar ännu'
               : `Inga ${STATUS_TABS.find(t => t.value === activeTab)?.label.toLowerCase()} bokningar`}
           </h3>
-          <p className="text-[#6b7280] mb-4">
+          <p className="text-[#78716c] mb-4">
             {activeTab === 'all'
               ? 'Du har inte gjort några bokningar ännu. Börja med att söka efter en lokal!'
               : 'Det finns inga bokningar med denna status just nu.'}
@@ -158,7 +158,7 @@ export default function CustomerBookingsPage() {
           {activeTab === 'all' && (
             <Link
               href="/search"
-              className="inline-flex items-center justify-center px-4 py-2 bg-[#1e3a8a] text-white rounded-lg hover:bg-[#1e40af] transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 bg-[#c45a3b] text-white rounded-lg hover:bg-[#b3512f] transition-colors"
             >
               Sök lokal
             </Link>
@@ -176,7 +176,7 @@ export default function CustomerBookingsPage() {
               <Link
                 key={booking.id}
                 href={`/account/bookings/${booking.id}`}
-                className="block bg-white border border-[#e5e7eb] rounded-xl overflow-hidden hover:shadow-md transition-shadow"
+                className="block bg-white border border-[#e7e5e4] rounded-xl overflow-hidden hover:shadow-md transition-shadow"
               >
                 <div className="flex flex-col sm:flex-row">
                   {/* Venue image */}
@@ -200,10 +200,10 @@ export default function CustomerBookingsPage() {
                   <div className="flex-1 p-4 sm:p-6">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="font-semibold text-lg text-[#111827]">
+                        <h3 className="font-semibold text-lg text-[#1a1a1a]">
                           {booking.venue.name}
                         </h3>
-                        <p className="text-sm text-[#6b7280] mt-1">
+                        <p className="text-sm text-[#78716c] mt-1">
                           {booking.venue.area ? `${booking.venue.area}, ${booking.venue.city}` : booking.venue.city}
                         </p>
                       </div>
@@ -214,26 +214,26 @@ export default function CustomerBookingsPage() {
 
                     <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
                       <div>
-                        <dt className="text-xs text-[#6b7280] uppercase tracking-wider">Datum</dt>
-                        <dd className="mt-1 text-sm font-medium text-[#111827]">
+                        <dt className="text-xs text-[#78716c] uppercase tracking-wider">Datum</dt>
+                        <dd className="mt-1 text-sm font-medium text-[#1a1a1a]">
                           {formatDate(booking.event_date)}
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-xs text-[#6b7280] uppercase tracking-wider">Gäster</dt>
-                        <dd className="mt-1 text-sm font-medium text-[#111827]">
+                        <dt className="text-xs text-[#78716c] uppercase tracking-wider">Gäster</dt>
+                        <dd className="mt-1 text-sm font-medium text-[#1a1a1a]">
                           {booking.guest_count || '-'} personer
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-xs text-[#6b7280] uppercase tracking-wider">Pris</dt>
-                        <dd className="mt-1 text-sm font-medium text-[#111827]">
+                        <dt className="text-xs text-[#78716c] uppercase tracking-wider">Pris</dt>
+                        <dd className="mt-1 text-sm font-medium text-[#1a1a1a]">
                           {formatPrice(booking.total_price)}
                         </dd>
                       </div>
                       <div className="hidden sm:block">
-                        <dt className="text-xs text-[#6b7280] uppercase tracking-wider">Bokad</dt>
-                        <dd className="mt-1 text-sm font-medium text-[#111827]">
+                        <dt className="text-xs text-[#78716c] uppercase tracking-wider">Bokad</dt>
+                        <dd className="mt-1 text-sm font-medium text-[#1a1a1a]">
                           {formatDate(booking.created_at)}
                         </dd>
                       </div>
@@ -242,7 +242,7 @@ export default function CustomerBookingsPage() {
 
                   {/* Arrow indicator */}
                   <div className="hidden sm:flex items-center px-4">
-                    <svg className="w-5 h-5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 text-[#a8a29e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>

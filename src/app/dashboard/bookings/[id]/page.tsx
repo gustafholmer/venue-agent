@@ -145,9 +145,9 @@ export default function BookingDetailPage() {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar bokning...</p>
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
+          <p className="text-[#78716c] mt-2">Laddar bokning...</p>
         </div>
       </div>
     )
@@ -209,7 +209,7 @@ export default function BookingDetailPage() {
       {/* Back link */}
       <Link
         href="/dashboard/bookings"
-        className="inline-flex items-center text-[#6b7280] hover:text-[#374151] mb-6"
+        className="inline-flex items-center text-[#78716c] hover:text-[#57534e] mb-6"
       >
         <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -236,13 +236,13 @@ export default function BookingDetailPage() {
       )}
 
       {/* Header with status */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 mb-6">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#111827]">
+            <h1 className="text-2xl font-semibold text-[#1a1a1a]">
               Bokning från {booking.customer_name}
             </h1>
-            <p className="text-[#6b7280] mt-1">
+            <p className="text-[#78716c] mt-1">
               {booking.venue.name} - {formatDate(booking.event_date)}
             </p>
           </div>
@@ -253,7 +253,7 @@ export default function BookingDetailPage() {
 
         {/* Action buttons for pending bookings */}
         {booking.status === 'pending' && (
-          <div className="flex gap-3 mt-6 pt-6 border-t border-[#e5e7eb]">
+          <div className="flex gap-3 mt-6 pt-6 border-t border-[#e7e5e4]">
             <Button
               onClick={handleAccept}
               loading={isSubmitting}
@@ -277,26 +277,26 @@ export default function BookingDetailPage() {
         {/* Main content - left column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Customer info */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Kundinformation</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Kundinformation</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <dt className="text-sm text-[#6b7280]">Namn</dt>
-                <dd className="mt-1 text-[#111827] font-medium">{booking.customer_name}</dd>
+                <dt className="text-sm text-[#78716c]">Namn</dt>
+                <dd className="mt-1 text-[#1a1a1a] font-medium">{booking.customer_name}</dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">E-post</dt>
-                <dd className="mt-1 text-[#111827]">
-                  <a href={`mailto:${booking.customer_email}`} className="text-[#1e3a8a] hover:underline">
+                <dt className="text-sm text-[#78716c]">E-post</dt>
+                <dd className="mt-1 text-[#1a1a1a]">
+                  <a href={`mailto:${booking.customer_email}`} className="text-[#c45a3b] hover:underline">
                     {booking.customer_email}
                   </a>
                 </dd>
               </div>
               {booking.customer_phone && (
                 <div>
-                  <dt className="text-sm text-[#6b7280]">Telefon</dt>
-                  <dd className="mt-1 text-[#111827]">
-                    <a href={`tel:${booking.customer_phone}`} className="text-[#1e3a8a] hover:underline">
+                  <dt className="text-sm text-[#78716c]">Telefon</dt>
+                  <dd className="mt-1 text-[#1a1a1a]">
+                    <a href={`tel:${booking.customer_phone}`} className="text-[#c45a3b] hover:underline">
                       {booking.customer_phone}
                     </a>
                   </dd>
@@ -304,63 +304,63 @@ export default function BookingDetailPage() {
               )}
               {booking.company_name && (
                 <div>
-                  <dt className="text-sm text-[#6b7280]">Företag</dt>
-                  <dd className="mt-1 text-[#111827]">{booking.company_name}</dd>
+                  <dt className="text-sm text-[#78716c]">Företag</dt>
+                  <dd className="mt-1 text-[#1a1a1a]">{booking.company_name}</dd>
                 </div>
               )}
             </dl>
           </div>
 
           {/* Event details */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Eventdetaljer</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Eventdetaljer</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <dt className="text-sm text-[#6b7280]">Datum</dt>
-                <dd className="mt-1 text-[#111827] font-medium">{formatDate(booking.event_date)}</dd>
+                <dt className="text-sm text-[#78716c]">Datum</dt>
+                <dd className="mt-1 text-[#1a1a1a] font-medium">{formatDate(booking.event_date)}</dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">Tid</dt>
-                <dd className="mt-1 text-[#111827]">
+                <dt className="text-sm text-[#78716c]">Tid</dt>
+                <dd className="mt-1 text-[#1a1a1a]">
                   {formatTime(booking.start_time)} - {formatTime(booking.end_time)}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">Eventtyp</dt>
-                <dd className="mt-1 text-[#111827]">{eventType}</dd>
+                <dt className="text-sm text-[#78716c]">Eventtyp</dt>
+                <dd className="mt-1 text-[#1a1a1a]">{eventType}</dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">Antal gäster</dt>
-                <dd className="mt-1 text-[#111827]">{booking.guest_count || '-'} personer</dd>
+                <dt className="text-sm text-[#78716c]">Antal gäster</dt>
+                <dd className="mt-1 text-[#1a1a1a]">{booking.guest_count || '-'} personer</dd>
               </div>
               {booking.event_description && (
                 <div className="sm:col-span-2">
-                  <dt className="text-sm text-[#6b7280]">Beskrivning</dt>
-                  <dd className="mt-1 text-[#111827] whitespace-pre-wrap">{booking.event_description}</dd>
+                  <dt className="text-sm text-[#78716c]">Beskrivning</dt>
+                  <dd className="mt-1 text-[#1a1a1a] whitespace-pre-wrap">{booking.event_description}</dd>
                 </div>
               )}
             </dl>
           </div>
 
           {/* Price breakdown */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Prisuppdelning</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Prisuppdelning</h2>
             <dl className="space-y-3">
               <div className="flex justify-between">
-                <dt className="text-[#6b7280]">Baspris</dt>
-                <dd className="text-[#111827]">{formatPrice(booking.base_price)}</dd>
+                <dt className="text-[#78716c]">Baspris</dt>
+                <dd className="text-[#1a1a1a]">{formatPrice(booking.base_price)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-[#6b7280]">Plattformsavgift (12%)</dt>
-                <dd className="text-[#111827]">{formatPrice(booking.platform_fee)}</dd>
+                <dt className="text-[#78716c]">Plattformsavgift (12%)</dt>
+                <dd className="text-[#1a1a1a]">{formatPrice(booking.platform_fee)}</dd>
               </div>
-              <div className="flex justify-between pt-3 border-t border-[#e5e7eb]">
-                <dt className="font-medium text-[#111827]">Totalt pris (kund)</dt>
-                <dd className="font-semibold text-[#111827]">{formatPrice(booking.total_price)}</dd>
+              <div className="flex justify-between pt-3 border-t border-[#e7e5e4]">
+                <dt className="font-medium text-[#1a1a1a]">Totalt pris (kund)</dt>
+                <dd className="font-semibold text-[#1a1a1a]">{formatPrice(booking.total_price)}</dd>
               </div>
-              <div className="flex justify-between pt-3 border-t border-[#e5e7eb]">
-                <dt className="font-medium text-[#1e3a8a]">Din utbetalning</dt>
-                <dd className="font-semibold text-[#1e3a8a]">{formatPrice(booking.venue_payout)}</dd>
+              <div className="flex justify-between pt-3 border-t border-[#e7e5e4]">
+                <dt className="font-medium text-[#c45a3b]">Din utbetalning</dt>
+                <dd className="font-semibold text-[#c45a3b]">{formatPrice(booking.venue_payout)}</dd>
               </div>
             </dl>
           </div>
@@ -386,17 +386,17 @@ export default function BookingDetailPage() {
         {/* Sidebar - right column */}
         <div className="space-y-6">
           {/* Timeline */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Tidslinje</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Tidslinje</h2>
             <div className="space-y-4">
               {timelineEvents.map((event, index) => (
                 <div key={index} className="flex gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#f3f4f6] rounded-full flex items-center justify-center text-[#6b7280]">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#f3f4f6] rounded-full flex items-center justify-center text-[#78716c]">
                     {event.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#111827]">{event.label}</p>
-                    <p className="text-xs text-[#6b7280]">{formatDateTime(event.date)}</p>
+                    <p className="text-sm font-medium text-[#1a1a1a]">{event.label}</p>
+                    <p className="text-xs text-[#78716c]">{formatDateTime(event.date)}</p>
                   </div>
                 </div>
               ))}
@@ -427,7 +427,7 @@ export default function BookingDetailPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#111827]">Neka bokningsförfrågan</h3>
+              <h3 className="text-lg font-semibold text-[#1a1a1a]">Neka bokningsförfrågan</h3>
               <button
                 onClick={() => {
                   setShowDeclineModal(false)
@@ -436,13 +436,13 @@ export default function BookingDetailPage() {
                 }}
                 className="p-1 hover:bg-[#f3f4f6] rounded-lg transition-colors"
               >
-                <svg className="w-5 h-5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#78716c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <p className="text-[#6b7280] mb-4">
+            <p className="text-[#78716c] mb-4">
               Ange en anledning till varför du nekar denna förfrågan. Detta hjälper kunden att förstå beslutet.
             </p>
 
@@ -453,7 +453,7 @@ export default function BookingDetailPage() {
             )}
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-[#374151] mb-1">
+              <label className="block text-sm font-medium text-[#57534e] mb-1">
                 Anledning till nekande *
               </label>
               <textarea
@@ -461,7 +461,7 @@ export default function BookingDetailPage() {
                 onChange={(e) => setDeclineReason(e.target.value)}
                 placeholder="T.ex. Datumet är upptaget, Lokalen passar inte för detta event..."
                 rows={4}
-                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent resize-none"
+                className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent resize-none"
               />
             </div>
 

@@ -244,7 +244,7 @@ export function NotificationBell() {
       {/* Bell button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-[#374151] hover:text-[#111827] hover:bg-[#f3f4f6] rounded-full transition-colors"
+        className="relative p-2 text-[#57534e] hover:text-[#1a1a1a] hover:bg-[#f3f4f6] rounded-full transition-colors"
         aria-label={`Notifieringar${unreadCount > 0 ? ` (${unreadCount} olasta)` : ''}`}
       >
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -266,15 +266,15 @@ export function NotificationBell() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-lg border border-[#e5e7eb] overflow-hidden z-50">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-lg border border-[#e7e5e4] overflow-hidden z-50">
           {/* Header */}
-          <div className="px-4 py-3 border-b border-[#e5e7eb] flex items-center justify-between">
-            <h3 className="font-semibold text-[#111827]">Notifieringar</h3>
+          <div className="px-4 py-3 border-b border-[#e7e5e4] flex items-center justify-between">
+            <h3 className="font-semibold text-[#1a1a1a]">Notifieringar</h3>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
                 disabled={isMarkingAllRead}
-                className="text-sm text-[#1e3a8a] hover:text-[#1e40af] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-sm text-[#c45a3b] hover:text-[#a84832] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isMarkingAllRead ? 'Markerar...' : 'Markera alla som lästa'}
               </button>
@@ -285,12 +285,12 @@ export function NotificationBell() {
           <div className="max-h-96 overflow-y-auto">
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="inline-block animate-spin rounded-full h-6 w-6 border-4 border-[#1e3a8a] border-t-transparent"></div>
+                <div className="inline-block animate-spin rounded-full h-6 w-6 border-4 border-[#c45a3b] border-t-transparent"></div>
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <div className="w-12 h-12 mx-auto mb-3 bg-[#f3f4f6] rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-6 h-6 text-[#a8a29e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -299,7 +299,7 @@ export function NotificationBell() {
                     />
                   </svg>
                 </div>
-                <p className="text-[#6b7280]">Inga notifieringar</p>
+                <p className="text-[#78716c]">Inga notifieringar</p>
               </div>
             ) : (
               <div>
@@ -322,20 +322,20 @@ export function NotificationBell() {
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm ${!notification.is_read ? 'font-semibold' : 'font-medium'} text-[#111827] truncate`}>
+                        <p className={`text-sm ${!notification.is_read ? 'font-semibold' : 'font-medium'} text-[#1a1a1a] truncate`}>
                           {notification.title}
                         </p>
-                        <p className="text-sm text-[#6b7280] line-clamp-2">
+                        <p className="text-sm text-[#78716c] line-clamp-2">
                           {notification.message}
                         </p>
-                        <p className="text-xs text-[#9ca3af] mt-1">
+                        <p className="text-xs text-[#a8a29e] mt-1">
                           {formatTimestamp(notification.created_at)}
                         </p>
                       </div>
 
                       {/* Unread indicator */}
                       {!notification.is_read && (
-                        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-[#1e3a8a] self-center" />
+                        <div className="flex-shrink-0 w-2 h-2 rounded-full bg-[#c45a3b] self-center" />
                       )}
                     </button>
                   )
@@ -346,13 +346,13 @@ export function NotificationBell() {
 
           {/* Footer - only show if there are notifications */}
           {notifications.length > 0 && (
-            <div className="px-4 py-3 border-t border-[#e5e7eb]">
+            <div className="px-4 py-3 border-t border-[#e7e5e4]">
               <button
                 onClick={() => {
                   setIsOpen(false)
                   router.push('/dashboard/notifications')
                 }}
-                className="w-full text-center text-sm text-[#1e3a8a] hover:text-[#1e40af] font-medium"
+                className="w-full text-center text-sm text-[#c45a3b] hover:text-[#a84832] font-medium"
               >
                 Visa alla
               </button>

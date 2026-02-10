@@ -8,25 +8,25 @@ function DashboardSkeleton() {
     <div className="max-w-6xl mx-auto animate-pulse">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <div className="h-8 bg-[#e5e7eb] rounded w-32 mb-2" />
-          <div className="h-5 bg-[#e5e7eb] rounded w-48" />
+          <div className="h-8 bg-[#e7e5e4] rounded w-32 mb-2" />
+          <div className="h-5 bg-[#e7e5e4] rounded w-48" />
         </div>
       </div>
 
       {/* Stats skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white border border-[#e5e7eb] rounded-xl p-4">
-            <div className="h-4 bg-[#e5e7eb] rounded w-20 mb-2" />
-            <div className="h-8 bg-[#e5e7eb] rounded w-24" />
+          <div key={i} className="bg-white border border-[#e7e5e4] rounded-xl p-4">
+            <div className="h-4 bg-[#e7e5e4] rounded w-20 mb-2" />
+            <div className="h-8 bg-[#e7e5e4] rounded w-24" />
           </div>
         ))}
       </div>
 
       {/* Content skeleton */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-        <div className="h-6 bg-[#e5e7eb] rounded w-48 mb-4" />
-        <div className="h-10 bg-[#e5e7eb] rounded w-40" />
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+        <div className="h-6 bg-[#e7e5e4] rounded w-48 mb-4" />
+        <div className="h-10 bg-[#e7e5e4] rounded w-40" />
       </div>
     </div>
   )
@@ -64,8 +64,8 @@ async function DashboardContent() {
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-[#111827]">Dashboard</h1>
-          <p className="text-[#6b7280]">
+          <h1 className="text-2xl font-semibold text-[#1a1a1a]">Dashboard</h1>
+          <p className="text-[#78716c]">
             {venue ? venue.name : 'Ingen lokal ännu'}
           </p>
         </div>
@@ -78,22 +78,22 @@ async function DashboardContent() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
-          <p className="text-sm text-[#6b7280]">Status</p>
-          <p className="text-2xl font-semibold text-[#111827]">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
+          <p className="text-sm text-[#78716c]">Status</p>
+          <p className="text-2xl font-semibold text-[#1a1a1a]">
             {venue?.status === 'published' ? 'Publicerad' :
              venue?.status === 'draft' ? 'Utkast' : 'Ingen lokal'}
           </p>
         </div>
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
-          <p className="text-sm text-[#6b7280]">Nya förfrågningar</p>
-          <p className="text-2xl font-semibold text-[#1e3a8a]">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
+          <p className="text-sm text-[#78716c]">Nya förfrågningar</p>
+          <p className="text-2xl font-semibold text-[#c45a3b]">
             {pendingCount || 0}
           </p>
         </div>
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-4">
-          <p className="text-sm text-[#6b7280]">Kommande bokningar</p>
-          <p className="text-2xl font-semibold text-[#111827]">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
+          <p className="text-sm text-[#78716c]">Kommande bokningar</p>
+          <p className="text-2xl font-semibold text-[#1a1a1a]">
             {upcomingBookings?.length || 0}
           </p>
         </div>
@@ -101,8 +101,8 @@ async function DashboardContent() {
 
       {/* Pending requests */}
       {(pendingCount || 0) > 0 && (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 mb-8">
-          <h2 className="text-lg font-semibold text-[#111827] mb-4">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">
             Väntar på svar ({pendingCount})
           </h2>
           <Link href="/dashboard/bookings?status=pending">
@@ -113,11 +113,11 @@ async function DashboardContent() {
 
       {/* Quick actions */}
       {!venue && (
-        <div className="bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-[#1e3a8a] mb-2">
+        <div className="bg-[#c45a3b]/5 border border-[#c45a3b]/20 rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-[#c45a3b] mb-2">
             Kom igång
           </h2>
-          <p className="text-[#374151] mb-4">
+          <p className="text-[#57534e] mb-4">
             Skapa din lokal för att börja ta emot bokningsförfrågningar.
           </p>
           <Link href="/dashboard/venue/new">

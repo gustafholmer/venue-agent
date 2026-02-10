@@ -17,7 +17,7 @@ export function MobileMenu() {
         className="lg:hidden p-3 -ml-3 hover:bg-[#f3f4f6] rounded-lg transition-colors"
         aria-label="Öppna meny"
       >
-        <svg className="w-5 h-5 text-[#374151]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
@@ -37,8 +37,8 @@ export function MobileMenu() {
         }`}
       >
         {/* Panel header */}
-        <div className="flex items-center justify-between h-14 px-4 border-b border-[#e5e7eb]">
-          <span className="font-[family-name:var(--font-playfair)] text-xl text-[#111827]">
+        <div className="flex items-center justify-between h-14 px-4 border-b border-[#e7e5e4]">
+          <span className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a]">
             Tryffle
           </span>
           <button
@@ -46,7 +46,7 @@ export function MobileMenu() {
             className="p-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
             aria-label="Stäng meny"
           >
-            <svg className="w-5 h-5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-[#78716c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -65,8 +65,8 @@ export function MobileMenu() {
                   item.indent ? 'pl-6 text-sm' : ''
                 } ${
                   isActive
-                    ? 'bg-[#f3f4f6] text-[#111827] font-medium'
-                    : 'text-[#374151] hover:bg-[#f3f4f6]'
+                    ? 'bg-[#f3f4f6] text-[#1a1a1a] font-medium'
+                    : 'text-[#57534e] hover:bg-[#f3f4f6]'
                 }`}
               >
                 {item.label}

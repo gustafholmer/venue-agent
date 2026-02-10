@@ -41,13 +41,13 @@ export function PreferenceInput({
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <div className="border border-[#e5e7eb] rounded-2xl p-4 focus-within:border-[#d1d5db] transition-colors">
+      <div className="border border-[#e7e5e4] rounded-2xl p-4 focus-within:border-[#d1d5db] transition-colors">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Tvåa i Södermalm, max 4 miljoner, gärna balkong..."
-          className="w-full text-[#111827] placeholder:text-[#9ca3af] focus:outline-none text-lg mb-3"
+          className="w-full text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none text-lg mb-3"
         />
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -56,7 +56,7 @@ export function PreferenceInput({
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="p-2 text-[#6b7280] hover:text-[#1e3a8a] disabled:opacity-40 transition-colors"
+            className="p-2 text-[#78716c] hover:text-[#c45a3b] disabled:opacity-40 transition-colors"
           >
             {isLoading ? (
               <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">

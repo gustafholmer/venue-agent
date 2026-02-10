@@ -62,7 +62,7 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
   const venue = booking.venue
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#faf9f7]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
         {/* Success Message */}
         <div className="text-center mb-8">
@@ -81,18 +81,18 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
               />
             </svg>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-[#111827] mb-2">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
             Din förfrågan har skickats!
           </h1>
-          <p className="text-[#6b7280]">
+          <p className="text-[#78716c]">
             Vi har skickat en bekräftelse till {booking.customer_email}
           </p>
         </div>
 
         {/* Booking Summary */}
-        <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden mb-8">
+        <div className="bg-white rounded-xl border border-[#e7e5e4] overflow-hidden mb-8">
           {/* Venue Header */}
-          <div className="flex items-center gap-4 p-6 border-b border-[#e5e7eb]">
+          <div className="flex items-center gap-4 p-6 border-b border-[#e7e5e4]">
             {venue.primary_photo && (
               <div className="w-20 h-20 relative rounded-lg overflow-hidden flex-shrink-0">
                 <Image
@@ -104,8 +104,8 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
               </div>
             )}
             <div>
-              <h2 className="font-semibold text-[#111827]">{venue.name}</h2>
-              <p className="text-sm text-[#6b7280]">
+              <h2 className="font-semibold text-[#1a1a1a]">{venue.name}</h2>
+              <p className="text-sm text-[#78716c]">
                 {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
               </p>
             </div>
@@ -115,87 +115,87 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-[#6b7280]">Datum</p>
-                <p className="font-medium text-[#111827] capitalize">
+                <p className="text-sm text-[#78716c]">Datum</p>
+                <p className="font-medium text-[#1a1a1a] capitalize">
                   {formatDate(booking.event_date)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-[#6b7280]">Tid</p>
-                <p className="font-medium text-[#111827]">
+                <p className="text-sm text-[#78716c]">Tid</p>
+                <p className="font-medium text-[#1a1a1a]">
                   {booking.start_time} - {booking.end_time}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-[#6b7280]">Typ av event</p>
-                <p className="font-medium text-[#111827]">
+                <p className="text-sm text-[#78716c]">Typ av event</p>
+                <p className="font-medium text-[#1a1a1a]">
                   {formatEventType(booking.event_type)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-[#6b7280]">Antal gäster</p>
-                <p className="font-medium text-[#111827]">{booking.guest_count} personer</p>
+                <p className="text-sm text-[#78716c]">Antal gäster</p>
+                <p className="font-medium text-[#1a1a1a]">{booking.guest_count} personer</p>
               </div>
             </div>
 
             {booking.event_description && (
               <div>
-                <p className="text-sm text-[#6b7280]">Beskrivning</p>
-                <p className="text-[#111827]">{booking.event_description}</p>
+                <p className="text-sm text-[#78716c]">Beskrivning</p>
+                <p className="text-[#1a1a1a]">{booking.event_description}</p>
               </div>
             )}
 
             {/* Price Summary */}
-            <div className="pt-4 border-t border-[#e5e7eb]">
+            <div className="pt-4 border-t border-[#e7e5e4]">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-[#6b7280]">Pris</span>
-                <span className="text-[#111827]">{formatPrice(booking.base_price)}</span>
+                <span className="text-[#78716c]">Pris</span>
+                <span className="text-[#1a1a1a]">{formatPrice(booking.base_price)}</span>
               </div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-[#6b7280]">Serviceavgift</span>
-                <span className="text-[#111827]">{formatPrice(booking.platform_fee)}</span>
+                <span className="text-[#78716c]">Serviceavgift</span>
+                <span className="text-[#1a1a1a]">{formatPrice(booking.platform_fee)}</span>
               </div>
-              <div className="flex justify-between font-semibold pt-2 border-t border-[#e5e7eb]">
-                <span className="text-[#111827]">Totalt</span>
-                <span className="text-[#111827]">{formatPrice(booking.total_price)}</span>
+              <div className="flex justify-between font-semibold pt-2 border-t border-[#e7e5e4]">
+                <span className="text-[#1a1a1a]">Totalt</span>
+                <span className="text-[#1a1a1a]">{formatPrice(booking.total_price)}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* What Happens Next */}
-        <div className="bg-white rounded-xl border border-[#e5e7eb] p-6 mb-8">
-          <h3 className="font-semibold text-[#111827] mb-4">Vad händer nu?</h3>
+        <div className="bg-white rounded-xl border border-[#e7e5e4] p-6 mb-8">
+          <h3 className="font-semibold text-[#1a1a1a] mb-4">Vad händer nu?</h3>
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#1e3a8a]/10 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#1e3a8a]">1</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-[#c45a3b]/10 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold text-[#c45a3b]">1</span>
               </div>
               <div>
-                <p className="font-medium text-[#111827]">Lokalägaren granskar</p>
-                <p className="text-sm text-[#6b7280]">
+                <p className="font-medium text-[#1a1a1a]">Lokalägaren granskar</p>
+                <p className="text-sm text-[#78716c]">
                   Lokalägaren har fått ett meddelande om din förfrågan och kommer att granska den.
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#1e3a8a]/10 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#1e3a8a]">2</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-[#c45a3b]/10 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold text-[#c45a3b]">2</span>
               </div>
               <div>
-                <p className="font-medium text-[#111827]">Du får svar</p>
-                <p className="text-sm text-[#6b7280]">
+                <p className="font-medium text-[#1a1a1a]">Du får svar</p>
+                <p className="text-sm text-[#78716c]">
                   Vi meddelar dig via e-post när lokalägaren har svarat på din förfrågan.
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#1e3a8a]/10 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-[#1e3a8a]">3</span>
+              <div className="flex-shrink-0 w-8 h-8 bg-[#c45a3b]/10 rounded-full flex items-center justify-center">
+                <span className="text-sm font-semibold text-[#c45a3b]">3</span>
               </div>
               <div>
-                <p className="font-medium text-[#111827]">Bekräfta och betala</p>
-                <p className="text-sm text-[#6b7280]">
+                <p className="font-medium text-[#1a1a1a]">Bekräfta och betala</p>
+                <p className="text-sm text-[#78716c]">
                   Om förfrågan godkänns kan du slutföra bokningen genom att betala.
                 </p>
               </div>
@@ -223,16 +223,16 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
 
 function LoadingState() {
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#faf9f7]">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
         <div className="animate-pulse space-y-6">
           <div className="text-center space-y-4">
-            <div className="w-16 h-16 bg-[#e5e7eb] rounded-full mx-auto" />
-            <div className="h-8 bg-[#e5e7eb] rounded w-3/4 mx-auto" />
-            <div className="h-4 bg-[#e5e7eb] rounded w-1/2 mx-auto" />
+            <div className="w-16 h-16 bg-[#e7e5e4] rounded-full mx-auto" />
+            <div className="h-8 bg-[#e7e5e4] rounded w-3/4 mx-auto" />
+            <div className="h-4 bg-[#e7e5e4] rounded w-1/2 mx-auto" />
           </div>
-          <div className="h-64 bg-[#e5e7eb] rounded-xl" />
-          <div className="h-48 bg-[#e5e7eb] rounded-xl" />
+          <div className="h-64 bg-[#e7e5e4] rounded-xl" />
+          <div className="h-48 bg-[#e7e5e4] rounded-xl" />
         </div>
       </div>
     </div>

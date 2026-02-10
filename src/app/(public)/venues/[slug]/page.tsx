@@ -143,10 +143,10 @@ async function VenueDetailContent({ params }: PageProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Header */}
             <div>
-              <h1 className="text-2xl sm:text-3xl font-semibold text-[#111827] mb-2">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
                 {venue.name}
               </h1>
-              <div className="flex flex-wrap items-center gap-4 text-[#6b7280]">
+              <div className="flex flex-wrap items-center gap-4 text-[#78716c]">
                 <span className="flex items-center gap-1">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -170,8 +170,8 @@ async function VenueDetailContent({ params }: PageProps) {
             {/* Description */}
             {venue.description && (
               <div>
-                <h2 className="text-lg font-semibold text-[#111827] mb-3">Om lokalen</h2>
-                <div className="text-[#374151] whitespace-pre-wrap leading-relaxed">
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Om lokalen</h2>
+                <div className="text-[#57534e] whitespace-pre-wrap leading-relaxed">
                   {venue.description}
                 </div>
               </div>
@@ -180,11 +180,11 @@ async function VenueDetailContent({ params }: PageProps) {
             {/* Capacity */}
             {hasCapacity && (
               <div>
-                <h2 className="text-lg font-semibold text-[#111827] mb-3">Kapacitet</h2>
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Kapacitet</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {venue.capacity_standing && (
-                    <div className="bg-[#f9fafb] rounded-xl p-4">
-                      <div className="flex items-center gap-2 text-[#6b7280] mb-1">
+                    <div className="bg-[#faf9f7] rounded-xl p-4">
+                      <div className="flex items-center gap-2 text-[#78716c] mb-1">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
                             strokeLinecap="round"
@@ -195,14 +195,14 @@ async function VenueDetailContent({ params }: PageProps) {
                         </svg>
                         <span className="text-sm">Stående</span>
                       </div>
-                      <p className="text-xl font-semibold text-[#111827]">
+                      <p className="text-xl font-semibold text-[#1a1a1a]">
                         {venue.capacity_standing} personer
                       </p>
                     </div>
                   )}
                   {venue.capacity_seated && (
-                    <div className="bg-[#f9fafb] rounded-xl p-4">
-                      <div className="flex items-center gap-2 text-[#6b7280] mb-1">
+                    <div className="bg-[#faf9f7] rounded-xl p-4">
+                      <div className="flex items-center gap-2 text-[#78716c] mb-1">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
                             strokeLinecap="round"
@@ -213,14 +213,14 @@ async function VenueDetailContent({ params }: PageProps) {
                         </svg>
                         <span className="text-sm">Sittande</span>
                       </div>
-                      <p className="text-xl font-semibold text-[#111827]">
+                      <p className="text-xl font-semibold text-[#1a1a1a]">
                         {venue.capacity_seated} personer
                       </p>
                     </div>
                   )}
                   {venue.capacity_conference && (
-                    <div className="bg-[#f9fafb] rounded-xl p-4">
-                      <div className="flex items-center gap-2 text-[#6b7280] mb-1">
+                    <div className="bg-[#faf9f7] rounded-xl p-4">
+                      <div className="flex items-center gap-2 text-[#78716c] mb-1">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
                             strokeLinecap="round"
@@ -231,14 +231,14 @@ async function VenueDetailContent({ params }: PageProps) {
                         </svg>
                         <span className="text-sm">Konferens</span>
                       </div>
-                      <p className="text-xl font-semibold text-[#111827]">
+                      <p className="text-xl font-semibold text-[#1a1a1a]">
                         {venue.capacity_conference} personer
                       </p>
                     </div>
                   )}
                 </div>
                 {venue.min_guests > 1 && (
-                  <p className="text-sm text-[#6b7280] mt-3">
+                  <p className="text-sm text-[#78716c] mt-3">
                     Minsta antal gäster: {venue.min_guests}
                   </p>
                 )}
@@ -248,14 +248,14 @@ async function VenueDetailContent({ params }: PageProps) {
             {/* Amenities */}
             {venue.amenities && venue.amenities.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-[#111827] mb-3">Faciliteter</h2>
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Faciliteter</h2>
                 <div className="flex flex-wrap gap-2">
                   {venue.amenities.map((amenity) => (
                     <span
                       key={amenity}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f9fafb] rounded-full text-sm text-[#374151]"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#faf9f7] rounded-full text-sm text-[#57534e]"
                     >
-                      <svg className="w-4 h-4 text-[#1e3a8a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 text-[#c45a3b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       {amenity}
@@ -268,12 +268,12 @@ async function VenueDetailContent({ params }: PageProps) {
             {/* Venue Types */}
             {venue.venue_types && venue.venue_types.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-[#111827] mb-3">Passar för</h2>
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Passar för</h2>
                 <div className="flex flex-wrap gap-2">
                   {venue.venue_types.map((type) => (
                     <span
                       key={type}
-                      className="inline-flex px-3 py-1.5 bg-[#1e3a8a]/10 rounded-full text-sm text-[#1e3a8a] font-medium"
+                      className="inline-flex px-3 py-1.5 bg-[#c45a3b]/10 rounded-full text-sm text-[#c45a3b] font-medium"
                     >
                       {type}
                     </span>
@@ -285,12 +285,12 @@ async function VenueDetailContent({ params }: PageProps) {
             {/* Vibes */}
             {venue.vibes && venue.vibes.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-[#111827] mb-3">Känsla</h2>
+                <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Känsla</h2>
                 <div className="flex flex-wrap gap-2">
                   {venue.vibes.map((vibe) => (
                     <span
                       key={vibe}
-                      className="inline-flex px-3 py-1.5 bg-[#f3f4f6] rounded-full text-sm text-[#374151]"
+                      className="inline-flex px-3 py-1.5 bg-[#f3f4f6] rounded-full text-sm text-[#57534e]"
                     >
                       {vibe}
                     </span>
@@ -301,9 +301,9 @@ async function VenueDetailContent({ params }: PageProps) {
 
             {/* Address */}
             <div>
-              <h2 className="text-lg font-semibold text-[#111827] mb-3">Adress</h2>
-              <p className="text-[#374151]">{venue.address}</p>
-              <p className="text-[#374151] mb-4">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Adress</h2>
+              <p className="text-[#57534e]">{venue.address}</p>
+              <p className="text-[#57534e] mb-4">
                 {venue.area ? `${venue.area}, ` : ''}
                 {venue.city}
               </p>
@@ -326,53 +326,53 @@ async function VenueDetailContent({ params }: PageProps) {
 
           {/* Right Column - Pricing & CTA */}
           <div className="lg:col-span-1">
-            <div className="sticky top-6 bg-white border border-[#e5e7eb] rounded-2xl p-6 shadow-sm">
+            <div className="sticky top-6 bg-white border border-[#e7e5e4] rounded-2xl p-6 shadow-sm">
               {/* Pricing */}
               {hasPricing ? (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#111827] mb-4">Priser</h3>
+                  <h3 className="text-lg font-semibold text-[#1a1a1a] mb-4">Priser</h3>
                   <div className="space-y-3">
                     {venue.price_per_hour && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[#6b7280]">Pris per timme</span>
-                        <span className="font-semibold text-[#111827]">
+                        <span className="text-[#78716c]">Pris per timme</span>
+                        <span className="font-semibold text-[#1a1a1a]">
                           {formatPrice(venue.price_per_hour)}
                         </span>
                       </div>
                     )}
                     {venue.price_half_day && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[#6b7280]">Halvdag</span>
-                        <span className="font-semibold text-[#111827]">
+                        <span className="text-[#78716c]">Halvdag</span>
+                        <span className="font-semibold text-[#1a1a1a]">
                           {formatPrice(venue.price_half_day)}
                         </span>
                       </div>
                     )}
                     {venue.price_full_day && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[#6b7280]">Heldag</span>
-                        <span className="font-semibold text-[#111827]">
+                        <span className="text-[#78716c]">Heldag</span>
+                        <span className="font-semibold text-[#1a1a1a]">
                           {formatPrice(venue.price_full_day)}
                         </span>
                       </div>
                     )}
                     {venue.price_evening && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[#6b7280]">Kväll</span>
-                        <span className="font-semibold text-[#111827]">
+                        <span className="text-[#78716c]">Kväll</span>
+                        <span className="font-semibold text-[#1a1a1a]">
                           {formatPrice(venue.price_evening)}
                         </span>
                       </div>
                     )}
                   </div>
                   {venue.price_notes && (
-                    <p className="mt-3 text-sm text-[#6b7280]">{venue.price_notes}</p>
+                    <p className="mt-3 text-sm text-[#78716c]">{venue.price_notes}</p>
                   )}
                 </div>
               ) : (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#111827] mb-2">Pris</h3>
-                  <p className="text-[#6b7280]">Kontakta oss för prisuppgifter</p>
+                  <h3 className="text-lg font-semibold text-[#1a1a1a] mb-2">Pris</h3>
+                  <p className="text-[#78716c]">Kontakta oss för prisuppgifter</p>
                 </div>
               )}
 
@@ -385,13 +385,13 @@ async function VenueDetailContent({ params }: PageProps) {
 
               {/* Contact Info */}
               {(venue.contact_email || venue.contact_phone || venue.website) && (
-                <div className="mt-6 pt-6 border-t border-[#e5e7eb]">
-                  <h3 className="text-sm font-semibold text-[#111827] mb-3">Kontakt</h3>
+                <div className="mt-6 pt-6 border-t border-[#e7e5e4]">
+                  <h3 className="text-sm font-semibold text-[#1a1a1a] mb-3">Kontakt</h3>
                   <div className="space-y-2">
                     {venue.contact_email && (
                       <a
                         href={`mailto:${venue.contact_email}`}
-                        className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#1e3a8a] transition-colors"
+                        className="flex items-center gap-2 text-sm text-[#78716c] hover:text-[#c45a3b] transition-colors"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
@@ -407,7 +407,7 @@ async function VenueDetailContent({ params }: PageProps) {
                     {venue.contact_phone && (
                       <a
                         href={`tel:${venue.contact_phone}`}
-                        className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#1e3a8a] transition-colors"
+                        className="flex items-center gap-2 text-sm text-[#78716c] hover:text-[#c45a3b] transition-colors"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
@@ -425,7 +425,7 @@ async function VenueDetailContent({ params }: PageProps) {
                         href={venue.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#1e3a8a] transition-colors"
+                        className="flex items-center gap-2 text-sm text-[#78716c] hover:text-[#c45a3b] transition-colors"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path

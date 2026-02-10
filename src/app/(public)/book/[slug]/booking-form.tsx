@@ -195,14 +195,14 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
       <div className="mb-8">
         <Link
           href={`/venues/${venue.slug || venue.id}`}
-          className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#1e3a8a] transition-colors mb-4"
+          className="inline-flex items-center gap-2 text-[#78716c] hover:text-[#c45a3b] transition-colors mb-4"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Tillbaka till {venue.name}
         </Link>
-        <h1 className="text-2xl sm:text-3xl font-semibold text-[#111827]">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a]">
           Skicka bokningsförfrågan
         </h1>
       </div>
@@ -212,14 +212,14 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
           {/* Left Column - Form */}
           <div className="lg:col-span-2 space-y-8">
             {/* Event Details Section */}
-            <div className="bg-white rounded-xl border border-[#e5e7eb] p-6">
-              <h2 className="text-lg font-semibold text-[#111827] mb-6">
+            <div className="bg-white rounded-xl border border-[#e7e5e4] p-6">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-6">
                 Eventdetaljer
               </h2>
 
               {/* Date Picker */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-[#374151] mb-2">
+                <label className="block text-sm font-medium text-[#57534e] mb-2">
                   Välj datum <span className="text-red-500">*</span>
                 </label>
                 <DatePicker
@@ -235,13 +235,13 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
               {/* Time Selection */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
+                  <label className="block text-sm font-medium text-[#57534e] mb-2">
                     Starttid <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1f2937] focus:outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                    className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
                     required
                   >
                     <option value="">Välj tid</option>
@@ -253,13 +253,13 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
+                  <label className="block text-sm font-medium text-[#57534e] mb-2">
                     Sluttid <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1f2937] focus:outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                    className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
                     required
                   >
                     <option value="">Välj tid</option>
@@ -274,13 +274,13 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
 
               {/* Event Type */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-[#374151] mb-2">
+                <label className="block text-sm font-medium text-[#57534e] mb-2">
                   Typ av event <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={eventType}
                   onChange={(e) => setEventType(e.target.value)}
-                  className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1f2937] focus:outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                  className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
                   required
                 >
                   <option value="">Välj typ av event</option>
@@ -294,7 +294,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
 
               {/* Guest Count */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-[#374151] mb-2">
+                <label className="block text-sm font-medium text-[#57534e] mb-2">
                   Antal gäster <span className="text-red-500">*</span>
                 </label>
                 <Input
@@ -312,7 +312,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   required
                 />
                 {venue.min_guests > 1 && (
-                  <p className="text-sm text-[#6b7280] mt-1">
+                  <p className="text-sm text-[#78716c] mt-1">
                     Minst {venue.min_guests} gäster
                   </p>
                 )}
@@ -320,7 +320,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
 
               {/* Event Description */}
               <div>
-                <label className="block text-sm font-medium text-[#374151] mb-2">
+                <label className="block text-sm font-medium text-[#57534e] mb-2">
                   Beskriv ditt event
                 </label>
                 <Textarea
@@ -333,14 +333,14 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
             </div>
 
             {/* Customer Details Section */}
-            <div className="bg-white rounded-xl border border-[#e5e7eb] p-6">
-              <h2 className="text-lg font-semibold text-[#111827] mb-6">
+            <div className="bg-white rounded-xl border border-[#e7e5e4] p-6">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-6">
                 Dina uppgifter
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
+                  <label className="block text-sm font-medium text-[#57534e] mb-2">
                     Namn <span className="text-red-500">*</span>
                   </label>
                   <Input
@@ -352,7 +352,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
+                  <label className="block text-sm font-medium text-[#57534e] mb-2">
                     E-post <span className="text-red-500">*</span>
                   </label>
                   <Input
@@ -364,7 +364,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
+                  <label className="block text-sm font-medium text-[#57534e] mb-2">
                     Telefon
                   </label>
                   <Input
@@ -375,7 +375,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
+                  <label className="block text-sm font-medium text-[#57534e] mb-2">
                     Företag
                   </label>
                   <Input
@@ -396,15 +396,15 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   type="checkbox"
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-[#1e3a8a] border-[#e5e7eb] rounded focus:ring-[#1e3a8a]"
+                  className="mt-1 w-4 h-4 text-[#c45a3b] border-[#e7e5e4] rounded focus:ring-[#c45a3b]"
                 />
-                <span className="text-sm text-[#374151]">
+                <span className="text-sm text-[#57534e]">
                   Jag godkänner{' '}
-                  <Link href="/terms" className="text-[#1e3a8a] hover:underline">
+                  <Link href="/terms" className="text-[#c45a3b] hover:underline">
                     villkoren
                   </Link>{' '}
                   och{' '}
-                  <Link href="/privacy" className="text-[#1e3a8a] hover:underline">
+                  <Link href="/privacy" className="text-[#c45a3b] hover:underline">
                     integritetspolicyn
                   </Link>
                 </span>
@@ -423,7 +423,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
               {/* Login Prompt or Submit Button */}
               {showLoginPrompt ? (
                 <div className="space-y-4 text-center p-4 bg-[#f3f4f6] rounded-lg">
-                  <p className="text-[#374151]">Logga in för att boka</p>
+                  <p className="text-[#57534e]">Logga in för att boka</p>
                   <div className="flex gap-4 justify-center">
                     <Link href={`/auth/sign-in?returnUrl=${encodeURIComponent(`/book/${slug}?fromAuth=true`)}`}>
                       <Button type="button" variant="primary">Logga in</Button>
@@ -451,7 +451,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
           <div className="lg:col-span-1">
             <div className="sticky top-6 space-y-4">
               {/* Venue Card */}
-              <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+              <div className="bg-white rounded-xl border border-[#e7e5e4] overflow-hidden">
                 {primaryPhoto && (
                   <div className="aspect-[16/10] relative">
                     <Image
@@ -463,8 +463,8 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   </div>
                 )}
                 <div className="p-4">
-                  <h3 className="font-semibold text-[#111827]">{venue.name}</h3>
-                  <p className="text-sm text-[#6b7280]">
+                  <h3 className="font-semibold text-[#1a1a1a]">{venue.name}</h3>
+                  <p className="text-sm text-[#78716c]">
                     {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
                   </p>
                 </div>
@@ -472,27 +472,27 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
 
               {/* Price Summary */}
               {pricing && (
-                <div className="bg-white rounded-xl border border-[#e5e7eb] p-4">
-                  <h3 className="font-semibold text-[#111827] mb-4">Prisöversikt</h3>
+                <div className="bg-white rounded-xl border border-[#e7e5e4] p-4">
+                  <h3 className="font-semibold text-[#1a1a1a] mb-4">Prisöversikt</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#6b7280]">Pris</span>
-                      <span className="text-[#111827]">{formatPrice(pricing.basePrice)}</span>
+                      <span className="text-[#78716c]">Pris</span>
+                      <span className="text-[#1a1a1a]">{formatPrice(pricing.basePrice)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#6b7280]">
+                      <span className="text-[#78716c]">
                         Serviceavgift ({Math.round(PLATFORM_FEE_RATE * 100)}%)
                       </span>
-                      <span className="text-[#111827]">{formatPrice(pricing.platformFee)}</span>
+                      <span className="text-[#1a1a1a]">{formatPrice(pricing.platformFee)}</span>
                     </div>
-                    <div className="pt-3 border-t border-[#e5e7eb] flex justify-between">
-                      <span className="font-semibold text-[#111827]">Totalt</span>
-                      <span className="font-semibold text-[#111827]">
+                    <div className="pt-3 border-t border-[#e7e5e4] flex justify-between">
+                      <span className="font-semibold text-[#1a1a1a]">Totalt</span>
+                      <span className="font-semibold text-[#1a1a1a]">
                         {formatPrice(pricing.totalPrice)}
                       </span>
                     </div>
                   </div>
-                  <p className="text-xs text-[#6b7280] mt-4">
+                  <p className="text-xs text-[#78716c] mt-4">
                     Betalning sker efter att lokalägaren godkänt din förfrågan.
                   </p>
                 </div>
@@ -506,15 +506,15 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                     type="checkbox"
                     checked={agreedToTerms}
                     onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-[#1e3a8a] border-[#e5e7eb] rounded focus:ring-[#1e3a8a]"
+                    className="mt-1 w-4 h-4 text-[#c45a3b] border-[#e7e5e4] rounded focus:ring-[#c45a3b]"
                   />
-                  <span className="text-sm text-[#374151]">
+                  <span className="text-sm text-[#57534e]">
                     Jag godkänner{' '}
-                    <Link href="/terms" className="text-[#1e3a8a] hover:underline">
+                    <Link href="/terms" className="text-[#c45a3b] hover:underline">
                       villkoren
                     </Link>{' '}
                     och{' '}
-                    <Link href="/privacy" className="text-[#1e3a8a] hover:underline">
+                    <Link href="/privacy" className="text-[#c45a3b] hover:underline">
                       integritetspolicyn
                     </Link>
                   </span>
@@ -533,7 +533,7 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                 {/* Login Prompt or Submit Button */}
                 {showLoginPrompt ? (
                   <div className="space-y-4 text-center p-4 bg-[#f3f4f6] rounded-lg">
-                    <p className="text-[#374151]">Logga in för att boka</p>
+                    <p className="text-[#57534e]">Logga in för att boka</p>
                     <div className="flex gap-4 justify-center">
                       <Link href={`/auth/sign-in?returnUrl=${encodeURIComponent(`/book/${slug}?fromAuth=true`)}`}>
                         <Button type="button" variant="primary">Logga in</Button>

@@ -22,14 +22,14 @@ export default async function AccountLayout({
     .single()
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#faf9f7]">
       {/* Top header bar */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#e5e7eb] z-40">
+      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#e7e5e4] z-40">
         <div className="h-full px-4 lg:px-6 flex items-center justify-between">
           {/* Logo / Brand */}
           <Link
             href="/"
-            className="font-[family-name:var(--font-playfair)] text-xl text-[#111827] hover:text-[#1e3a8a] transition-colors"
+            className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
           >
             Tryffle
           </Link>
@@ -37,12 +37,12 @@ export default async function AccountLayout({
           {/* Right side actions */}
           <div className="flex items-center gap-3">
             <NotificationBell />
-            <span className="text-sm text-[#6b7280] hidden sm:block">
+            <span className="text-sm text-[#78716c] hidden sm:block">
               {profile?.full_name || user.email}
             </span>
             <Link
               href="/"
-              className="text-sm text-[#374151] hover:text-[#111827] transition-colors"
+              className="text-sm text-[#57534e] hover:text-[#1a1a1a] transition-colors"
             >
               Till startsidan
             </Link>
@@ -51,29 +51,29 @@ export default async function AccountLayout({
       </header>
 
       {/* Sidebar */}
-      <aside className="fixed left-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-white border-r border-[#e5e7eb] p-4 hidden lg:block">
+      <aside className="fixed left-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-white border-r border-[#e7e5e4] p-4 hidden lg:block">
         <nav className="space-y-1">
           <Link
             href="/account"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
+            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
           >
             Mitt konto
           </Link>
           <Link
             href="/account/bookings"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
+            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
           >
             Mina bokningar
           </Link>
           <Link
             href="/account/saved"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
+            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
           >
             Sparade lokaler
           </Link>
           <Link
             href="/account/settings"
-            className="block px-3 py-2 rounded-lg text-[#374151] hover:bg-[#f3f4f6]"
+            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
           >
             Inställningar
           </Link>
@@ -81,29 +81,29 @@ export default async function AccountLayout({
       </aside>
 
       {/* Mobile navigation */}
-      <div className="lg:hidden fixed top-14 left-0 right-0 bg-white border-b border-[#e5e7eb] z-30">
+      <div className="lg:hidden fixed top-14 left-0 right-0 bg-white border-b border-[#e7e5e4] z-30">
         <div className="flex overflow-x-auto">
           <Link
             href="/account"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#374151] hover:text-[#111827] border-b-2 border-transparent hover:border-[#1e3a8a]"
+            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
           >
             Mitt konto
           </Link>
           <Link
             href="/account/bookings"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#374151] hover:text-[#111827] border-b-2 border-transparent hover:border-[#1e3a8a]"
+            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
           >
             Mina bokningar
           </Link>
           <Link
             href="/account/saved"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#374151] hover:text-[#111827] border-b-2 border-transparent hover:border-[#1e3a8a]"
+            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
           >
             Sparade lokaler
           </Link>
           <Link
             href="/account/settings"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#374151] hover:text-[#111827] border-b-2 border-transparent hover:border-[#1e3a8a]"
+            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
           >
             Inställningar
           </Link>

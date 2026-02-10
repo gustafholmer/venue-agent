@@ -49,7 +49,7 @@ async function BookingPageContent({ params }: PageProps) {
   trackEvent('booking_started', { venue_id: venue.id, slug }, initialUser?.id)
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#faf9f7]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <BookingForm venue={venue} initialUser={initialUser} />
       </div>
@@ -59,17 +59,17 @@ async function BookingPageContent({ params }: PageProps) {
 
 function LoadingState() {
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#faf9f7]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-[#e5e7eb] rounded w-1/2" />
+          <div className="h-8 bg-[#e7e5e4] rounded w-1/2" />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
-              <div className="h-48 bg-[#e5e7eb] rounded-xl" />
-              <div className="h-32 bg-[#e5e7eb] rounded-xl" />
-              <div className="h-32 bg-[#e5e7eb] rounded-xl" />
+              <div className="h-48 bg-[#e7e5e4] rounded-xl" />
+              <div className="h-32 bg-[#e7e5e4] rounded-xl" />
+              <div className="h-32 bg-[#e7e5e4] rounded-xl" />
             </div>
-            <div className="h-64 bg-[#e5e7eb] rounded-xl" />
+            <div className="h-64 bg-[#e7e5e4] rounded-xl" />
           </div>
         </div>
       </div>

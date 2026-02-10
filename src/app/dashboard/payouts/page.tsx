@@ -3,14 +3,14 @@ export default function PayoutsPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#111827]">Utbetalningar</h1>
-        <p className="text-[#6b7280] mt-1">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Utbetalningar</h1>
+        <p className="text-[#78716c] mt-1">
           Hantera dina utbetalningar och se transaktionshistorik
         </p>
       </div>
 
       {/* Coming soon state */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
         <div className="w-16 h-16 mx-auto mb-4 bg-[#d1fae5] rounded-full flex items-center justify-center">
           <svg className="w-8 h-8 text-[#059669]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -21,10 +21,10 @@ export default function PayoutsPage() {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-medium text-[#111827] mb-2">
+        <h3 className="text-lg font-medium text-[#1a1a1a] mb-2">
           Kommer snart
         </h3>
-        <p className="text-[#6b7280] max-w-md mx-auto">
+        <p className="text-[#78716c] max-w-md mx-auto">
           Betalningsfunktionen är under utveckling. Snart kommer du kunna ta emot betalningar
           direkt via plattformen och se alla dina utbetalningar här.
         </p>

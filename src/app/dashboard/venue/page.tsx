@@ -279,13 +279,13 @@ export default function VenueEditPage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="animate-pulse">
-          <div className="h-8 bg-[#e5e7eb] rounded w-1/3 mb-4"></div>
-          <div className="h-4 bg-[#e5e7eb] rounded w-1/2 mb-8"></div>
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+          <div className="h-8 bg-[#e7e5e4] rounded w-1/3 mb-4"></div>
+          <div className="h-4 bg-[#e7e5e4] rounded w-1/2 mb-8"></div>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
             <div className="space-y-4">
-              <div className="h-10 bg-[#e5e7eb] rounded"></div>
-              <div className="h-10 bg-[#e5e7eb] rounded"></div>
-              <div className="h-24 bg-[#e5e7eb] rounded"></div>
+              <div className="h-10 bg-[#e7e5e4] rounded"></div>
+              <div className="h-10 bg-[#e7e5e4] rounded"></div>
+              <div className="h-24 bg-[#e7e5e4] rounded"></div>
             </div>
           </div>
         </div>
@@ -307,16 +307,16 @@ export default function VenueEditPage() {
       <div className="mb-8">
         <Link
           href="/dashboard"
-          className="text-sm text-[#6b7280] hover:text-[#1e3a8a]"
+          className="text-sm text-[#78716c] hover:text-[#c45a3b]"
         >
           &larr; Tillbaka till dashboard
         </Link>
         <div className="flex items-center justify-between mt-4">
           <div>
-            <h1 className="text-2xl font-semibold text-[#111827]">
+            <h1 className="text-2xl font-semibold text-[#1a1a1a]">
               Redigera lokal
             </h1>
-            <p className="text-[#6b7280] mt-1">
+            <p className="text-[#78716c] mt-1">
               Uppdatera information om din lokal
             </p>
           </div>
@@ -365,14 +365,14 @@ export default function VenueEditPage() {
       </div>
 
       {/* Edit form */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 mb-8">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-8">
         <div className="space-y-8">
           {/* Basic Info */}
           <section>
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Grundlaggande information</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Grundlaggande information</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="name" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Namn pa lokalen *
                 </label>
                 <Input
@@ -385,7 +385,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="description" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Beskrivning
                 </label>
                 <Textarea
@@ -398,7 +398,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#374151] mb-2">
+                <label className="block text-sm font-medium text-[#57534e] mb-2">
                   Typ av evenemang
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -407,24 +407,24 @@ export default function VenueEditPage() {
                       key={type.value}
                       className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
                         formData.venue_types.includes(type.value)
-                          ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-                          : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+                          ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                          : 'border-[#e7e5e4] hover:border-[#a8a29e]'
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={formData.venue_types.includes(type.value)}
                         onChange={() => toggleArrayField('venue_types', type.value)}
-                        className="w-4 h-4 text-[#1e3a8a] border-[#d1d5db] rounded focus:ring-[#1e3a8a]"
+                        className="w-4 h-4 text-[#c45a3b] border-[#d1d5db] rounded focus:ring-[#c45a3b]"
                       />
-                      <span className="text-sm text-[#374151]">{type.label}</span>
+                      <span className="text-sm text-[#57534e]">{type.label}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#374151] mb-2">
+                <label className="block text-sm font-medium text-[#57534e] mb-2">
                   Stil/kansla
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -433,17 +433,17 @@ export default function VenueEditPage() {
                       key={vibe.value}
                       className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
                         formData.vibes.includes(vibe.value)
-                          ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-                          : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+                          ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                          : 'border-[#e7e5e4] hover:border-[#a8a29e]'
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={formData.vibes.includes(vibe.value)}
                         onChange={() => toggleArrayField('vibes', vibe.value)}
-                        className="w-4 h-4 text-[#1e3a8a] border-[#d1d5db] rounded focus:ring-[#1e3a8a]"
+                        className="w-4 h-4 text-[#c45a3b] border-[#d1d5db] rounded focus:ring-[#c45a3b]"
                       />
-                      <span className="text-sm text-[#374151]">{vibe.label}</span>
+                      <span className="text-sm text-[#57534e]">{vibe.label}</span>
                     </label>
                   ))}
                 </div>
@@ -453,10 +453,10 @@ export default function VenueEditPage() {
 
           {/* Location */}
           <section>
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Plats</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Plats</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="address" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Adress *
                 </label>
                 <Input
@@ -470,14 +470,14 @@ export default function VenueEditPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="area" className="block text-sm font-medium text-[#374151] mb-1.5">
+                  <label htmlFor="area" className="block text-sm font-medium text-[#57534e] mb-1.5">
                     Omrade
                   </label>
                   <select
                     id="area"
                     value={formData.area}
                     onChange={e => updateField('area', e.target.value)}
-                    className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1f2937] focus:outline-none focus:border-[#1e3a8a] focus:ring-1 focus:ring-[#1e3a8a]"
+                    className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
                   >
                     <option value="">Valj omrade</option>
                     {AREAS.map(area => (
@@ -489,7 +489,7 @@ export default function VenueEditPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="city" className="block text-sm font-medium text-[#374151] mb-1.5">
+                  <label htmlFor="city" className="block text-sm font-medium text-[#57534e] mb-1.5">
                     Stad
                   </label>
                   <Input
@@ -505,10 +505,10 @@ export default function VenueEditPage() {
 
           {/* Capacity */}
           <section>
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Kapacitet</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Kapacitet</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="capacity_standing" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="capacity_standing" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Staende kapacitet
                 </label>
                 <Input
@@ -522,7 +522,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="capacity_seated" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="capacity_seated" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Sittande kapacitet
                 </label>
                 <Input
@@ -536,7 +536,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="capacity_conference" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="capacity_conference" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Konferenskapacitet
                 </label>
                 <Input
@@ -550,7 +550,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="min_guests" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="min_guests" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Minsta antal gaster
                 </label>
                 <Input
@@ -567,10 +567,10 @@ export default function VenueEditPage() {
 
           {/* Pricing */}
           <section>
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Priser</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Priser</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="price_per_hour" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_per_hour" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris per timme (SEK)
                 </label>
                 <Input
@@ -584,7 +584,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="price_half_day" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_half_day" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris halvdag (SEK)
                 </label>
                 <Input
@@ -598,7 +598,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="price_full_day" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_full_day" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris heldag (SEK)
                 </label>
                 <Input
@@ -612,7 +612,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="price_evening" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="price_evening" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Pris kvall (SEK)
                 </label>
                 <Input
@@ -627,7 +627,7 @@ export default function VenueEditPage() {
             </div>
 
             <div className="mt-4">
-              <label htmlFor="price_notes" className="block text-sm font-medium text-[#374151] mb-1.5">
+              <label htmlFor="price_notes" className="block text-sm font-medium text-[#57534e] mb-1.5">
                 Prisanteckningar
               </label>
               <Textarea
@@ -642,24 +642,24 @@ export default function VenueEditPage() {
 
           {/* Amenities */}
           <section>
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Faciliteter</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Faciliteter</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {AMENITIES.map(amenity => (
                 <label
                   key={amenity.value}
                   className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
                     formData.amenities.includes(amenity.value)
-                      ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-                      : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+                      ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                      : 'border-[#e7e5e4] hover:border-[#a8a29e]'
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={formData.amenities.includes(amenity.value)}
                     onChange={() => toggleArrayField('amenities', amenity.value)}
-                    className="w-4 h-4 text-[#1e3a8a] border-[#d1d5db] rounded focus:ring-[#1e3a8a]"
+                    className="w-4 h-4 text-[#c45a3b] border-[#d1d5db] rounded focus:ring-[#c45a3b]"
                   />
-                  <span className="text-sm text-[#374151]">{amenity.label}</span>
+                  <span className="text-sm text-[#57534e]">{amenity.label}</span>
                 </label>
               ))}
             </div>
@@ -667,10 +667,10 @@ export default function VenueEditPage() {
 
           {/* Contact */}
           <section>
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Kontaktuppgifter</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Kontaktuppgifter</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="contact_email" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="contact_email" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   E-post
                 </label>
                 <Input
@@ -683,7 +683,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="contact_phone" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="contact_phone" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Telefon
                 </label>
                 <Input
@@ -696,7 +696,7 @@ export default function VenueEditPage() {
               </div>
 
               <div>
-                <label htmlFor="website" className="block text-sm font-medium text-[#374151] mb-1.5">
+                <label htmlFor="website" className="block text-sm font-medium text-[#57534e] mb-1.5">
                   Webbplats
                 </label>
                 <Input
@@ -712,7 +712,7 @@ export default function VenueEditPage() {
         </div>
 
         {/* Action buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-[#e5e7eb]">
+        <div className="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-[#e7e5e4]">
           <div className="flex gap-3">
             {showPublishButton && (
               <Button

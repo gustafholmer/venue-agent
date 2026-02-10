@@ -43,7 +43,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
 
   if (photos.length === 0) {
     return (
-      <div className="aspect-[16/9] bg-[#f9fafb] rounded-xl flex items-center justify-center">
+      <div className="aspect-[16/9] bg-[#faf9f7] rounded-xl flex items-center justify-center">
         <div className="text-center">
           <svg
             className="w-16 h-16 text-[#d1d5db] mx-auto mb-4"
@@ -58,7 +58,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-[#6b7280]">Inga bilder tillgängliga</p>
+          <p className="text-[#78716c]">Inga bilder tillgängliga</p>
         </div>
       </div>
     )
@@ -70,7 +70,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
       <div className="space-y-4">
         {/* Primary Image */}
         <div
-          className="relative aspect-[16/9] bg-[#f9fafb] rounded-xl overflow-hidden cursor-pointer group"
+          className="relative aspect-[16/9] bg-[#faf9f7] rounded-xl overflow-hidden cursor-pointer group"
           onClick={() => setIsLightboxOpen(true)}
         >
           <Image
@@ -84,7 +84,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
 
           {/* View all photos overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 px-4 py-2 rounded-full text-sm font-medium text-[#111827]">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 px-4 py-2 rounded-full text-sm font-medium text-[#1a1a1a]">
               Visa alla bilder ({allPhotos.length})
             </span>
           </div>
@@ -97,7 +97,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
                   e.stopPropagation()
                   handlePrevious()
                 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#111827] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#1a1a1a] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                 aria-label="Föregående bild"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,7 +109,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
                   e.stopPropagation()
                   handleNext()
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#111827] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#1a1a1a] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                 aria-label="Nästa bild"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,7 +136,7 @@ export function PhotoGallery({ photos, venueName }: PhotoGalleryProps) {
                 onClick={() => setSelectedIndex(index)}
                 className={`relative aspect-square rounded-lg overflow-hidden transition-all ${
                   index === selectedIndex
-                    ? 'ring-2 ring-[#1e3a8a] ring-offset-2'
+                    ? 'ring-2 ring-[#c45a3b] ring-offset-2'
                     : 'opacity-70 hover:opacity-100'
                 }`}
               >

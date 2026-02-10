@@ -239,14 +239,14 @@ export default function PhotosPage() {
       <div className="mb-8">
         <a
           href="/dashboard/venue"
-          className="text-sm text-[#6b7280] hover:text-[#1e3a8a]"
+          className="text-sm text-[#78716c] hover:text-[#c45a3b]"
         >
           &larr; Tillbaka till lokal
         </a>
-        <h1 className="text-2xl font-semibold text-[#111827] mt-4">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a] mt-4">
           Bilder
         </h1>
-        <p className="text-[#6b7280] mt-1">
+        <p className="text-[#78716c] mt-1">
           Hantera bilder for din lokal. Den forsta bilden visas som huvudbild.
         </p>
       </div>
@@ -273,8 +273,8 @@ export default function PhotosPage() {
       <div
         className={`mb-8 border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
           isDragging
-            ? 'border-[#1e3a8a] bg-[#1e3a8a]/5'
-            : 'border-[#e5e7eb] hover:border-[#9ca3af]'
+            ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+            : 'border-[#e7e5e4] hover:border-[#a8a29e]'
         }`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -291,7 +291,7 @@ export default function PhotosPage() {
 
         <div className="mb-4">
           <svg
-            className="mx-auto h-12 w-12 text-[#9ca3af]"
+            className="mx-auto h-12 w-12 text-[#a8a29e]"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -305,7 +305,7 @@ export default function PhotosPage() {
           </svg>
         </div>
 
-        <p className="text-[#374151] mb-2">
+        <p className="text-[#57534e] mb-2">
           {isDragging
             ? 'Slapp bilderna har'
             : 'Dra och slapp bilder har, eller'}
@@ -320,7 +320,7 @@ export default function PhotosPage() {
           Välj filer
         </Button>
 
-        <p className="text-sm text-[#6b7280] mt-3">
+        <p className="text-sm text-[#78716c] mt-3">
           JPG, PNG eller WebP. Max 5MB per bild.
         </p>
       </div>
@@ -328,11 +328,11 @@ export default function PhotosPage() {
       {/* Photo grid */}
       {isLoading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar bilder...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
+          <p className="text-[#78716c] mt-2">Laddar bilder...</p>
         </div>
       ) : photos.length === 0 ? (
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
           <svg
             className="mx-auto h-16 w-16 text-[#d1d5db]"
             fill="none"
@@ -346,8 +346,8 @@ export default function PhotosPage() {
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-[#6b7280] mt-4 text-lg">Inga bilder annu</p>
-          <p className="text-[#9ca3af] mt-1">
+          <p className="text-[#78716c] mt-4 text-lg">Inga bilder annu</p>
+          <p className="text-[#a8a29e] mt-1">
             Ladda upp bilder for att visa din lokal for potentiella kunder.
           </p>
         </div>
@@ -360,13 +360,13 @@ export default function PhotosPage() {
                 key={photo.id}
                 className={`relative bg-white border rounded-xl overflow-hidden group ${
                   photo.is_primary
-                    ? 'border-[#1e3a8a] ring-2 ring-[#1e3a8a]/20'
-                    : 'border-[#e5e7eb]'
+                    ? 'border-[#c45a3b] ring-2 ring-[#c45a3b]/20'
+                    : 'border-[#e7e5e4]'
                 }`}
               >
                 {/* Primary badge */}
                 {photo.is_primary && (
-                  <div className="absolute top-2 left-2 z-10 bg-[#1e3a8a] text-white text-xs px-2 py-1 rounded-full">
+                  <div className="absolute top-2 left-2 z-10 bg-[#c45a3b] text-white text-xs px-2 py-1 rounded-full">
                     Huvudbild
                   </div>
                 )}
@@ -393,7 +393,7 @@ export default function PhotosPage() {
                     title="Flytta upp"
                   >
                     <svg
-                      className="w-5 h-5 text-[#374151]"
+                      className="w-5 h-5 text-[#57534e]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -416,7 +416,7 @@ export default function PhotosPage() {
                     title="Flytta ner"
                   >
                     <svg
-                      className="w-5 h-5 text-[#374151]"
+                      className="w-5 h-5 text-[#57534e]"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -488,8 +488,8 @@ export default function PhotosPage() {
 
       {/* Help text */}
       {photos.length > 0 && (
-        <div className="mt-6 p-4 bg-[#f9fafb] rounded-lg">
-          <p className="text-sm text-[#6b7280]">
+        <div className="mt-6 p-4 bg-[#faf9f7] rounded-lg">
+          <p className="text-sm text-[#78716c]">
             <strong>Tips:</strong> Hover over en bild for att se alternativ.
             Anvand pilarna for att andra ordningen, stjarnan for att satta huvudbild,
             eller papperskorgen for att ta bort.

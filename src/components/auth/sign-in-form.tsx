@@ -30,7 +30,7 @@ export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="email" className="block text-sm text-[#57534e] mb-1.5">
             E-post
           </label>
           <input
@@ -39,12 +39,12 @@ export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
             type="email"
             required
             placeholder="namn@exempel.se"
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className="w-full h-11 px-4 border border-[#e7e5e4] rounded-xl text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none focus:border-[#c45a3b]"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="password" className="block text-sm text-[#57534e] mb-1.5">
             Lösenord
           </label>
           <input
@@ -53,7 +53,7 @@ export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
             type="password"
             required
             placeholder="••••••••"
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className="w-full h-11 px-4 border border-[#e7e5e4] rounded-xl text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none focus:border-[#c45a3b]"
           />
         </div>
 
@@ -62,9 +62,9 @@ export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
         </Button>
       </form>
 
-      <p className="text-center text-sm text-[#6b7280] mt-6">
+      <p className="text-center text-sm text-[#78716c] mt-6">
         Inget konto?{' '}
-        <a href={signUpLink} className="text-[#1e3a8a] hover:underline">
+        <a href={signUpLink} className="text-[#c45a3b] hover:underline">
           Skapa ett här
         </a>
       </p>

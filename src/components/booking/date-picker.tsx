@@ -132,7 +132,7 @@ export function DatePicker({
   }
 
   return (
-    <div className={`relative bg-white border border-[#e5e7eb] rounded-xl p-4 ${className}`}>
+    <div className={`relative bg-white border border-[#e7e5e4] rounded-xl p-4 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <button
@@ -142,12 +142,12 @@ export function DatePicker({
           className="p-2 hover:bg-[#f3f4f6] rounded-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           aria-label="Föregående månad"
         >
-          <svg className="w-5 h-5 text-[#374151]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
 
-        <h3 className="text-lg font-semibold text-[#111827]">
+        <h3 className="text-lg font-semibold text-[#1a1a1a]">
           {MONTHS[currentMonth]} {currentYear}
         </h3>
 
@@ -157,7 +157,7 @@ export function DatePicker({
           className="p-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
           aria-label="Nästa månad"
         >
-          <svg className="w-5 h-5 text-[#374151]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -168,7 +168,7 @@ export function DatePicker({
         {WEEKDAYS.map((day) => (
           <div
             key={day}
-            className="h-8 flex items-center justify-center text-xs font-medium text-[#6b7280]"
+            className="h-8 flex items-center justify-center text-xs font-medium text-[#78716c]"
           >
             {day}
           </div>
@@ -177,7 +177,7 @@ export function DatePicker({
 
       {isLoadingMonth && (
         <div className="absolute inset-0 bg-white/60 flex items-center justify-center rounded-xl z-10">
-          <svg className="animate-spin h-6 w-6 text-[#6b7280]" viewBox="0 0 24 24">
+          <svg className="animate-spin h-6 w-6 text-[#78716c]" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
@@ -206,14 +206,14 @@ export function DatePicker({
               className={`
                 relative h-10 rounded-lg text-sm font-medium transition-colors
                 ${isSelected
-                  ? 'bg-[#1e3a8a] text-white'
+                  ? 'bg-[#c45a3b] text-white'
                   : isBlocked
                     ? 'bg-red-50 text-red-300 cursor-not-allowed line-through'
                     : isBooked
                       ? 'bg-amber-50 text-amber-400 cursor-not-allowed'
                       : isDisabled
                         ? 'text-[#d1d5db] cursor-not-allowed'
-                        : 'text-[#374151] hover:bg-[#f3f4f6]'
+                        : 'text-[#57534e] hover:bg-[#f3f4f6]'
                 }
               `}
               title={
@@ -237,9 +237,9 @@ export function DatePicker({
       </div>
 
       {/* Legend */}
-      <div className="mt-4 pt-4 border-t border-[#e5e7eb] flex flex-wrap gap-4 text-xs text-[#6b7280]">
+      <div className="mt-4 pt-4 border-t border-[#e7e5e4] flex flex-wrap gap-4 text-xs text-[#78716c]">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-[#1e3a8a] rounded" />
+          <div className="w-4 h-4 bg-[#c45a3b] rounded" />
           <span>Valt datum</span>
         </div>
         <div className="flex items-center gap-2">

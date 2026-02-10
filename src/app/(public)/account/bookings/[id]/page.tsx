@@ -146,9 +146,9 @@ export default function CustomerBookingDetailPage() {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar bokning...</p>
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
+          <p className="text-[#78716c] mt-2">Laddar bokning...</p>
         </div>
       </div>
     )
@@ -187,7 +187,7 @@ export default function CustomerBookingDetailPage() {
       {/* Back link */}
       <Link
         href="/account/bookings"
-        className="inline-flex items-center text-[#6b7280] hover:text-[#374151] mb-6"
+        className="inline-flex items-center text-[#78716c] hover:text-[#57534e] mb-6"
       >
         <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -210,7 +210,7 @@ export default function CustomerBookingDetailPage() {
       )}
 
       {/* Venue card with status */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden mb-6">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl overflow-hidden mb-6">
         <div className="flex flex-col sm:flex-row">
           {/* Venue image */}
           <div className="sm:w-64 h-48 sm:h-auto flex-shrink-0 bg-[#f3f4f6]">
@@ -233,15 +233,15 @@ export default function CustomerBookingDetailPage() {
           <div className="flex-1 p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-semibold text-[#111827]">
+                <h1 className="text-2xl font-semibold text-[#1a1a1a]">
                   {booking.venue.name}
                 </h1>
-                <p className="text-[#6b7280] mt-1">
+                <p className="text-[#78716c] mt-1">
                   {booking.venue.area ? `${booking.venue.area}, ${booking.venue.city}` : booking.venue.city}
                 </p>
                 <Link
                   href={`/venues/${booking.venue.slug || booking.venue_id}`}
-                  className="text-[#1e3a8a] hover:underline text-sm mt-2 inline-block"
+                  className="text-[#c45a3b] hover:underline text-sm mt-2 inline-block"
                 >
                   Visa lokal
                 </Link>
@@ -252,13 +252,13 @@ export default function CustomerBookingDetailPage() {
             </div>
 
             {/* Status description */}
-            <div className="mt-4 p-3 bg-[#f9fafb] rounded-lg">
-              <p className="text-sm text-[#6b7280]">{status.description}</p>
+            <div className="mt-4 p-3 bg-[#faf9f7] rounded-lg">
+              <p className="text-sm text-[#78716c]">{status.description}</p>
             </div>
 
             {/* Cancel button */}
             {canCancel && (
-              <div className="mt-4 pt-4 border-t border-[#e5e7eb]">
+              <div className="mt-4 pt-4 border-t border-[#e7e5e4]">
                 <Button
                   variant="outline"
                   onClick={() => setShowCancelModal(true)}
@@ -276,51 +276,51 @@ export default function CustomerBookingDetailPage() {
         {/* Main content - left column */}
         <div className="lg:col-span-2 space-y-6">
           {/* Event details */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Eventdetaljer</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Eventdetaljer</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <dt className="text-sm text-[#6b7280]">Datum</dt>
-                <dd className="mt-1 text-[#111827] font-medium">{formatDate(booking.event_date)}</dd>
+                <dt className="text-sm text-[#78716c]">Datum</dt>
+                <dd className="mt-1 text-[#1a1a1a] font-medium">{formatDate(booking.event_date)}</dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">Tid</dt>
-                <dd className="mt-1 text-[#111827]">
+                <dt className="text-sm text-[#78716c]">Tid</dt>
+                <dd className="mt-1 text-[#1a1a1a]">
                   {formatTime(booking.start_time)} - {formatTime(booking.end_time)}
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">Eventtyp</dt>
-                <dd className="mt-1 text-[#111827]">{eventType}</dd>
+                <dt className="text-sm text-[#78716c]">Eventtyp</dt>
+                <dd className="mt-1 text-[#1a1a1a]">{eventType}</dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">Antal gäster</dt>
-                <dd className="mt-1 text-[#111827]">{booking.guest_count || '-'} personer</dd>
+                <dt className="text-sm text-[#78716c]">Antal gäster</dt>
+                <dd className="mt-1 text-[#1a1a1a]">{booking.guest_count || '-'} personer</dd>
               </div>
               {booking.event_description && (
                 <div className="sm:col-span-2">
-                  <dt className="text-sm text-[#6b7280]">Beskrivning</dt>
-                  <dd className="mt-1 text-[#111827] whitespace-pre-wrap">{booking.event_description}</dd>
+                  <dt className="text-sm text-[#78716c]">Beskrivning</dt>
+                  <dd className="mt-1 text-[#1a1a1a] whitespace-pre-wrap">{booking.event_description}</dd>
                 </div>
               )}
             </dl>
           </div>
 
           {/* Price breakdown */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Prisuppdelning</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Prisuppdelning</h2>
             <dl className="space-y-3">
               <div className="flex justify-between">
-                <dt className="text-[#6b7280]">Lokalhyra</dt>
-                <dd className="text-[#111827]">{formatPrice(booking.base_price)}</dd>
+                <dt className="text-[#78716c]">Lokalhyra</dt>
+                <dd className="text-[#1a1a1a]">{formatPrice(booking.base_price)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-[#6b7280]">Serviceavgift</dt>
-                <dd className="text-[#111827]">{formatPrice(booking.platform_fee)}</dd>
+                <dt className="text-[#78716c]">Serviceavgift</dt>
+                <dd className="text-[#1a1a1a]">{formatPrice(booking.platform_fee)}</dd>
               </div>
-              <div className="flex justify-between pt-3 border-t border-[#e5e7eb]">
-                <dt className="font-medium text-[#111827]">Totalt</dt>
-                <dd className="font-semibold text-[#1e3a8a] text-lg">{formatPrice(booking.total_price)}</dd>
+              <div className="flex justify-between pt-3 border-t border-[#e7e5e4]">
+                <dt className="font-medium text-[#1a1a1a]">Totalt</dt>
+                <dd className="font-semibold text-[#c45a3b] text-lg">{formatPrice(booking.total_price)}</dd>
               </div>
             </dl>
           </div>
@@ -354,19 +354,19 @@ export default function CustomerBookingDetailPage() {
         {/* Sidebar - right column */}
         <div className="space-y-6">
           {/* Timeline */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Tidslinje</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Tidslinje</h2>
             <div className="space-y-4">
               {/* Booking created */}
               <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-[#f3f4f6] rounded-full flex items-center justify-center text-[#6b7280]">
+                <div className="flex-shrink-0 w-8 h-8 bg-[#f3f4f6] rounded-full flex items-center justify-center text-[#78716c]">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#111827]">Förfrågan skickad</p>
-                  <p className="text-xs text-[#6b7280]">{formatDateTime(booking.created_at)}</p>
+                  <p className="text-sm font-medium text-[#1a1a1a]">Förfrågan skickad</p>
+                  <p className="text-xs text-[#78716c]">{formatDateTime(booking.created_at)}</p>
                 </div>
               </div>
 
@@ -389,12 +389,12 @@ export default function CustomerBookingDetailPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#111827]">
+                    <p className="text-sm font-medium text-[#1a1a1a]">
                       {booking.status === 'accepted' ? 'Godkänd' :
                        booking.status === 'declined' ? 'Nekad' :
                        booking.status === 'cancelled' ? 'Avbokad' : 'Besvarad'}
                     </p>
-                    <p className="text-xs text-[#6b7280]">{formatDateTime(booking.responded_at)}</p>
+                    <p className="text-xs text-[#78716c]">{formatDateTime(booking.responded_at)}</p>
                   </div>
                 </div>
               )}
@@ -419,27 +419,27 @@ export default function CustomerBookingDetailPage() {
           )}
 
           {/* Your booking info */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[#111827] mb-4">Din bokningsinformation</h2>
+          <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Din bokningsinformation</h2>
             <dl className="space-y-3">
               <div>
-                <dt className="text-sm text-[#6b7280]">Namn</dt>
-                <dd className="mt-1 text-[#111827]">{booking.customer_name}</dd>
+                <dt className="text-sm text-[#78716c]">Namn</dt>
+                <dd className="mt-1 text-[#1a1a1a]">{booking.customer_name}</dd>
               </div>
               <div>
-                <dt className="text-sm text-[#6b7280]">E-post</dt>
-                <dd className="mt-1 text-[#111827]">{booking.customer_email}</dd>
+                <dt className="text-sm text-[#78716c]">E-post</dt>
+                <dd className="mt-1 text-[#1a1a1a]">{booking.customer_email}</dd>
               </div>
               {booking.customer_phone && (
                 <div>
-                  <dt className="text-sm text-[#6b7280]">Telefon</dt>
-                  <dd className="mt-1 text-[#111827]">{booking.customer_phone}</dd>
+                  <dt className="text-sm text-[#78716c]">Telefon</dt>
+                  <dd className="mt-1 text-[#1a1a1a]">{booking.customer_phone}</dd>
                 </div>
               )}
               {booking.company_name && (
                 <div>
-                  <dt className="text-sm text-[#6b7280]">Företag</dt>
-                  <dd className="mt-1 text-[#111827]">{booking.company_name}</dd>
+                  <dt className="text-sm text-[#78716c]">Företag</dt>
+                  <dd className="mt-1 text-[#1a1a1a]">{booking.company_name}</dd>
                 </div>
               )}
             </dl>
@@ -452,7 +452,7 @@ export default function CustomerBookingDetailPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#111827]">Avboka bokning</h3>
+              <h3 className="text-lg font-semibold text-[#1a1a1a]">Avboka bokning</h3>
               <button
                 onClick={() => {
                   setShowCancelModal(false)
@@ -461,13 +461,13 @@ export default function CustomerBookingDetailPage() {
                 }}
                 className="p-1 hover:bg-[#f3f4f6] rounded-lg transition-colors"
               >
-                <svg className="w-5 h-5 text-[#6b7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#78716c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <p className="text-[#6b7280] mb-4">
+            <p className="text-[#78716c] mb-4">
               Är du säker på att du vill avboka denna bokning? Denna åtgärd kan inte ångras.
             </p>
 
@@ -478,7 +478,7 @@ export default function CustomerBookingDetailPage() {
             )}
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-[#374151] mb-1">
+              <label className="block text-sm font-medium text-[#57534e] mb-1">
                 Anledning till avbokning (valfritt)
               </label>
               <textarea
@@ -486,7 +486,7 @@ export default function CustomerBookingDetailPage() {
                 onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="T.ex. Ändrade planer, behöver boka om..."
                 rows={3}
-                className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent resize-none"
+                className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent resize-none"
               />
             </div>
 

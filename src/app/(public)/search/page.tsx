@@ -42,10 +42,10 @@ async function SearchContent({ searchParams }: SearchPageProps) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-xl font-semibold text-[#111827] mb-2">
+          <h1 className="text-xl font-semibold text-[#1a1a1a] mb-2">
             Något gick fel
           </h1>
-          <p className="text-[#6b7280]">
+          <p className="text-[#78716c]">
             {sessionResult.error || 'Kunde inte starta sökning. Försök igen.'}
           </p>
         </div>
@@ -75,11 +75,11 @@ function SearchLoading() {
     <div className="flex-1 flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="flex gap-1">
-          <span className="w-3 h-3 bg-[#1e3a8a] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-          <span className="w-3 h-3 bg-[#1e3a8a] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-          <span className="w-3 h-3 bg-[#1e3a8a] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+          <span className="w-3 h-3 bg-[#c45a3b] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+          <span className="w-3 h-3 bg-[#c45a3b] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+          <span className="w-3 h-3 bg-[#c45a3b] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
         </div>
-        <p className="text-[#6b7280]">Laddar...</p>
+        <p className="text-[#78716c]">Laddar...</p>
       </div>
     </div>
   )

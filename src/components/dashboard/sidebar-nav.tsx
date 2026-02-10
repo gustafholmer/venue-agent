@@ -19,8 +19,8 @@ export function SidebarNav() {
               item.indent ? 'pl-6 text-sm' : ''
             } ${
               isActive
-                ? 'bg-[#f3f4f6] text-[#111827] font-medium'
-                : 'text-[#374151] hover:bg-[#f3f4f6]'
+                ? 'bg-[#f3f4f6] text-[#1a1a1a] font-medium'
+                : 'text-[#57534e] hover:bg-[#f3f4f6]'
             }`}
           >
             {item.label}

@@ -14,10 +14,10 @@ function VenueResultCard({ venue }: { venue: VenueResult }) {
   return (
     <Link
       href={`/venues/${venue.slug}`}
-      className="group block bg-white border border-[#e5e7eb] rounded-xl overflow-hidden hover:shadow-lg hover:border-[#d1d5db] transition-all"
+      className="group block bg-white border border-[#e7e5e4] rounded-xl overflow-hidden hover:shadow-lg hover:border-[#d1d5db] transition-all"
     >
       {/* Image */}
-      <div className="aspect-[4/3] bg-[#f9fafb] relative overflow-hidden">
+      <div className="aspect-[4/3] bg-[#faf9f7] relative overflow-hidden">
         {venue.imageUrl ? (
           <Image
             src={venue.imageUrl}
@@ -37,23 +37,23 @@ function VenueResultCard({ venue }: { venue: VenueResult }) {
 
       {/* Content */}
       <div className="p-4">
-        <h3 className="font-semibold text-[#111827] text-lg mb-1 line-clamp-1 group-hover:text-[#1e3a8a] transition-colors">
+        <h3 className="font-semibold text-[#1a1a1a] text-lg mb-1 line-clamp-1 group-hover:text-[#c45a3b] transition-colors">
           {venue.name}
         </h3>
 
-        <p className="text-sm text-[#6b7280] mb-3">{venue.area}</p>
+        <p className="text-sm text-[#78716c] mb-3">{venue.area}</p>
 
         <div className="flex items-center justify-between text-sm">
-          <span className="text-[#1e3a8a] font-semibold">
+          <span className="text-[#c45a3b] font-semibold">
             {venue.price > 0 ? `${venue.price.toLocaleString('sv-SE')} SEK` : 'Pris på förfrågan'}
           </span>
-          <span className="text-[#6b7280]">
+          <span className="text-[#78716c]">
             {venue.capacity} pers
           </span>
         </div>
 
         {venue.matchReason && (
-          <p className="text-xs text-[#6b7280] mt-2 italic line-clamp-2">
+          <p className="text-xs text-[#78716c] mt-2 italic line-clamp-2">
             {venue.matchReason}
           </p>
         )}
@@ -121,19 +121,19 @@ async function SearchResultsContent({ params }: PageProps) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-[#111827] mb-4">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-4">
           Sökresultat
         </h1>
 
         {/* Search criteria */}
         {criteria.length > 0 && (
-          <div className="bg-[#f9fafb] rounded-xl p-4 mb-6">
-            <h2 className="text-sm font-semibold text-[#374151] mb-2">Sökkriterier:</h2>
+          <div className="bg-[#faf9f7] rounded-xl p-4 mb-6">
+            <h2 className="text-sm font-semibold text-[#57534e] mb-2">Sökkriterier:</h2>
             <div className="flex flex-wrap gap-2">
               {criteria.map((criterion, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-white border border-[#e5e7eb] text-[#374151]"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-white border border-[#e7e5e4] text-[#57534e]"
                 >
                   {criterion}
                 </span>
@@ -160,7 +160,7 @@ async function SearchResultsContent({ params }: PageProps) {
       {/* Results */}
       {venues.length > 0 ? (
         <>
-          <p className="text-[#6b7280] mb-6">
+          <p className="text-[#78716c] mb-6">
             {venues.length} {venues.length === 1 ? 'lokal' : 'lokaler'} matchade din sökning
           </p>
 
@@ -171,14 +171,14 @@ async function SearchResultsContent({ params }: PageProps) {
           </div>
         </>
       ) : (
-        <div className="text-center py-12 bg-[#f9fafb] rounded-xl">
+        <div className="text-center py-12 bg-[#faf9f7] rounded-xl">
           <svg className="w-16 h-16 text-[#d1d5db] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          <h3 className="text-lg font-semibold text-[#111827] mb-2">
+          <h3 className="text-lg font-semibold text-[#1a1a1a] mb-2">
             Inga lokaler hittades
           </h3>
-          <p className="text-[#6b7280] mb-6 max-w-md mx-auto">
+          <p className="text-[#78716c] mb-6 max-w-md mx-auto">
             Den här sökningen har inga tillgängliga resultat längre. Prova att göra en ny sökning.
           </p>
           <Link href="/search">
@@ -196,9 +196,9 @@ function LoadingState() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <div className="animate-pulse">
-        <div className="h-8 bg-[#e5e7eb] rounded w-48 mb-4" />
+        <div className="h-8 bg-[#e7e5e4] rounded w-48 mb-4" />
         <div className="h-24 bg-[#f3f4f6] rounded-xl mb-6" />
-        <div className="h-10 bg-[#e5e7eb] rounded w-32 mb-8" />
+        <div className="h-10 bg-[#e7e5e4] rounded w-32 mb-8" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
             <div key={i} className="bg-[#f3f4f6] rounded-xl h-72" />

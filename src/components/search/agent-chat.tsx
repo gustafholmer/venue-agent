@@ -19,10 +19,10 @@ function VenueCard({ venue }: { venue: VenueResult }) {
   return (
     <Link
       href={`/venues/${venue.slug}`}
-      className="block bg-white border border-[#e5e7eb] rounded-xl p-4 hover:shadow-md transition-shadow"
+      className="block bg-white border border-[#e7e5e4] rounded-xl p-4 hover:shadow-md transition-shadow"
     >
       {venue.imageUrl && (
-        <div className="w-full h-32 bg-[#f9fafb] rounded-lg mb-3 overflow-hidden">
+        <div className="w-full h-32 bg-[#faf9f7] rounded-lg mb-3 overflow-hidden">
           <img
             src={venue.imageUrl}
             alt={venue.name}
@@ -30,13 +30,13 @@ function VenueCard({ venue }: { venue: VenueResult }) {
           />
         </div>
       )}
-      <h4 className="font-semibold text-[#111827] mb-1">{venue.name}</h4>
-      <p className="text-sm text-[#6b7280] mb-2">{venue.area}</p>
+      <h4 className="font-semibold text-[#1a1a1a] mb-1">{venue.name}</h4>
+      <p className="text-sm text-[#78716c] mb-2">{venue.area}</p>
       <div className="flex items-center justify-between text-sm">
-        <span className="text-[#1e3a8a] font-medium">
+        <span className="text-[#c45a3b] font-medium">
           {venue.price.toLocaleString('sv-SE')} SEK
         </span>
-        <span className="text-[#6b7280]">
+        <span className="text-[#78716c]">
           {venue.capacity} pers
         </span>
       </div>
@@ -47,7 +47,7 @@ function VenueCard({ venue }: { venue: VenueResult }) {
         </p>
       )}
       {venue.matchReason && (
-        <p className="text-xs text-[#6b7280] mt-1 italic">
+        <p className="text-xs text-[#78716c] mt-1 italic">
           {venue.matchReason}
         </p>
       )}
@@ -63,8 +63,8 @@ function MessageBubble({ message }: { message: AgentMessage }) {
       <div
         className={`max-w-[85%] sm:max-w-[75%] ${
           isUser
-            ? 'bg-[#1e3a8a] text-white rounded-2xl rounded-br-md'
-            : 'bg-[#f3f4f6] text-[#111827] rounded-2xl rounded-bl-md'
+            ? 'bg-[#c45a3b] text-white rounded-2xl rounded-br-md'
+            : 'bg-[#f3f4f6] text-[#1a1a1a] rounded-2xl rounded-bl-md'
         } px-4 py-3`}
       >
         <p className="whitespace-pre-wrap text-sm sm:text-base">{message.content}</p>
@@ -85,16 +85,16 @@ function MessageBubble({ message }: { message: AgentMessage }) {
 function LoadingIndicator({ agentState }: { agentState?: AgentState }) {
   return (
     <div className="flex justify-start">
-      <div className="bg-[#f3f4f6] text-[#6b7280] rounded-2xl rounded-bl-md px-4 py-3">
+      <div className="bg-[#f3f4f6] text-[#78716c] rounded-2xl rounded-bl-md px-4 py-3">
         <div className="flex items-center gap-2">
           <div className="flex gap-1">
-            <span className="w-2 h-2 bg-[#9ca3af] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-2 h-2 bg-[#9ca3af] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-2 h-2 bg-[#9ca3af] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <span className="w-2 h-2 bg-[#a8a29e] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <span className="w-2 h-2 bg-[#a8a29e] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+            <span className="w-2 h-2 bg-[#a8a29e] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
           <span className="text-sm">Söker lokaler...</span>
           {agentState && agentState !== 'idle' && (
-            <span className="text-xs ml-2 px-2 py-1 bg-[#e5e7eb] rounded-md">
+            <span className="text-xs ml-2 px-2 py-1 bg-[#e7e5e4] rounded-md">
               {agentState}
             </span>
           )}
@@ -319,10 +319,10 @@ export function AgentChat({
           {/* Welcome message if no messages */}
           {messages.length === 0 && !isLoading && (
             <div className="text-center py-12">
-              <h2 className="text-xl font-semibold text-[#111827] mb-2">
+              <h2 className="text-xl font-semibold text-[#1a1a1a] mb-2">
                 Hej! Jag hjälper dig hitta den perfekta lokalen.
               </h2>
-              <p className="text-[#6b7280]">
+              <p className="text-[#78716c]">
                 Beskriv vad du söker, så hittar jag matchande lokaler åt dig.
               </p>
             </div>
@@ -343,9 +343,9 @@ export function AgentChat({
 
       {/* Share button - shows when venues are found (not in demo mode) */}
       {hasVenues && !demoMode && (
-        <div className="border-t border-[#e5e7eb] bg-[#f9fafb] px-4 py-3">
+        <div className="border-t border-[#e7e5e4] bg-[#faf9f7] px-4 py-3">
           <div className="max-w-3xl mx-auto flex items-center justify-between">
-            <p className="text-sm text-[#6b7280]">
+            <p className="text-sm text-[#78716c]">
               Dela dina sökresultat med andra
             </p>
             <button
@@ -356,12 +356,12 @@ export function AgentChat({
                   ? 'bg-green-100 text-green-700'
                   : shareStatus === 'error'
                   ? 'bg-red-100 text-red-700'
-                  : 'bg-white border border-[#e5e7eb] text-[#374151] hover:bg-[#f3f4f6]'
+                  : 'bg-white border border-[#e7e5e4] text-[#57534e] hover:bg-[#f3f4f6]'
               } disabled:opacity-50`}
             >
               {isSharing ? (
                 <>
-                  <span className="w-4 h-4 border-2 border-[#6b7280] border-t-transparent rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-[#78716c] border-t-transparent rounded-full animate-spin" />
                   Sparar...
                 </>
               ) : shareStatus === 'success' ? (
@@ -392,7 +392,7 @@ export function AgentChat({
       )}
 
       {/* Input area */}
-      <div className="border-t border-[#e5e7eb] bg-white px-4 py-4">
+      <div className="border-t border-[#e7e5e4] bg-white px-4 py-4">
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
           <div className="flex gap-3 items-end">
             <div className="flex-1 relative">
@@ -404,7 +404,7 @@ export function AgentChat({
                 placeholder="Skriv ett meddelande..."
                 rows={1}
                 disabled={isLoading}
-                className="w-full resize-none rounded-2xl border border-[#e5e7eb] px-4 py-3 text-sm sm:text-base focus:outline-none focus:border-[#1e3a8a] focus:ring-2 focus:ring-[#1e3a8a]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full resize-none rounded-2xl border border-[#e7e5e4] px-4 py-3 text-sm sm:text-base focus:outline-none focus:border-[#c45a3b] focus:ring-2 focus:ring-[#c45a3b]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Meddelande"
               />
             </div>
@@ -417,7 +417,7 @@ export function AgentChat({
               {isLoading ? 'Skickar...' : 'Skicka'}
             </Button>
           </div>
-          <p className="mt-2 text-xs text-[#9ca3af] text-center">
+          <p className="mt-2 text-xs text-[#a8a29e] text-center">
             Tryck Enter för att skicka, Shift+Enter för ny rad
           </p>
         </form>

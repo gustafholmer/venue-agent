@@ -132,9 +132,9 @@ export default function AccountSettingsPage() {
   if (isLoading) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-12 text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#1e3a8a] border-t-transparent"></div>
-          <p className="text-[#6b7280] mt-2">Laddar inställningar...</p>
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
+          <p className="text-[#78716c] mt-2">Laddar inställningar...</p>
         </div>
       </div>
     )
@@ -144,15 +144,15 @@ export default function AccountSettingsPage() {
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#111827]">Inställningar</h1>
-        <p className="text-[#6b7280] mt-1">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Inställningar</h1>
+        <p className="text-[#78716c] mt-1">
           Hantera din profil och aviseringsinställningar
         </p>
       </div>
 
       {/* Personal info section */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 mb-6">
-        <h2 className="text-lg font-semibold text-[#111827] mb-4">Personlig information</h2>
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Personlig information</h2>
 
         {profileError && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
@@ -167,7 +167,7 @@ export default function AccountSettingsPage() {
 
         <form onSubmit={handleSaveProfile} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
+            <label className="block text-sm font-medium text-[#57534e] mb-1">
               Namn
             </label>
             <Input
@@ -178,21 +178,21 @@ export default function AccountSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
+            <label className="block text-sm font-medium text-[#57534e] mb-1">
               E-post
             </label>
             <Input
               value={email}
               disabled
-              className="bg-[#f9fafb] text-[#6b7280]"
+              className="bg-[#faf9f7] text-[#78716c]"
             />
-            <p className="mt-1 text-xs text-[#6b7280]">
+            <p className="mt-1 text-xs text-[#78716c]">
               E-postadressen kan inte ändras
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#374151] mb-1">
+            <label className="block text-sm font-medium text-[#57534e] mb-1">
               Telefon
             </label>
             <Input
@@ -212,9 +212,9 @@ export default function AccountSettingsPage() {
       </div>
 
       {/* Notification preferences section */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
-        <h2 className="text-lg font-semibold text-[#111827] mb-4">Aviseringar</h2>
-        <p className="text-sm text-[#6b7280] mb-6">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Aviseringar</h2>
+        <p className="text-sm text-[#78716c] mb-6">
           Välj vilka e-postaviseringar du vill ta emot
         </p>
 
@@ -230,55 +230,55 @@ export default function AccountSettingsPage() {
         )}
 
         <div className="space-y-4">
-          <label className="flex items-center justify-between p-3 bg-[#f9fafb] rounded-lg cursor-pointer hover:bg-[#f3f4f6] transition-colors">
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
             <div>
-              <p className="font-medium text-[#111827]">Bokningsbekräftelser</p>
-              <p className="text-sm text-[#6b7280]">När din bokning godkänns eller nekas</p>
+              <p className="font-medium text-[#1a1a1a]">Bokningsbekräftelser</p>
+              <p className="text-sm text-[#78716c]">När din bokning godkänns eller nekas</p>
             </div>
             <input
               type="checkbox"
               checked={prefs.email_booking_accepted}
               onChange={() => handlePrefsChange('email_booking_accepted')}
-              className="w-5 h-5 text-[#1e3a8a] rounded focus:ring-[#1e3a8a]"
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
             />
           </label>
 
-          <label className="flex items-center justify-between p-3 bg-[#f9fafb] rounded-lg cursor-pointer hover:bg-[#f3f4f6] transition-colors">
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
             <div>
-              <p className="font-medium text-[#111827]">Nya meddelanden</p>
-              <p className="text-sm text-[#6b7280]">När du får ett nytt meddelande från en lokalägare</p>
+              <p className="font-medium text-[#1a1a1a]">Nya meddelanden</p>
+              <p className="text-sm text-[#78716c]">När du får ett nytt meddelande från en lokalägare</p>
             </div>
             <input
               type="checkbox"
               checked={prefs.email_new_message}
               onChange={() => handlePrefsChange('email_new_message')}
-              className="w-5 h-5 text-[#1e3a8a] rounded focus:ring-[#1e3a8a]"
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
             />
           </label>
 
-          <label className="flex items-center justify-between p-3 bg-[#f9fafb] rounded-lg cursor-pointer hover:bg-[#f3f4f6] transition-colors">
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
             <div>
-              <p className="font-medium text-[#111827]">Nya matchningar</p>
-              <p className="text-sm text-[#6b7280]">När vi hittar lokaler som matchar din sökning</p>
+              <p className="font-medium text-[#1a1a1a]">Nya matchningar</p>
+              <p className="text-sm text-[#78716c]">När vi hittar lokaler som matchar din sökning</p>
             </div>
             <input
               type="checkbox"
               checked={prefs.email_new_match}
               onChange={() => handlePrefsChange('email_new_match')}
-              className="w-5 h-5 text-[#1e3a8a] rounded focus:ring-[#1e3a8a]"
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
             />
           </label>
 
-          <label className="flex items-center justify-between p-3 bg-[#f9fafb] rounded-lg cursor-pointer hover:bg-[#f3f4f6] transition-colors">
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
             <div>
-              <p className="font-medium text-[#111827]">Påminnelser</p>
-              <p className="text-sm text-[#6b7280]">Påminnelser om kommande event</p>
+              <p className="font-medium text-[#1a1a1a]">Påminnelser</p>
+              <p className="text-sm text-[#78716c]">Påminnelser om kommande event</p>
             </div>
             <input
               type="checkbox"
               checked={prefs.email_reminders}
               onChange={() => handlePrefsChange('email_reminders')}
-              className="w-5 h-5 text-[#1e3a8a] rounded focus:ring-[#1e3a8a]"
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
             />
           </label>
         </div>

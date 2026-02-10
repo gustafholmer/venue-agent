@@ -28,15 +28,15 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#f9fafb]">
+    <div className="min-h-screen bg-[#faf9f7]">
       {/* Top header bar */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#e5e7eb] z-40">
+      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#e7e5e4] z-40">
         <div className="h-full px-4 lg:px-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MobileMenu />
             <Link
               href="/dashboard"
-              className="font-[family-name:var(--font-playfair)] text-xl text-[#111827] hover:text-[#1e3a8a] transition-colors"
+              className="font-[family-name:var(--font-playfair)] text-xl text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
             >
               Tryffle
             </Link>
@@ -44,12 +44,12 @@ export default async function DashboardLayout({
 
           <div className="flex items-center gap-3">
             <NotificationBell />
-            <span className="text-sm text-[#6b7280] hidden sm:block">
+            <span className="text-sm text-[#78716c] hidden sm:block">
               {profile.company_name || profile.full_name || user.email}
             </span>
             <Link
               href="/"
-              className="text-sm text-[#374151] hover:text-[#111827] transition-colors"
+              className="text-sm text-[#57534e] hover:text-[#1a1a1a] transition-colors"
             >
               Till sidan
             </Link>
@@ -58,7 +58,7 @@ export default async function DashboardLayout({
       </header>
 
       {/* Desktop sidebar */}
-      <aside className="fixed left-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-white border-r border-[#e5e7eb] p-4 hidden lg:block">
+      <aside className="fixed left-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-white border-r border-[#e7e5e4] p-4 hidden lg:block">
         <SidebarNav />
       </aside>
 

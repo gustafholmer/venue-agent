@@ -93,14 +93,14 @@ export default function SettingsPage() {
     return (
       <div className="max-w-2xl mx-auto animate-pulse">
         <div className="mb-8">
-          <div className="h-8 bg-[#e5e7eb] rounded w-32 mb-2" />
-          <div className="h-5 bg-[#e5e7eb] rounded w-48" />
+          <div className="h-8 bg-[#e7e5e4] rounded w-32 mb-2" />
+          <div className="h-5 bg-[#e7e5e4] rounded w-48" />
         </div>
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-6">
+        <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
           <div className="space-y-4">
-            <div className="h-10 bg-[#e5e7eb] rounded" />
-            <div className="h-10 bg-[#e5e7eb] rounded" />
-            <div className="h-10 bg-[#e5e7eb] rounded" />
+            <div className="h-10 bg-[#e7e5e4] rounded" />
+            <div className="h-10 bg-[#e7e5e4] rounded" />
+            <div className="h-10 bg-[#e7e5e4] rounded" />
           </div>
         </div>
       </div>
@@ -111,19 +111,19 @@ export default function SettingsPage() {
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-[#111827]">Inställningar</h1>
-        <p className="text-[#6b7280] mt-1">
+        <h1 className="text-2xl font-semibold text-[#1a1a1a]">Inställningar</h1>
+        <p className="text-[#78716c] mt-1">
           Hantera din profil och kontoinställningar
         </p>
       </div>
 
       {/* Profile form */}
-      <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 mb-6">
-        <h2 className="text-lg font-semibold text-[#111827] mb-4">Profilinformation</h2>
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Profilinformation</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[#374151] mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-[#57534e] mb-1">
               E-post
             </label>
             <input
@@ -131,15 +131,15 @@ export default function SettingsPage() {
               id="email"
               value={email}
               disabled
-              className="w-full px-3 py-2 bg-[#f9fafb] border border-[#e5e7eb] rounded-lg text-[#6b7280] cursor-not-allowed"
+              className="w-full px-3 py-2 bg-[#faf9f7] border border-[#e7e5e4] rounded-lg text-[#78716c] cursor-not-allowed"
             />
-            <p className="mt-1 text-xs text-[#6b7280]">
+            <p className="mt-1 text-xs text-[#78716c]">
               E-postadressen kan inte ändras
             </p>
           </div>
 
           <div>
-            <label htmlFor="full_name" className="block text-sm font-medium text-[#374151] mb-1">
+            <label htmlFor="full_name" className="block text-sm font-medium text-[#57534e] mb-1">
               Fullständigt namn
             </label>
             <input
@@ -147,12 +147,12 @@ export default function SettingsPage() {
               id="full_name"
               value={formData.full_name}
               onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-              className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent"
+              className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="company_name" className="block text-sm font-medium text-[#374151] mb-1">
+            <label htmlFor="company_name" className="block text-sm font-medium text-[#57534e] mb-1">
               Företagsnamn
             </label>
             <input
@@ -160,12 +160,12 @@ export default function SettingsPage() {
               id="company_name"
               value={formData.company_name}
               onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-              className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent"
+              className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-[#374151] mb-1">
+            <label htmlFor="phone" className="block text-sm font-medium text-[#57534e] mb-1">
               Telefonnummer
             </label>
             <input
@@ -173,7 +173,7 @@ export default function SettingsPage() {
               id="phone"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-3 py-2 border border-[#e5e7eb] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] focus:border-transparent"
+              className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
               placeholder="+46 70 123 45 67"
             />
           </div>
@@ -202,7 +202,7 @@ export default function SettingsPage() {
       {/* Danger zone */}
       <div className="bg-white border border-red-200 rounded-xl p-6">
         <h2 className="text-lg font-semibold text-red-600 mb-2">Farozonen</h2>
-        <p className="text-[#6b7280] text-sm mb-4">
+        <p className="text-[#78716c] text-sm mb-4">
           Dessa åtgärder är permanenta och kan inte ångras.
         </p>
         <Button
