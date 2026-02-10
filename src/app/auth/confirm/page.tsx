@@ -1,7 +1,9 @@
+import { AuthSkyline } from '@/components/illustrations/auth-skyline'
+
 export default function ConfirmPage() {
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-6">
-      <div className="w-full max-w-sm text-center">
+    <main className="relative min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-6 overflow-hidden">
+      <div className="w-full max-w-sm text-center relative z-10">
         <h1 className="font-[family-name:var(--font-playfair)] text-3xl text-[#1a1a1a] mb-4">
           Kolla din e-post
         </h1>
@@ -15,6 +17,7 @@ export default function ConfirmPage() {
           Tillbaka till inloggning
         </a>
       </div>
+      <AuthSkyline className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[48rem] max-w-none opacity-[0.12] pointer-events-none" />
     </main>
   )
 }
