@@ -10,7 +10,8 @@ interface SignUpFormCompanyProps {
 }
 
 const initialState: SignUpState = {
-  error: null,
+  fieldErrors: {},
+  formError: null,
 }
 
 function generateTestOrgNumber(): string {
@@ -19,105 +20,118 @@ function generateTestOrgNumber(): string {
   return `${part1}-${part2}`
 }
 
+const inputBase = 'w-full h-11 px-4 border rounded-xl text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none'
+const inputNormal = `${inputBase} border-[#e7e5e4] focus:border-[#c45a3b]`
+const inputError = `${inputBase} border-red-400 focus:border-red-400`
+
 export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyProps) {
   const [state, formAction, isPending] = useActionState(signUp, initialState)
   const [testOrgNumber] = useState(() => generateTestOrgNumber())
 
   return (
     <>
-      <form action={formAction} className="space-y-4">
+      <form action={formAction} noValidate className="space-y-4">
         <input type="hidden" name="accountType" value="company" />
         {returnUrl && (
           <input type="hidden" name="returnUrl" value={returnUrl} />
         )}
 
-        {state.error && (
+        {state.formError && (
           <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-            {state.error}
+            {state.formError}
           </div>
         )}
 
         <div>
-          <label htmlFor="contactPerson" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="contactPerson" className="block text-sm text-[#57534e] mb-1.5">
             Kontaktperson*
           </label>
           <input
             id="contactPerson"
             name="contactPerson"
             type="text"
-            required
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className={state.fieldErrors.fullName ? inputError : inputNormal}
           />
+          {state.fieldErrors.fullName && (
+            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.fullName}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="companyName" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="companyName" className="block text-sm text-[#57534e] mb-1.5">
             Företagsnamn*
           </label>
           <input
             id="companyName"
             name="companyName"
             type="text"
-            required
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className={state.fieldErrors.companyName ? inputError : inputNormal}
           />
+          {state.fieldErrors.companyName && (
+            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.companyName}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="orgNumber" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="orgNumber" className="block text-sm text-[#57534e] mb-1.5">
             Organisationsnummer*
           </label>
           <input
             id="orgNumber"
             name="orgNumber"
             type="text"
-            required
             maxLength={11}
             defaultValue={testOrgNumber}
             placeholder="556123-4567"
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className={state.fieldErrors.orgNumber ? inputError : inputNormal}
           />
+          {state.fieldErrors.orgNumber && (
+            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.orgNumber}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="email" className="block text-sm text-[#57534e] mb-1.5">
             E-post*
           </label>
           <input
             id="email"
             name="email"
             type="email"
-            required
             placeholder="namn@exempel.se"
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className={state.fieldErrors.email ? inputError : inputNormal}
           />
+          {state.fieldErrors.email && (
+            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.email}</p>
+          )}
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="phone" className="block text-sm text-[#57534e] mb-1.5">
             Telefon
           </label>
           <input
             id="phone"
             name="phone"
             type="tel"
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            className={inputNormal}
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm text-[#374151] mb-1.5">
+          <label htmlFor="password" className="block text-sm text-[#57534e] mb-1.5">
             Lösenord*
           </label>
           <input
             id="password"
             name="password"
             type="password"
-            required
-            minLength={8}
-            placeholder="Minst 8 tecken"
-            className="w-full h-11 px-4 border border-[#e5e7eb] rounded-xl text-[#111827] placeholder:text-[#9ca3af] focus:outline-none focus:border-[#1e3a8a]"
+            placeholder="Minst 8 tecken, en versal och en siffra"
+            className={state.fieldErrors.password ? inputError : inputNormal}
           />
+          {state.fieldErrors.password && (
+            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.password}</p>
+          )}
         </div>
 
         <Button type="submit" className="w-full" loading={isPending}>
@@ -125,9 +139,9 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
         </Button>
       </form>
 
-      <p className="text-center text-sm text-[#6b7280] mt-6">
+      <p className="text-center text-sm text-[#78716c] mt-6">
         Har du redan ett konto?{' '}
-        <a href={signInLink} className="text-[#1e3a8a] hover:underline">
+        <a href={signInLink} className="text-[#c45a3b] hover:underline">
           Logga in
         </a>
       </p>

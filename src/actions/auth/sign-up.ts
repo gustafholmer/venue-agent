@@ -6,8 +6,11 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 
+export type FieldErrors = Record<string, string>
+
 export type SignUpState = {
-  error: string | null
+  fieldErrors: FieldErrors
+  formError: string | null
 }
 
 export async function signUp(
@@ -17,7 +20,7 @@ export async function signUp(
   // Check rate limit
   const rateLimitResult = await rateLimit('sign-up', RATE_LIMITS.signUp)
   if (!rateLimitResult.success) {
-    return { error: RATE_LIMIT_ERROR }
+    return { fieldErrors: {}, formError: RATE_LIMIT_ERROR }
   }
 
   const email = formData.get('email') as string
@@ -28,30 +31,34 @@ export async function signUp(
   const companyName = formData.get('companyName') as string | null
   const orgNumber = formData.get('orgNumber') as string | null
 
-  if (!email || !password) {
-    return { error: 'E-post och lösenord krävs.' }
-  }
+  const fieldErrors: FieldErrors = {}
 
-  if (password.length < 8) {
-    return { error: 'Lösenordet måste vara minst 8 tecken.' }
-  }
-
-  if (!fullName) {
-    return { error: 'Namn krävs.' }
-  }
-
+  if (!fullName) fieldErrors.fullName = 'Namn krävs.'
   if (accountType === 'company') {
-    if (!companyName) {
-      return { error: 'Företagsnamn krävs.' }
-    }
+    if (!companyName) fieldErrors.companyName = 'Företagsnamn krävs.'
     if (!orgNumber) {
-      return { error: 'Organisationsnummer krävs.' }
-    }
-    const orgNumberRegex = /^\d{6}-?\d{4}$/
-    if (!orgNumberRegex.test(orgNumber)) {
-      return { error: 'Ogiltigt organisationsnummer. Ange i formatet 556123-4567.' }
+      fieldErrors.orgNumber = 'Organisationsnummer krävs.'
+    } else {
+      const orgNumberRegex = /^\d{6}-?\d{4}$/
+      if (!orgNumberRegex.test(orgNumber)) {
+        fieldErrors.orgNumber = 'Ogiltigt format. Ange t.ex. 556123-4567.'
+      }
     }
   }
+  if (!email) fieldErrors.email = 'E-post krävs.'
+  if (!password) {
+    fieldErrors.password = 'Lösenord krävs.'
+  } else {
+    const pwErrors: string[] = []
+    if (password.length < 8) pwErrors.push('minst 8 tecken')
+    if (!/[A-Z]/.test(password)) pwErrors.push('en versal')
+    if (!/\d/.test(password)) pwErrors.push('en siffra')
+    if (pwErrors.length > 0) {
+      fieldErrors.password = `Lösenordet behöver ${pwErrors.join(', ')}.`
+    }
+  }
+
+  if (Object.keys(fieldErrors).length > 0) return { fieldErrors, formError: null }
 
   const supabase = await createClient()
   const headersList = await headers()
@@ -66,7 +73,7 @@ export async function signUp(
   })
 
   if (error) {
-    return { error: error.message }
+    return { fieldErrors: {}, formError: error.message }
   }
 
   if (authData.user) {
