@@ -22,31 +22,41 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps) {
           Skapa konto
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-3">
           <Link
             href={`/auth/sign-up/private${qs}`}
-            className="flex flex-col items-center gap-3 rounded-xl border border-[#e7e5e4] p-6 text-center hover:border-[#c45a3b] hover:shadow-md transition-all"
+            className="flex items-center gap-4 rounded-xl border border-[#e7e5e4] px-5 py-4 hover:border-[#c45a3b] hover:shadow-md transition-all"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c45a3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c45a3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
               <circle cx="12" cy="7" r="4" />
               <path d="M5.5 21a6.5 6.5 0 0 1 13 0" />
             </svg>
-            <span className="text-lg font-semibold text-[#1a1a1a]">Privatperson</span>
-            <span className="text-sm text-[#78716c]">Boka lokal som privatperson</span>
+            <div className="flex-1 min-w-0">
+              <span className="block text-lg font-semibold text-[#1a1a1a]">Privatperson</span>
+              <span className="block text-sm text-[#78716c]">Boka lokal som privatperson</span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
           </Link>
 
           <Link
             href={`/auth/sign-up/company${qs}`}
-            className="flex flex-col items-center gap-3 rounded-xl border border-[#e7e5e4] p-6 text-center hover:border-[#c45a3b] hover:shadow-md transition-all"
+            className="flex items-center gap-4 rounded-xl border border-[#e7e5e4] px-5 py-4 hover:border-[#c45a3b] hover:shadow-md transition-all"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c45a3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c45a3b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
               <rect x="3" y="7" width="18" height="14" rx="2" />
               <path d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2" />
               <path d="M8 11h0" /><path d="M12 11h0" /><path d="M16 11h0" />
               <path d="M8 15h0" /><path d="M12 15h0" /><path d="M16 15h0" />
             </svg>
-            <span className="text-lg font-semibold text-[#1a1a1a]">Företag</span>
-            <span className="text-sm text-[#78716c]">Boka lokal för ditt företag</span>
+            <div className="flex-1 min-w-0">
+              <span className="block text-lg font-semibold text-[#1a1a1a]">Företag</span>
+              <span className="block text-sm text-[#78716c]">Boka lokal för ditt företag</span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
           </Link>
         </div>
 
