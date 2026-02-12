@@ -104,6 +104,11 @@ minimum_password_length = 8
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
 password_requirements = ""
 
+[auth.hook.send_email]
+enabled = true
+uri = "http://host.docker.internal:54321/functions/v1/send-auth-email"
+secrets = "env(AUTH_HOOK_SECRET)"
+
 [auth.email]
 # Allow/disallow new user signups via email to your project.
 enable_signup = true
