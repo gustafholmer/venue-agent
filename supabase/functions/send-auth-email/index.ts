@@ -104,19 +104,17 @@ Deno.serve(async (req) => {
       html = passwordResetEmail(resetUrl);
     }
 
-    // Fire and forget for faster response
-    sendEmail({ to: userEmail, subject, html })
-      .then((result) => {
-        if (!result.success) {
-          console.error(`Failed to send ${email_data.email_action_type} email:`, result.error);
-        } else {
-          console.log(`${email_data.email_action_type} email sent to:`, userEmail);
-        }
-      })
-      .catch((error) => {
-        console.error("Error sending email:", error);
-      });
+    const result = await sendEmail({ to: userEmail, subject, html });
 
+    if (!result.success) {
+      console.error(`Failed to send ${email_data.email_action_type} email:`, result.error);
+      return new Response(JSON.stringify({ error: result.error }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    console.log(`${email_data.email_action_type} email sent to:`, userEmail);
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

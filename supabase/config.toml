@@ -107,7 +107,7 @@ password_requirements = ""
 [auth.hook.send_email]
 enabled = true
 uri = "http://host.docker.internal:54321/functions/v1/send-auth-email"
-secrets = "env(AUTH_HOOK_SECRET)"
+secrets = "v1,whsec_aWYgeW91IGRlY29kZSB0aGlzIHlvdSBhcmUgYXdlc29tZQ=="
 
 [auth.email]
 # Allow/disallow new user signups via email to your project.
