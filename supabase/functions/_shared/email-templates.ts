@@ -24,7 +24,7 @@ const baseTemplate = (content: string) => `
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       }
       .header {
-        background: #c45a3b;
+        background-color: #c45a3b;
         color: white;
         padding: 28px 24px 24px;
       }
@@ -140,7 +140,7 @@ export const bookingRequestEmail = (
       <div class="info-row"><span class="info-label">Antal gäster:</span> ${guestCount}</div>
     </div>
     <p>Logga in för att granska och svara på förfrågan.</p>
-    <p style="text-align: center;"><a href="${SITE_URL}" class="button">Gå till Tryffle</a></p>
+    <p style="text-align: center;"><a href="${SITE_URL}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Gå till Tryffle</a></p>
     <div class="content-footer">
       <p>Svara gärna inom 24 timmar för bästa kundupplevelse.</p>
     </div>
@@ -160,7 +160,7 @@ export const bookingAcceptedEmail = (venueName: string, eventDate: string, owner
       <div class="info-row"><span class="info-label">Datum:</span> ${escapeHtml(eventDate)}</div>
     </div>
     <p>Logga in för att se detaljer och kommunicera med lokalägaren.</p>
-    <p style="text-align: center;"><a href="${SITE_URL}" class="button">Gå till Tryffle</a></p>
+    <p style="text-align: center;"><a href="${SITE_URL}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Gå till Tryffle</a></p>
     <div class="content-footer">
       <p>Tack för att du använder Tryffle!</p>
     </div>
@@ -177,7 +177,7 @@ export const bookingDeclinedEmail = (venueName: string, eventDate: string, reaso
     <p>Tyvärr kunde din bokningsförfrågan för <strong>${escapeHtml(venueName)}</strong> den ${escapeHtml(eventDate)} inte accepteras.</p>
     ${reason ? `<p><strong>Anledning:</strong> ${escapeHtml(reason)}</p>` : ""}
     <p>Sök gärna vidare bland våra andra lokaler för att hitta den perfekta platsen för ditt event.</p>
-    <p style="text-align: center;"><a href="${SITE_URL}" class="button">Gå till Tryffle</a></p>
+    <p style="text-align: center;"><a href="${SITE_URL}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Gå till Tryffle</a></p>
     <div class="content-footer">
       <p>Behöver du hjälp? Kontakta oss så hjälper vi dig hitta rätt lokal.</p>
     </div>
@@ -196,7 +196,7 @@ export const newMessageEmail = (senderName: string, venueName: string, messagePr
       "${escapeHtml(messagePreview)}"
     </div>
     <p>Logga in för att svara.</p>
-    <p style="text-align: center;"><a href="${SITE_URL}" class="button">Gå till Tryffle</a></p>
+    <p style="text-align: center;"><a href="${SITE_URL}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Gå till Tryffle</a></p>
     <div class="content-footer">
       <p>Du får detta mejl för att du har en aktiv bokningsförfrågan.</p>
     </div>
@@ -213,7 +213,7 @@ export const confirmationEmail = (confirmationUrl: string) =>
     <p>Välkommen till Tryffle!</p>
     <p>Klicka på knappen nedan för att bekräfta din e-postadress och aktivera ditt konto:</p>
     <p style="text-align: center;">
-      <a href="${escapeHtml(confirmationUrl)}" class="button">Bekräfta e-postadress</a>
+      <a href="${escapeHtml(confirmationUrl)}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Bekräfta e-postadress</a>
     </p>
     <p style="color: #78716c; font-size: 14px;">Om du inte skapade ett konto kan du ignorera detta mejl.</p>
     <div class="content-footer">
@@ -232,7 +232,7 @@ export const passwordResetEmail = (resetUrl: string) =>
     <p>Vi har fått en begäran om att återställa lösenordet för ditt konto.</p>
     <p>Klicka på knappen nedan för att välja ett nytt lösenord:</p>
     <p style="text-align: center;">
-      <a href="${escapeHtml(resetUrl)}" class="button">Återställ lösenord</a>
+      <a href="${escapeHtml(resetUrl)}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Återställ lösenord</a>
     </p>
     <p style="color: #78716c; font-size: 14px;">Om du inte begärde detta kan du ignorera mejlet. Ditt lösenord förblir oförändrat.</p>
     <div class="content-footer">
