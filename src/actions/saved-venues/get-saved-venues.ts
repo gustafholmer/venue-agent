@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { Venue, VenuePhoto } from '@/types/database'
+import type { VenuePhoto } from '@/types/database'
 
 export interface SavedVenueWithDetails {
   id: string
