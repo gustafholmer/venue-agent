@@ -10,7 +10,11 @@ import {
 import type { Notification } from '@/types/database'
 import { getNotificationStyle, getNotificationUrl, formatTimestamp } from './notification-utils'
 
-export function NotificationBell({ viewAllHref }: { viewAllHref: string }) {
+interface NotificationBellProps {
+  viewAllHref: string
+}
+
+export function NotificationBell({ viewAllHref }: NotificationBellProps) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
