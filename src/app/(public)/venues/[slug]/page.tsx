@@ -9,6 +9,7 @@ import { PhotoGallery } from '@/components/venues/photo-gallery'
 import { Button } from '@/components/ui/button'
 import { VenueDetailMap } from '@/components/maps/venue-detail-map'
 import { VenueAssistant } from '@/components/chat/venue-assistant'
+import { SaveButton } from '@/components/venues/save-button'
 import {
   generateLocalBusinessSchema,
   generateBreadcrumbSchema,
@@ -143,9 +144,12 @@ async function VenueDetailContent({ params }: PageProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Header */}
             <div>
-              <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
-                {venue.name}
-              </h1>
+              <div className="flex items-start justify-between gap-4">
+                <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
+                  {venue.name}
+                </h1>
+                <SaveButton venueId={venue.id} size="md" />
+              </div>
               <div className="flex flex-wrap items-center gap-4 text-[#78716c]">
                 <span className="flex items-center gap-1">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

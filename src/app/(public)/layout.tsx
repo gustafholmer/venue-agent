@@ -3,6 +3,7 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { NotificationBell } from '@/components/notifications/notification-bell'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
+import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
 
 export default async function PublicLayout({
   children,
@@ -115,7 +116,9 @@ export default async function PublicLayout({
       </header>
 
       <main className="flex-1">
-        {children}
+        <SavedVenuesProvider>
+          {children}
+        </SavedVenuesProvider>
       </main>
 
       {/* Footer */}

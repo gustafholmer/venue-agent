@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { SaveButton } from '@/components/venues/save-button'
 
 export interface VenueCardData {
   id: string
@@ -54,6 +55,9 @@ export function VenueCard({ venue }: VenueCardProps) {
             <span className="text-[#78716c] text-sm">Ingen bild</span>
           </div>
         )}
+        <div className="absolute top-2 right-2 z-10">
+          <SaveButton venueId={venue.id} size="sm" />
+        </div>
       </div>
 
       {/* Content */}
