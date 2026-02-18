@@ -400,11 +400,11 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                 />
                 <span className="text-sm text-[#57534e]">
                   Jag godkänner{' '}
-                  <Link href="/terms" className="text-[#c45a3b] hover:underline">
+                  <Link href="/policy" className="text-[#c45a3b] hover:underline">
                     villkoren
                   </Link>{' '}
                   och{' '}
-                  <Link href="/privacy" className="text-[#c45a3b] hover:underline">
+                  <Link href="/policy" className="text-[#c45a3b] hover:underline">
                     integritetspolicyn
                   </Link>
                 </span>
@@ -510,11 +510,11 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
                   />
                   <span className="text-sm text-[#57534e]">
                     Jag godkänner{' '}
-                    <Link href="/terms" className="text-[#c45a3b] hover:underline">
+                    <Link href="/policy" className="text-[#c45a3b] hover:underline">
                       villkoren
                     </Link>{' '}
                     och{' '}
-                    <Link href="/privacy" className="text-[#c45a3b] hover:underline">
+                    <Link href="/policy" className="text-[#c45a3b] hover:underline">
                       integritetspolicyn
                     </Link>
                   </span>
