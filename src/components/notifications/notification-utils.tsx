@@ -1,10 +1,13 @@
+'use client'
+
+import type { ReactNode } from 'react'
 import type { NotificationType, EntityType } from '@/types/database'
 
 /**
  * Get the icon and color for a notification type
  */
 export function getNotificationStyle(type: NotificationType): {
-  icon: React.ReactNode
+  icon: ReactNode
   bgColor: string
   textColor: string
 } {
