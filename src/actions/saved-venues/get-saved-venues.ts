@@ -124,6 +124,31 @@ export async function getSavedVenues(): Promise<{
   }
 }
 
+export async function getSavedVenueIds(): Promise<string[]> {
+  try {
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return []
+    }
+
+    const { data, error } = await supabase
+      .from('saved_venues')
+      .select('venue_id')
+      .eq('customer_id', user.id)
+
+    if (error) {
+      console.error('Error fetching saved venue IDs:', error)
+      return []
+    }
+
+    return (data || []).map(row => row.venue_id)
+  } catch {
+    return []
+  }
+}
+
 export async function isVenueSaved(venueId: string): Promise<boolean> {
   try {
     const supabase = await createClient()
