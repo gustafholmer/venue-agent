@@ -76,7 +76,7 @@ export default async function PublicLayout({
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <NotificationBell />
+                  <NotificationBell viewAllHref="/account/notifications" />
                   {profile?.roles?.includes('venue_owner') && (
                     <Link
                       href="/dashboard"

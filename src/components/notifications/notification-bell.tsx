@@ -10,7 +10,7 @@ import {
 import type { Notification } from '@/types/database'
 import { getNotificationStyle, getNotificationUrl, formatTimestamp } from './notification-utils'
 
-export function NotificationBell() {
+export function NotificationBell({ viewAllHref }: { viewAllHref: string }) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -208,7 +208,7 @@ export function NotificationBell() {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  router.push('/dashboard/notifications')
+                  router.push(viewAllHref)
                 }}
                 className="w-full text-center text-sm text-[#c45a3b] hover:text-[#a84832] font-medium"
               >
