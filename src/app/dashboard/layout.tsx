@@ -43,7 +43,7 @@ export default async function DashboardLayout({
           </div>
 
           <div className="flex items-center gap-3">
-            <NotificationBell />
+            <NotificationBell viewAllHref="/dashboard/notifications" />
             <span className="text-sm text-[#78716c] hidden sm:block">
               {profile.company_name || profile.full_name || user.email}
             </span>

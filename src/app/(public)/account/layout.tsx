@@ -36,7 +36,7 @@ export default async function AccountLayout({
 
           {/* Right side actions */}
           <div className="flex items-center gap-3">
-            <NotificationBell />
+            <NotificationBell viewAllHref="/account/notifications" />
             <span className="text-sm text-[#78716c] hidden sm:block">
               {profile?.full_name || user.email}
             </span>
