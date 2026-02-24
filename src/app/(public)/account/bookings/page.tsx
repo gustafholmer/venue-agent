@@ -157,7 +157,7 @@ export default function CustomerBookingsPage() {
           </p>
           {activeTab === 'all' && (
             <Link
-              href="/search"
+              href="/venues"
               className="inline-flex items-center justify-center px-4 py-2 bg-[#c45a3b] text-white rounded-lg hover:bg-[#b3512f] transition-colors"
             >
               Sök lokal

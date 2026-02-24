@@ -103,7 +103,7 @@ export function getNotificationUrl(entityType: EntityType, entityId: string): st
       // Messages are linked to bookings, so entityId is booking_request_id
       return `/dashboard/bookings/${entityId}`
     case 'search':
-      return `/search?id=${entityId}`
+      return `/venues`
     default:
       return '/'
   }

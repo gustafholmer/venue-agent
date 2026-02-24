@@ -85,7 +85,7 @@ export default async function AccountPage() {
       {/* Quick links */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Link
-          href="/search"
+          href="/venues"
           className="bg-white border border-[#e7e5e4] rounded-xl p-6 hover:shadow-md transition-shadow group"
         >
           <div className="w-10 h-10 bg-[#c45a3b]/10 rounded-lg flex items-center justify-center mb-3">
@@ -160,7 +160,7 @@ export default async function AccountPage() {
               Du har inte gjort några bokningar ännu
             </p>
             <Link
-              href="/search"
+              href="/venues"
               className="inline-flex items-center justify-center px-4 py-2 bg-[#c45a3b] text-white rounded-lg hover:bg-[#b3512f] transition-colors"
             >
               Sök lokal
