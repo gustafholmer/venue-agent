@@ -317,7 +317,7 @@ export default function CalendarPage() {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-yellow-100 border border-yellow-300"></div>
-            <span className="text-sm text-[#57534e]">Ventande bokning</span>
+            <span className="text-sm text-[#57534e]">Väntande bokningar</span>
           </div>
         </div>
       </div>

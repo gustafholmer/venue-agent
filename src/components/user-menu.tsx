@@ -2,11 +2,31 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { signOut } from '@/actions/auth/sign-out'
+
+const ACCOUNT_LINKS = [
+  { href: '/account', label: 'Mitt konto' },
+  { href: '/account/bookings', label: 'Mina bokningar' },
+  { href: '/account/saved', label: 'Sparade lokaler' },
+  { href: '/account/settings', label: 'Inställningar' },
+]
+
+const DASHBOARD_LINKS = [
+  { href: '/dashboard', label: 'Översikt' },
+  { href: '/dashboard/venue', label: 'Min lokal' },
+  { href: '/dashboard/bookings', label: 'Bokningar' },
+  { href: '/dashboard/calendar', label: 'Kalender' },
+  { href: '/dashboard/payouts', label: 'Utbetalningar' },
+  { href: '/dashboard/settings', label: 'Inställningar' },
+]
 
 export function UserMenu({ isVenueOwner }: { isVenueOwner: boolean }) {
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+  const isOnDashboard = isVenueOwner && pathname.startsWith('/dashboard')
+  const links = isOnDashboard ? DASHBOARD_LINKS : ACCOUNT_LINKS
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -37,43 +57,16 @@ export function UserMenu({ isVenueOwner }: { isVenueOwner: boolean }) {
 
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#e7e5e4] py-1 z-50">
-          <Link
-            href="/account"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm text-[#57534e] hover:bg-[#f5f5f4] hover:text-[#1a1a1a]"
-          >
-            Mitt konto
-          </Link>
-          <Link
-            href="/account/bookings"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm text-[#57534e] hover:bg-[#f5f5f4] hover:text-[#1a1a1a]"
-          >
-            Mina bokningar
-          </Link>
-          <Link
-            href="/account/saved"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm text-[#57534e] hover:bg-[#f5f5f4] hover:text-[#1a1a1a]"
-          >
-            Sparade lokaler
-          </Link>
-          <Link
-            href="/account/settings"
-            onClick={() => setOpen(false)}
-            className="block px-4 py-2 text-sm text-[#57534e] hover:bg-[#f5f5f4] hover:text-[#1a1a1a]"
-          >
-            Inställningar
-          </Link>
-          {isVenueOwner && (
+          {links.map(({ href, label }) => (
             <Link
-              href="/dashboard"
+              key={href}
+              href={href}
               onClick={() => setOpen(false)}
               className="block px-4 py-2 text-sm text-[#57534e] hover:bg-[#f5f5f4] hover:text-[#1a1a1a]"
             >
-              Hantera lokaler
+              {label}
             </Link>
-          )}
+          ))}
           <div className="border-t border-[#e7e5e4] my-1" />
           <form action={signOut}>
             <button
