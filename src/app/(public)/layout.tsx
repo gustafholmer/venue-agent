@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { NotificationBell } from '@/components/notifications/notification-bell'
+import { UserMenu } from '@/components/user-menu'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
 
@@ -80,26 +81,7 @@ export default async function PublicLayout({
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-3">
                   <NotificationBell viewAllHref="/account/notifications" />
-                  {profile?.roles?.includes('venue_owner') && (
-                    <Link
-                      href="/dashboard"
-                      className="hidden sm:inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full text-[#5a4a42] hover:bg-[#7b4a6b]/10 hover:text-[#7b4a6b] transition-all"
-                    >
-                      <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5M3.75 3v18m16.5-18v18M5.25 3h13.5M5.25 21h13.5M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15" />
-                      </svg>
-                      <span>Hantera lokaler</span>
-                    </Link>
-                  )}
-                  <Link
-                    href="/account"
-                    className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-full bg-[#c45a3b] text-white hover:bg-[#a84832] transition-colors shadow-sm"
-                  >
-                    <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                    </svg>
-                    <span>Konto</span>
-                  </Link>
+                  <UserMenu isVenueOwner={profile?.roles?.includes('venue_owner') ?? false} />
                 </div>
               ) : (
                 <Link
