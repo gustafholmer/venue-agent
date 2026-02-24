@@ -3,6 +3,7 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { NotificationBell } from '@/components/notifications/notification-bell'
 import { UserMenu } from '@/components/user-menu'
+import { WorkspaceSwitcher } from '@/components/workspace-switcher'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
 
@@ -80,6 +81,9 @@ export default async function PublicLayout({
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-3">
+                  {profile?.roles?.includes('venue_owner') && (
+                    <WorkspaceSwitcher />
+                  )}
                   <NotificationBell viewAllHref="/account/notifications" />
                   <UserMenu isVenueOwner={profile?.roles?.includes('venue_owner') ?? false} />
                 </div>
