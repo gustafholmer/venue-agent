@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { NotificationBell } from '@/components/notifications/notification-bell'
 
 export default async function AccountLayout({
   children,
@@ -15,107 +14,76 @@ export default async function AccountLayout({
     redirect('/auth/sign-in')
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('full_name, email, roles')
-    .eq('id', user.id)
-    .single()
-
   return (
-    <div className="min-h-screen bg-[#faf9f7]">
-      {/* Top header bar */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#e7e5e4] z-40">
-        <div className="h-full px-4 lg:px-6 flex items-center justify-between">
-          {/* Logo / Brand */}
-          <Link
-            href="/"
-            className="font-[family-name:var(--font-heading)] text-xl text-[#1a1a1a] hover:text-[#c45a3b] transition-colors"
-          >
-            Tryffle
-          </Link>
-
-          {/* Right side actions */}
-          <div className="flex items-center gap-3">
-            <NotificationBell viewAllHref="/account/notifications" />
-            <span className="text-sm text-[#78716c] hidden sm:block">
-              {profile?.full_name || user.email}
-            </span>
+    <div className="bg-[#faf9f7]">
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className="w-64 shrink-0 bg-white border-r border-[#e7e5e4] p-4 hidden lg:block min-h-[calc(100vh-4rem)]">
+          <nav className="space-y-1">
             <Link
-              href="/"
-              className="text-sm text-[#57534e] hover:text-[#1a1a1a] transition-colors"
+              href="/account"
+              className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
             >
-              Till startsidan
+              Mitt konto
             </Link>
+            <Link
+              href="/account/bookings"
+              className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
+            >
+              Mina bokningar
+            </Link>
+            <Link
+              href="/account/saved"
+              className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
+            >
+              Sparade lokaler
+            </Link>
+            <Link
+              href="/account/settings"
+              className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
+            >
+              Inställningar
+            </Link>
+          </nav>
+        </aside>
+
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          {/* Mobile navigation */}
+          <div className="lg:hidden bg-white border-b border-[#e7e5e4]">
+            <div className="flex overflow-x-auto">
+              <Link
+                href="/account"
+                className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
+              >
+                Mitt konto
+              </Link>
+              <Link
+                href="/account/bookings"
+                className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
+              >
+                Mina bokningar
+              </Link>
+              <Link
+                href="/account/saved"
+                className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
+              >
+                Sparade lokaler
+              </Link>
+              <Link
+                href="/account/settings"
+                className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
+              >
+                Inställningar
+              </Link>
+            </div>
+          </div>
+
+          <div className="p-6">
+            {children}
           </div>
         </div>
-      </header>
-
-      {/* Sidebar */}
-      <aside className="fixed left-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-white border-r border-[#e7e5e4] p-4 hidden lg:block">
-        <nav className="space-y-1">
-          <Link
-            href="/account"
-            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
-          >
-            Mitt konto
-          </Link>
-          <Link
-            href="/account/bookings"
-            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
-          >
-            Mina bokningar
-          </Link>
-          <Link
-            href="/account/saved"
-            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
-          >
-            Sparade lokaler
-          </Link>
-          <Link
-            href="/account/settings"
-            className="block px-3 py-2 rounded-lg text-[#57534e] hover:bg-[#f5f5f4]"
-          >
-            Inställningar
-          </Link>
-        </nav>
-      </aside>
-
-      {/* Mobile navigation */}
-      <div className="lg:hidden fixed top-14 left-0 right-0 bg-white border-b border-[#e7e5e4] z-30">
-        <div className="flex overflow-x-auto">
-          <Link
-            href="/account"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
-          >
-            Mitt konto
-          </Link>
-          <Link
-            href="/account/bookings"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
-          >
-            Mina bokningar
-          </Link>
-          <Link
-            href="/account/saved"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
-          >
-            Sparade lokaler
-          </Link>
-          <Link
-            href="/account/settings"
-            className="flex-shrink-0 px-4 py-3 text-sm text-[#57534e] hover:text-[#1a1a1a] border-b-2 border-transparent hover:border-[#c45a3b]"
-          >
-            Inställningar
-          </Link>
-        </div>
       </div>
-
-      {/* Main content */}
-      <main className="lg:pl-64 pt-14 lg:pt-14">
-        <div className="pt-12 lg:pt-0 p-6">
-          {children}
-        </div>
-      </main>
     </div>
   )
 }
