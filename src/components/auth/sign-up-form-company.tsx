@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useRef, useState } from 'react'
 import { signUp, type SignUpState } from '@/actions/auth/sign-up'
 import { Button } from '@/components/ui/button'
 
@@ -26,7 +26,16 @@ const inputError = `${inputBase} border-red-400 focus:border-red-400`
 
 export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyProps) {
   const [state, formAction, isPending] = useActionState(signUp, initialState)
-  const [testOrgNumber] = useState(() => generateTestOrgNumber())
+  const [testOrgNumber, setTestOrgNumber] = useState(() => generateTestOrgNumber())
+  const orgNumberRef = useRef<HTMLInputElement>(null)
+
+  function handleRandomize() {
+    const newValue = generateTestOrgNumber()
+    setTestOrgNumber(newValue)
+    if (orgNumberRef.current) {
+      orgNumberRef.current.value = newValue
+    }
+  }
 
   return (
     <>
@@ -77,16 +86,34 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
         <div>
           <label htmlFor="orgNumber" className="block text-sm text-[#57534e] mb-1.5">
             Organisationsnummer*
+            {/* TODO: Remove test default value before production */}
+            {testOrgNumber && !state.fields?.orgNumber && (
+              <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded">
+                TEST
+              </span>
+            )}
           </label>
-          <input
-            id="orgNumber"
-            name="orgNumber"
-            type="text"
-            maxLength={11}
-            defaultValue={state.fields?.orgNumber ?? testOrgNumber}
-            placeholder="556123-4567"
-            className={state.fieldErrors.orgNumber ? inputError : inputNormal}
-          />
+          <div className="flex gap-2">
+            <input
+              ref={orgNumberRef}
+              id="orgNumber"
+              name="orgNumber"
+              type="text"
+              maxLength={11}
+              defaultValue={state.fields?.orgNumber ?? testOrgNumber}
+              placeholder="556123-4567"
+              className={state.fieldErrors.orgNumber ? inputError : inputNormal}
+            />
+            {/* TODO: Remove test randomize button before production */}
+            <button
+              type="button"
+              onClick={handleRandomize}
+              className="shrink-0 h-11 px-3 text-xs font-medium bg-amber-100 text-amber-700 rounded-xl hover:bg-amber-200 transition-colors"
+              title="Slumpa nytt testnummer"
+            >
+              Slumpa
+            </button>
+          </div>
           {state.fieldErrors.orgNumber && (
             <p className="text-red-600 text-xs mt-1">{state.fieldErrors.orgNumber}</p>
           )}

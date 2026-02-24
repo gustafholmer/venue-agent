@@ -7,13 +7,14 @@ import { Button } from '@/components/ui/button'
 interface SignInFormProps {
   returnUrl: string | null
   signUpLink: string
+  defaultEmail: string | null
 }
 
 const initialState: SignInState = {
   error: null,
 }
 
-export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
+export function SignInForm({ returnUrl, signUpLink, defaultEmail }: SignInFormProps) {
   const [state, formAction, isPending] = useActionState(signIn, initialState)
 
   return (
@@ -38,6 +39,7 @@ export function SignInForm({ returnUrl, signUpLink }: SignInFormProps) {
             name="email"
             type="email"
             required
+            defaultValue={defaultEmail ?? undefined}
             placeholder="namn@exempel.se"
             className="w-full h-11 px-4 border border-[#e7e5e4] rounded-xl text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none focus:border-[#c45a3b]"
           />

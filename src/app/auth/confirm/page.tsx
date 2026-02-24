@@ -17,6 +17,11 @@ export default async function ConfirmPage({ searchParams }: ConfirmPageProps) {
     })
 
     if (!error) {
+      const { data: { user } } = await supabase.auth.getUser()
+      const signInUrl = user?.email
+        ? `/auth/sign-in?email=${encodeURIComponent(user.email)}`
+        : '/auth/sign-in'
+
       // Verification succeeded — show success page
       return (
         <main className="relative min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-6 overflow-hidden">
@@ -33,7 +38,7 @@ export default async function ConfirmPage({ searchParams }: ConfirmPageProps) {
               Din e-postadress har bekräftats. Du kan nu logga in.
             </p>
             <a
-              href="/auth/sign-in"
+              href={signInUrl}
               className="inline-flex h-11 items-center justify-center rounded-xl bg-[#c45a3b] px-6 text-white font-medium hover:bg-[#b34e32] transition-colors"
             >
               Logga in

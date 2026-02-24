@@ -3,11 +3,11 @@ import { SignInForm } from '@/components/auth/sign-in-form'
 import { AuthSkyline } from '@/components/illustrations/auth-skyline'
 
 interface SignInPageProps {
-  searchParams: Promise<{ returnUrl?: string }>
+  searchParams: Promise<{ returnUrl?: string; email?: string }>
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
-  const { returnUrl } = await searchParams
+  const { returnUrl, email } = await searchParams
   // Validate returnUrl - only allow relative URLs (must start with /)
   const validReturnUrl = returnUrl && returnUrl.startsWith('/') ? returnUrl : null
   const signUpLink = validReturnUrl
@@ -23,7 +23,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         </Link>
 
         <h1 className="font-[family-name:var(--font-heading)] text-3xl text-[#1a1a1a] text-center mb-8">Välkommen tillbaka</h1>
-        <SignInForm returnUrl={validReturnUrl} signUpLink={signUpLink} />
+        <SignInForm returnUrl={validReturnUrl} signUpLink={signUpLink} defaultEmail={email ?? null} />
       </div>
       <AuthSkyline className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[48rem] max-w-none opacity-[0.12] pointer-events-none" />
     </main>
