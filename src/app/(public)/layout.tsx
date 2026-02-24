@@ -4,6 +4,7 @@ import { isDemoMode } from '@/lib/demo-mode'
 import { NotificationBell } from '@/components/notifications/notification-bell'
 import { UserMenu } from '@/components/user-menu'
 import { WorkspaceSwitcher } from '@/components/workspace-switcher'
+import { WorkspaceModeBanner } from '@/components/workspace-mode-banner'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
 
@@ -102,6 +103,10 @@ export default async function PublicLayout({
           </div>
         </div>
       </header>
+
+      {profile?.roles?.includes('venue_owner') && (
+        <WorkspaceModeBanner />
+      )}
 
       <main className="flex-1">
         <SavedVenuesProvider>
