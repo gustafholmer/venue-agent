@@ -208,7 +208,14 @@ export default function BookingsPage() {
                 <div key={booking.id} className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <p className="font-medium text-[#1a1a1a]">{booking.customer_name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-[#1a1a1a]">{booking.customer_name}</p>
+                        {booking.company_name ? (
+                          <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[#7b4a6b]/10 text-[#7b4a6b] rounded-full">Företag</span>
+                        ) : (
+                          <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[#e7e5e4] text-[#78716c] rounded-full">Privat</span>
+                        )}
+                      </div>
                       {booking.company_name && (
                         <p className="text-sm text-[#78716c]">{booking.company_name}</p>
                       )}
@@ -282,7 +289,14 @@ export default function BookingsPage() {
                       <tr key={booking.id} className="hover:bg-[#faf9f7] transition-colors">
                         <td className="px-6 py-4">
                           <div>
-                            <p className="font-medium text-[#1a1a1a]">{booking.customer_name}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-[#1a1a1a]">{booking.customer_name}</p>
+                              {booking.company_name ? (
+                                <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[#7b4a6b]/10 text-[#7b4a6b] rounded-full">Företag</span>
+                              ) : (
+                                <span className="px-1.5 py-0.5 text-[10px] font-medium bg-[#e7e5e4] text-[#78716c] rounded-full">Privat</span>
+                              )}
+                            </div>
                             {booking.company_name && (
                               <p className="text-sm text-[#78716c]">{booking.company_name}</p>
                             )}

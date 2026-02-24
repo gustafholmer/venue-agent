@@ -242,8 +242,14 @@ export default function BookingDetailPage() {
             <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
               Bokning från {booking.customer_name}
             </h1>
-            <p className="text-[#78716c] mt-1">
-              {booking.venue.name} - {formatDate(booking.event_date)}
+            <p className="mt-1">
+              <span className="text-[#78716c]">{booking.venue.name} - {formatDate(booking.event_date)}</span>
+              <span className="mx-2 text-[#d4bfb6]">·</span>
+              {booking.company_name ? (
+                <span className="text-[#7b4a6b] font-medium">{booking.company_name}</span>
+              ) : (
+                <span className="text-[#78716c]">Privatperson</span>
+              )}
             </p>
           </div>
           <div className={`inline-flex items-center px-4 py-2 rounded-full border text-sm font-medium ${status.color}`}>
