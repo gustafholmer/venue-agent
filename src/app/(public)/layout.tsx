@@ -65,15 +65,17 @@ export default async function PublicLayout({
                 </svg>
                 <span>Eventlokaler</span>
               </Link>
-              <Link
-                href="/auth/sign-up/company"
-                className="hidden sm:inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full text-[#5a4a42] hover:bg-[#7b4a6b]/10 hover:text-[#7b4a6b] transition-all"
-              >
-                <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span>Lista eventlokal</span>
-              </Link>
+              {!user && (
+                <Link
+                  href="/auth/sign-up/company"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full text-[#5a4a42] hover:bg-[#7b4a6b]/10 hover:text-[#7b4a6b] transition-all"
+                >
+                  <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span>Lista eventlokal</span>
+                </Link>
+              )}
 
               {user ? (
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -142,9 +144,11 @@ export default async function PublicLayout({
               <Link href="/venues" className="hover:text-[#fef3c7] transition-colors">
                 Sök eventlokaler
               </Link>
-              <Link href="/auth/sign-up/company" className="hover:text-[#fef3c7] transition-colors">
-                Lista din eventlokal
-              </Link>
+              {!user && (
+                <Link href="/auth/sign-up/company" className="hover:text-[#fef3c7] transition-colors">
+                  Lista din eventlokal
+                </Link>
+              )}
               <Link href="/faq" className="hover:text-[#fef3c7] transition-colors">
                 FAQ
               </Link>
