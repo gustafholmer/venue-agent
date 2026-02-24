@@ -20,9 +20,10 @@ import { EVENT_TYPES, TIME_OPTIONS } from '@/lib/constants'
 interface BookingFormProps {
   venue: VenueWithDetails
   initialUser: { id: string; email?: string } | null
+  initialProfile: { fullName?: string; companyName?: string; phone?: string } | null
 }
 
-export function BookingForm({ venue, initialUser }: BookingFormProps) {
+export function BookingForm({ venue, initialUser, initialProfile }: BookingFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -36,10 +37,10 @@ export function BookingForm({ venue, initialUser }: BookingFormProps) {
   const [eventType, setEventType] = useState('')
   const [eventDescription, setEventDescription] = useState('')
   const [guestCount, setGuestCount] = useState('')
-  const [customerName, setCustomerName] = useState('')
-  const [customerEmail, setCustomerEmail] = useState('')
-  const [customerPhone, setCustomerPhone] = useState('')
-  const [companyName, setCompanyName] = useState('')
+  const [customerName, setCustomerName] = useState(initialProfile?.fullName ?? '')
+  const [customerEmail, setCustomerEmail] = useState(initialUser?.email ?? '')
+  const [customerPhone, setCustomerPhone] = useState(initialProfile?.phone ?? '')
+  const [companyName, setCompanyName] = useState(initialProfile?.companyName ?? '')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
   // Availability state
