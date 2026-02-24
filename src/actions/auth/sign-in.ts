@@ -33,7 +33,10 @@ export async function signIn(
   })
 
   if (error) {
-    return { error: error.message }
+    if (error.message === 'Email not confirmed') {
+      return { error: 'E-postadressen är inte verifierad ännu. Kolla din inkorg och klicka på bekräftelselänken.' }
+    }
+    return { error: 'Felaktig e-post eller lösenord.' }
   }
 
   redirect(validReturnUrl || '/')

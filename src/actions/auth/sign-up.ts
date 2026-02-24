@@ -11,6 +11,7 @@ export type FieldErrors = Record<string, string>
 export type SignUpState = {
   fieldErrors: FieldErrors
   formError: string | null
+  fields?: Record<string, string>
 }
 
 export async function signUp(
@@ -30,6 +31,16 @@ export async function signUp(
   const phone = formData.get('phone') as string | null
   const companyName = formData.get('companyName') as string | null
   const orgNumber = formData.get('orgNumber') as string | null
+
+  const fields: Record<string, string> = {
+    email: email || '',
+    fullName: fullName || '',
+    phone: phone || '',
+    ...(accountType === 'company' && {
+      companyName: companyName || '',
+      orgNumber: orgNumber || '',
+    }),
+  }
 
   const fieldErrors: FieldErrors = {}
 
@@ -58,7 +69,7 @@ export async function signUp(
     }
   }
 
-  if (Object.keys(fieldErrors).length > 0) return { fieldErrors, formError: null }
+  if (Object.keys(fieldErrors).length > 0) return { fieldErrors, formError: null, fields }
 
   const supabase = await createClient()
   const headersList = await headers()
@@ -73,7 +84,7 @@ export async function signUp(
   })
 
   if (error) {
-    return { fieldErrors: {}, formError: error.message }
+    return { fieldErrors: {}, formError: error.message, fields }
   }
 
   if (authData.user) {

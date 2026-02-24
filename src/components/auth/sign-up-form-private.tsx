@@ -43,6 +43,7 @@ export function SignUpFormPrivate({ returnUrl, signInLink }: SignUpFormPrivatePr
             id="fullName"
             name="fullName"
             type="text"
+            defaultValue={state.fields?.fullName}
             className={state.fieldErrors.fullName ? inputError : inputNormal}
           />
           {state.fieldErrors.fullName && (
@@ -59,6 +60,7 @@ export function SignUpFormPrivate({ returnUrl, signInLink }: SignUpFormPrivatePr
             name="email"
             type="email"
             placeholder="namn@exempel.se"
+            defaultValue={state.fields?.email}
             className={state.fieldErrors.email ? inputError : inputNormal}
           />
           {state.fieldErrors.email && (
@@ -74,6 +76,7 @@ export function SignUpFormPrivate({ returnUrl, signInLink }: SignUpFormPrivatePr
             id="phone"
             name="phone"
             type="tel"
+            defaultValue={state.fields?.phone}
             className={inputNormal}
           />
         </div>

@@ -50,6 +50,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             id="contactPerson"
             name="contactPerson"
             type="text"
+            defaultValue={state.fields?.fullName}
             className={state.fieldErrors.fullName ? inputError : inputNormal}
           />
           {state.fieldErrors.fullName && (
@@ -65,6 +66,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             id="companyName"
             name="companyName"
             type="text"
+            defaultValue={state.fields?.companyName}
             className={state.fieldErrors.companyName ? inputError : inputNormal}
           />
           {state.fieldErrors.companyName && (
@@ -81,7 +83,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             name="orgNumber"
             type="text"
             maxLength={11}
-            defaultValue={testOrgNumber}
+            defaultValue={state.fields?.orgNumber ?? testOrgNumber}
             placeholder="556123-4567"
             className={state.fieldErrors.orgNumber ? inputError : inputNormal}
           />
@@ -99,6 +101,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             name="email"
             type="email"
             placeholder="namn@exempel.se"
+            defaultValue={state.fields?.email}
             className={state.fieldErrors.email ? inputError : inputNormal}
           />
           {state.fieldErrors.email && (
@@ -114,6 +117,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             id="phone"
             name="phone"
             type="tel"
+            defaultValue={state.fields?.phone}
             className={inputNormal}
           />
         </div>
