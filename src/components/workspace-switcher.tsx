@@ -9,12 +9,11 @@ export function WorkspaceSwitcher() {
 
   const href = isOnDashboard ? '/venues' : '/dashboard'
   const label = isOnDashboard ? 'Boka lokal' : 'Hantera lokal'
-  const ariaLabel = label
 
   const icon = isOnDashboard ? (
-    // Search icon (Boka lokal)
+    // Calendar icon (Boka lokal) — distinct from existing search icon
     <svg className="w-5 h-5 sm:w-4 sm:h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
     </svg>
   ) : (
     // Building icon (Hantera lokal)
@@ -29,7 +28,7 @@ export function WorkspaceSwitcher() {
       <Link
         href={href}
         className="sm:hidden inline-flex items-center justify-center w-11 h-11 rounded-full border border-[#d4bfb6] text-[#5a4a42] hover:bg-[#c45a3b]/10 hover:text-[#c45a3b] hover:border-[#c45a3b]/30 transition-all"
-        aria-label={ariaLabel}
+        aria-label={label}
       >
         {icon}
       </Link>
