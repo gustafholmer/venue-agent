@@ -160,7 +160,7 @@ export const bookingAcceptedEmail = (venueName: string, eventDate: string, owner
       <div class="info-row"><span class="info-label">Datum:</span> ${escapeHtml(eventDate)}</div>
     </div>
     <p>Logga in för att se detaljer och kommunicera med lokalägaren.</p>
-    <p style="text-align: center;"><a href="${SITE_URL}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Gå till Tryffle</a></p>
+    <p style="text-align: center;"><a href="${SITE_URL}/account/bookings" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Se din bokning</a></p>
     <div class="content-footer">
       <p>Tack för att du använder Tryffle!</p>
     </div>
@@ -177,7 +177,7 @@ export const bookingDeclinedEmail = (venueName: string, eventDate: string, reaso
     <p>Tyvärr kunde din bokningsförfrågan för <strong>${escapeHtml(venueName)}</strong> den ${escapeHtml(eventDate)} inte accepteras.</p>
     ${reason ? `<p><strong>Anledning:</strong> ${escapeHtml(reason)}</p>` : ""}
     <p>Sök gärna vidare bland våra andra lokaler för att hitta den perfekta platsen för ditt event.</p>
-    <p style="text-align: center;"><a href="${SITE_URL}" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Gå till Tryffle</a></p>
+    <p style="text-align: center;"><a href="${SITE_URL}/venues" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Hitta andra lokaler</a></p>
     <div class="content-footer">
       <p>Behöver du hjälp? Kontakta oss så hjälper vi dig hitta rätt lokal.</p>
     </div>
