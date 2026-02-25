@@ -10,3 +10,4 @@
 
 - Always use superpowers skills when they apply. Check for applicable skills before starting any task.
 - Never skip a skill because the task seems simple — invoke it if there's even a chance it's relevant.
+- Use the `subagent-driven-development` skill when implementing features or executing plans with independent tasks.
