@@ -6,9 +6,13 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { getBooking, type BookingWithVenue } from '@/actions/bookings/get-booking'
 import { cancelBooking } from '@/actions/bookings/cancel-booking'
+import { getBookingModification } from '@/actions/bookings/get-booking-modification'
 import { formatPrice } from '@/lib/pricing'
 import { MessageThread } from '@/components/booking/message-thread'
+import { ModificationBanner } from '@/components/booking/modification-banner'
+import { ModificationForm } from '@/components/booking/modification-form'
 import { createClient } from '@/lib/supabase/client'
+import type { BookingModification } from '@/types/database'
 
 const STATUS_LABELS: Record<string, { label: string; color: string; description: string }> = {
   pending: {
@@ -66,6 +70,9 @@ export default function CustomerBookingDetailPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
+  const [modification, setModification] = useState<BookingModification | undefined>()
+  const [showModificationForm, setShowModificationForm] = useState(false)
+
   // Cancel modal state
   const [showCancelModal, setShowCancelModal] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
@@ -87,6 +94,11 @@ export default function CustomerBookingDetailPage() {
     if (result.success && result.booking) {
       setBooking(result.booking)
       setError(null)
+      // Fetch pending modification
+      const modResult = await getBookingModification(bookingId)
+      if (modResult.success) {
+        setModification(modResult.modification)
+      }
     } else {
       setError(result.error || 'Kunde inte hämta bokningen')
       setBooking(null)
@@ -258,7 +270,7 @@ export default function CustomerBookingDetailPage() {
 
             {/* Cancel button */}
             {canCancel && (
-              <div className="mt-4 pt-4 border-t border-[#e7e5e4]">
+              <div className="mt-4 pt-4 border-t border-[#e7e5e4] flex gap-3 flex-wrap">
                 <Button
                   variant="outline"
                   onClick={() => setShowCancelModal(true)}
@@ -266,11 +278,28 @@ export default function CustomerBookingDetailPage() {
                 >
                   Avboka
                 </Button>
+                {['pending', 'accepted'].includes(booking.status) && !modification && (
+                  <button
+                    onClick={() => setShowModificationForm(true)}
+                    className="px-4 py-2 text-sm font-medium text-[#c45a3b] border border-[#c45a3b] rounded-lg hover:bg-[#c45a3b]/5"
+                  >
+                    Föreslå ändring
+                  </button>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {modification && currentUserId && (
+        <ModificationBanner
+          booking={booking}
+          modification={modification}
+          currentUserId={currentUserId}
+          onResolved={fetchBooking}
+        />
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main content - left column */}
@@ -446,6 +475,18 @@ export default function CustomerBookingDetailPage() {
           </div>
         </div>
       </div>
+
+      {showModificationForm && booking && (
+        <ModificationForm
+          booking={booking}
+          canEditPrice={false}
+          onClose={() => setShowModificationForm(false)}
+          onSuccess={() => {
+            setShowModificationForm(false)
+            fetchBooking()
+          }}
+        />
+      )}
 
       {/* Cancel modal */}
       {showCancelModal && (
