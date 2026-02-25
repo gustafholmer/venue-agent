@@ -1,14 +1,13 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { trackEvent } from '@/lib/analytics'
 
-export async function createVenue(formData: FormData) {
+export async function createVenue(formData: FormData): Promise<{ success: boolean; error?: string }> {
   const { createClient } = await import('@/lib/supabase/server')
   const { isDemoMode } = await import('@/lib/demo-mode')
 
   if (isDemoMode()) {
-    return redirect('/dashboard/venue?success=demo')
+    return { success: true }
   }
 
   const supabase = await createClient()
@@ -16,7 +15,7 @@ export async function createVenue(formData: FormData) {
   // Get current user
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return redirect('/auth/sign-in')
+    return { success: false, error: 'Ej inloggad' }
   }
 
   // Verify user is a venue owner
@@ -27,7 +26,7 @@ export async function createVenue(formData: FormData) {
     .single()
 
   if (!profile || !profile.roles.includes('venue_owner')) {
-    return redirect('/')
+    return { success: false, error: 'Ej behörig' }
   }
 
   // Parse form data
@@ -124,10 +123,10 @@ export async function createVenue(formData: FormData) {
 
   if (error) {
     console.error('Error creating venue:', error)
-    return redirect('/dashboard/venue/new?error=create_failed')
+    return { success: false, error: 'Kunde inte skapa lokalen' }
   }
 
   trackEvent('venue_listed', {}, user.id)
 
-  return redirect('/dashboard/venue?success=venue_created')
+  return { success: true }
 }
