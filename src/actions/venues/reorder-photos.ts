@@ -65,6 +65,6 @@ export async function reorderPhotos(photoOrders: PhotoOrder[]) {
     return { success: false, error: 'Kunde inte uppdatera ordningen' }
   }
 
-  revalidatePath('/dashboard/venue/photos')
+  revalidatePath('/dashboard/venue')
   return { success: true }
 }

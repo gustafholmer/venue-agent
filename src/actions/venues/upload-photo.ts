@@ -109,7 +109,7 @@ export async function uploadPhoto(formData: FormData) {
     return { success: false, error: 'Kunde inte spara bildinformation' }
   }
 
-  revalidatePath('/dashboard/venue/photos')
+  revalidatePath('/dashboard/venue')
   trackEvent('venue_photo_uploaded', { venue_id: venue.id }, user.id)
   return { success: true, photoId }
 }
