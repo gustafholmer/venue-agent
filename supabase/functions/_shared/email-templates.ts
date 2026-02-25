@@ -240,3 +240,36 @@ export const passwordResetEmail = (resetUrl: string) =>
     </div>
   </div>
 `);
+
+export function modificationProposedEmail(
+  venueName: string,
+  eventDate: string,
+  changes: string
+): string {
+  return baseTemplate(`
+    <h1>Ändringsförslag</h1>
+    <p>Ett ändringsförslag har skapats för din bokning av <strong>${escapeHtml(venueName)}</strong>.</p>
+    <div class="info-box">
+      <p><strong>Nuvarande datum:</strong> ${escapeHtml(eventDate)}</p>
+      <p><strong>Föreslagna ändringar:</strong></p>
+      ${changes}
+    </div>
+    <p>Logga in på Tryffle för att granska och godkänna eller neka förslaget.</p>
+    <a href="${SITE_URL}/account/bookings" class="button">Granska ändringsförslag</a>
+  `)
+}
+
+export function modificationAcceptedEmail(
+  venueName: string,
+  eventDate: string
+): string {
+  return baseTemplate(`
+    <h1>Ändringsförslag godkänt</h1>
+    <p>Ditt ändringsförslag för bokningen av <strong>${escapeHtml(venueName)}</strong> har godkänts.</p>
+    <div class="info-box">
+      <p><strong>Uppdaterat datum:</strong> ${escapeHtml(eventDate)}</p>
+    </div>
+    <p>Logga in på Tryffle för att se den uppdaterade bokningen.</p>
+    <a href="${SITE_URL}/account/bookings" class="button">Se bokning</a>
+  `)
+}
