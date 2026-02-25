@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { createVenue } from '@/actions/venues/create-venue'
+import { uploadPhoto } from '@/actions/venues/upload-photo'
 import { VENUE_TYPES, VIBES, AREAS, AMENITIES } from '@/lib/constants'
 
 const STEPS = [
@@ -15,7 +16,78 @@ const STEPS = [
   { id: 4, title: 'Priser' },
   { id: 5, title: 'Faciliteter' },
   { id: 6, title: 'Kontakt' },
+  { id: 7, title: 'Bilder' },
 ]
+
+const MAX_DIMENSION = 2000
+const QUALITY = 0.8
+
+async function resizeImage(file: File): Promise<File> {
+  if (!file.type.startsWith('image/')) return file
+
+  return new Promise((resolve) => {
+    const img = new window.Image()
+    const url = URL.createObjectURL(file)
+
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+
+      if (img.width <= MAX_DIMENSION && img.height <= MAX_DIMENSION) {
+        resolve(file)
+        return
+      }
+
+      let width = img.width
+      let height = img.height
+
+      if (width > height) {
+        if (width > MAX_DIMENSION) {
+          height = Math.round(height * (MAX_DIMENSION / width))
+          width = MAX_DIMENSION
+        }
+      } else {
+        if (height > MAX_DIMENSION) {
+          width = Math.round(width * (MAX_DIMENSION / height))
+          height = MAX_DIMENSION
+        }
+      }
+
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        resolve(file)
+        return
+      }
+
+      ctx.drawImage(img, 0, 0, width, height)
+
+      const outputType = file.type === 'image/png' ? 'image/png' : 'image/webp'
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            resolve(file)
+            return
+          }
+          const resized = new File([blob], file.name, { type: outputType })
+          resolve(resized)
+        },
+        outputType,
+        QUALITY
+      )
+    }
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      resolve(file)
+    }
+
+    img.src = url
+  })
+}
 
 interface FormData {
   name: string
@@ -40,10 +112,19 @@ interface FormData {
   website: string
 }
 
+interface SelectedFile {
+  file: File
+  previewUrl: string
+}
+
 export default function NewVenuePage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState('')
+  const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([])
+  const [isDragging, setIsDragging] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
@@ -81,6 +162,41 @@ export default function NewVenuePage() {
     })
   }
 
+  const handleFilesSelected = useCallback((files: FileList | null) => {
+    if (!files || files.length === 0) return
+    const newFiles = Array.from(files)
+      .filter(f => f.type.startsWith('image/'))
+      .map(file => ({
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }))
+    setSelectedFiles(prev => [...prev, ...newFiles])
+  }, [])
+
+  const removeFile = useCallback((index: number) => {
+    setSelectedFiles(prev => {
+      const removed = prev[index]
+      URL.revokeObjectURL(removed.previewUrl)
+      return prev.filter((_, i) => i !== index)
+    })
+  }, [])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    handleFilesSelected(e.dataTransfer.files)
+  }, [handleFilesSelected])
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }, [])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }, [])
+
   const handleNext = () => {
     if (currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1)
@@ -95,6 +211,7 @@ export default function NewVenuePage() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
+    setUploadProgress('')
 
     const form = new window.FormData()
     form.append('name', formData.name)
@@ -118,7 +235,30 @@ export default function NewVenuePage() {
     form.append('contact_phone', formData.contact_phone)
     form.append('website', formData.website)
 
-    await createVenue(form)
+    setUploadProgress('Skapar lokal...')
+    const result = await createVenue(form)
+    if (!result.success) {
+      setUploadProgress('')
+      setIsSubmitting(false)
+      alert(result.error || 'Kunde inte skapa lokalen')
+      return
+    }
+
+    // Upload photos sequentially
+    if (selectedFiles.length > 0) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        setUploadProgress(`Laddar upp bild ${i + 1} av ${selectedFiles.length}...`)
+        const resizedFile = await resizeImage(selectedFiles[i].file)
+        const photoForm = new window.FormData()
+        photoForm.append('file', resizedFile)
+        const photoResult = await uploadPhoto(photoForm)
+        if (!photoResult.success) {
+          console.error('Photo upload failed:', photoResult.error)
+        }
+      }
+    }
+
+    router.push('/dashboard/venue?success=venue_created')
   }
 
   const canProceed = () => {
@@ -540,6 +680,100 @@ export default function NewVenuePage() {
           </div>
         )}
 
+        {/* Step 7: Photos */}
+        {currentStep === 7 && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-semibold text-[#1a1a1a]">Bilder</h2>
+            <p className="text-sm text-[#78716c]">
+              Lagg till bilder pa din lokal. Bilder hjalper kunder att fa en bild av lokalen.
+            </p>
+
+            {/* Dropzone */}
+            <div
+              className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
+                isDragging
+                  ? 'border-[#c45a3b] bg-[#c45a3b]/5'
+                  : 'border-[#e7e5e4] hover:border-[#a8a29e]'
+              }`}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={(e) => handleFilesSelected(e.target.files)}
+                className="hidden"
+              />
+
+              <div className="mb-4">
+                <svg
+                  className="mx-auto h-12 w-12 text-[#a8a29e]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+
+              <p className="text-[#57534e] mb-2">
+                {isDragging
+                  ? 'Slapp bilderna har'
+                  : 'Dra och slapp bilder har, eller'}
+              </p>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Valj filer
+              </Button>
+
+              <p className="text-sm text-[#78716c] mt-3">
+                JPG, PNG eller WebP. Max 5MB per bild.
+              </p>
+            </div>
+
+            {/* Thumbnail previews */}
+            {selectedFiles.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {selectedFiles.map((sf, index) => (
+                  <div key={sf.previewUrl} className="relative group">
+                    <div className="aspect-[4/3] rounded-lg overflow-hidden bg-[#f5f5f4]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={sf.previewUrl}
+                        alt={sf.file.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="absolute top-2 right-2 p-1.5 bg-black/60 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80"
+                      title="Ta bort"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                    <p className="text-xs text-[#78716c] mt-1 truncate">{sf.file.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Navigation */}
         <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#e7e5e4]">
           <Button
@@ -551,7 +785,10 @@ export default function NewVenuePage() {
             Tillbaka
           </Button>
 
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
+            {uploadProgress && (
+              <span className="text-sm text-[#78716c]">{uploadProgress}</span>
+            )}
             {currentStep === STEPS.length ? (
               <Button
                 type="button"
