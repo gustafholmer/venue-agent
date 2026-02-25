@@ -62,6 +62,6 @@ export async function setPrimaryPhoto(photoId: string) {
     return { success: false, error: 'Kunde inte satta primarbild' }
   }
 
-  revalidatePath('/dashboard/venue/photos')
+  revalidatePath('/dashboard/venue')
   return { success: true }
 }

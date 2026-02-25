@@ -84,6 +84,6 @@ export async function deletePhoto(photoId: string) {
     }
   }
 
-  revalidatePath('/dashboard/venue/photos')
+  revalidatePath('/dashboard/venue')
   return { success: true }
 }

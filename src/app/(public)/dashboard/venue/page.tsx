@@ -10,6 +10,7 @@ import { updateVenue } from '@/actions/venues/update-venue'
 import { publishVenue, getPublishValidation, type PublishValidationError } from '@/actions/venues/publish-venue'
 import { unpublishVenue } from '@/actions/venues/unpublish-venue'
 import { VENUE_TYPES, VIBES, AREAS, AMENITIES } from '@/lib/constants'
+import { VenuePhotoManager } from '@/components/dashboard/venue-photo-manager'
 
 interface VenueData {
   id: string
@@ -320,7 +321,14 @@ export default function VenueEditPage() {
               Uppdatera information om din lokal
             </p>
           </div>
-          <StatusBadge status={venue.status} />
+          <div className="flex items-center gap-3">
+            {venue.status === 'published' && venue.slug && (
+              <Link href={`/venue/${venue.slug}`} target="_blank">
+                <Button variant="outline" size="sm">Visa lokal</Button>
+              </Link>
+            )}
+            <StatusBadge status={venue.status} />
+          </div>
         </div>
       </div>
 
@@ -352,16 +360,10 @@ export default function VenueEditPage() {
         </div>
       )}
 
-      {/* Quick actions */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <Link href="/dashboard/venue/photos">
-          <Button variant="outline">Hantera bilder</Button>
-        </Link>
-        {venue.status === 'published' && venue.slug && (
-          <Link href={`/venue/${venue.slug}`} target="_blank">
-            <Button variant="outline">Visa lokal</Button>
-          </Link>
-        )}
+      {/* Photo management */}
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Bilder</h2>
+        <VenuePhotoManager />
       </div>
 
       {/* Edit form */}

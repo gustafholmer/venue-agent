@@ -16,13 +16,11 @@ export function DashboardNav() {
       {/* Desktop sidebar */}
       <aside className="w-64 shrink-0 bg-white border-r border-[#e7e5e4] p-4 hidden lg:block min-h-[calc(100vh-4rem)]">
         <nav className="space-y-1">
-          {NAV_ITEMS.map(({ href, label, indent }) => (
+          {NAV_ITEMS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={`block px-3 py-2 rounded-lg transition-colors ${
-                indent ? 'pl-6 text-sm' : ''
-              } ${
                 isActive(href)
                   ? 'bg-[#c45a3b]/10 text-[#c45a3b] font-medium'
                   : 'text-[#57534e] hover:bg-[#f5f5f4]'

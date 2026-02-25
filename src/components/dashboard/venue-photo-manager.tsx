@@ -17,7 +17,7 @@ interface Photo {
   is_primary: boolean
 }
 
-export default function PhotosPage() {
+export function VenuePhotoManager() {
   const [photos, setPhotos] = useState<Photo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
@@ -165,23 +165,7 @@ export default function PhotosPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="mb-8">
-        <a
-          href="/dashboard/venue"
-          className="text-sm text-[#78716c] hover:text-[#c45a3b]"
-        >
-          &larr; Tillbaka till lokal
-        </a>
-        <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a] mt-4">
-          Bilder
-        </h1>
-        <p className="text-[#78716c] mt-1">
-          Hantera bilder for din lokal. Den forsta bilden visas som huvudbild.
-        </p>
-      </div>
-
+    <>
       {/* Messages */}
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-start gap-2">
@@ -427,6 +411,6 @@ export default function PhotosPage() {
           </p>
         </div>
       )}
-    </div>
+    </>
   )
 }
