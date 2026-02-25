@@ -1,10 +1,11 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { syncToCalendar } from '@/lib/calendar/sync'
 
 export async function unblockDate(
   date: string
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; calendarSyncFailed?: boolean }> {
   const supabase = await createClient()
 
   // Get current user
@@ -24,6 +25,14 @@ export async function unblockDate(
     return { success: false, error: 'Ingen lokal hittades' }
   }
 
+  // Get the blocked date's ID before deleting (needed for calendar sync)
+  const { data: blockedDate } = await supabase
+    .from('venue_blocked_dates')
+    .select('id')
+    .eq('venue_id', venue.id)
+    .eq('blocked_date', date)
+    .single()
+
   // Delete the blocked date
   const { error: deleteError } = await supabase
     .from('venue_blocked_dates')
@@ -36,5 +45,15 @@ export async function unblockDate(
     return { success: false, error: 'Kunde inte avblockera datum' }
   }
 
-  return { success: true }
+  let calendarSyncFailed: boolean | undefined
+  if (blockedDate) {
+    const syncResult = await syncToCalendar(venue.id, {
+      entityType: 'blocked_date',
+      entityId: blockedDate.id,
+      action: 'delete',
+    })
+    calendarSyncFailed = syncResult.calendarSyncFailed
+  }
+
+  return { success: true, calendarSyncFailed }
 }

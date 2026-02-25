@@ -1,11 +1,12 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { syncToCalendar } from '@/lib/calendar/sync'
 
 export async function blockDate(
   date: string,
   reason?: string
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; calendarSyncFailed?: boolean }> {
   const supabase = await createClient()
 
   // Get current user
@@ -55,27 +56,41 @@ export async function blockDate(
   }
 
   // Insert blocked date
-  const { error: insertError } = await supabase
+  const { data: insertedBlock, error: insertError } = await supabase
     .from('venue_blocked_dates')
     .insert({
       venue_id: venue.id,
       blocked_date: date,
       reason: reason || null,
     })
+    .select('id')
+    .single()
 
-  if (insertError) {
+  if (insertError || !insertedBlock) {
     console.error('Error blocking date:', insertError)
     return { success: false, error: 'Kunde inte blockera datum' }
   }
 
-  return { success: true }
+  const syncResult = await syncToCalendar(venue.id, {
+    entityType: 'blocked_date',
+    entityId: insertedBlock.id,
+    action: 'create',
+    event: {
+      title: 'Blockerad',
+      description: reason || undefined,
+      date,
+      status: 'confirmed',
+    },
+  })
+
+  return { success: true, calendarSyncFailed: syncResult.calendarSyncFailed }
 }
 
 export async function blockDateRange(
   startDate: string,
   endDate: string,
   reason?: string
-): Promise<{ success: boolean; error?: string; blockedCount?: number; failedDates?: string[] }> {
+): Promise<{ success: boolean; error?: string; blockedCount?: number; failedDates?: string[]; calendarSyncFailed?: boolean }> {
   const supabase = await createClient()
 
   // Get current user
@@ -139,7 +154,7 @@ export async function blockDateRange(
   }
 
   // Insert blocked dates
-  const { error: insertError } = await supabase
+  const { data: insertedBlocks, error: insertError } = await supabase
     .from('venue_blocked_dates')
     .insert(
       datesToBlock.map(date => ({
@@ -148,15 +163,35 @@ export async function blockDateRange(
         reason: reason || null,
       }))
     )
+    .select('id, blocked_date')
 
   if (insertError) {
     console.error('Error blocking dates:', insertError)
     return { success: false, error: 'Kunde inte blockera datum' }
   }
 
+  let calendarSyncFailed = false
+  if (insertedBlocks) {
+    for (const block of insertedBlocks) {
+      const syncResult = await syncToCalendar(venue.id, {
+        entityType: 'blocked_date',
+        entityId: block.id,
+        action: 'create',
+        event: {
+          title: 'Blockerad',
+          description: reason || undefined,
+          date: block.blocked_date,
+          status: 'confirmed',
+        },
+      })
+      if (syncResult.calendarSyncFailed) calendarSyncFailed = true
+    }
+  }
+
   return {
     success: true,
     blockedCount: datesToBlock.length,
     failedDates: failedDates.length > 0 ? failedDates : undefined,
+    calendarSyncFailed: calendarSyncFailed || undefined,
   }
 }
