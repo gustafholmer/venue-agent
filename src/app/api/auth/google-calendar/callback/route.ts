@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getCalendarProvider } from '@/lib/calendar'
 import { encrypt } from '@/lib/calendar/encryption'
-import { createHmac } from 'crypto'
+import { createHmac, timingSafeEqual } from 'crypto'
 
 function verifyState(state: string): string | null {
   const secret = process.env.CALENDAR_ENCRYPTION_KEY
@@ -12,7 +12,8 @@ function verifyState(state: string): string | null {
   if (!userId || !hmac) return null
 
   const expected = createHmac('sha256', secret).update(userId).digest('hex')
-  if (hmac !== expected) return null
+  if (hmac.length !== expected.length) return null
+  if (!timingSafeEqual(Buffer.from(hmac), Buffer.from(expected))) return null
 
   return userId
 }

@@ -1,6 +1,15 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { encrypt, decrypt } from './encryption'
 import { getCalendarProvider } from './index'
+
+function getServiceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) {
+    throw new Error('Missing Supabase service role configuration')
+  }
+  return createServiceClient(url, key)
+}
 
 /**
  * Get a valid access token for a calendar connection.
@@ -12,7 +21,7 @@ export async function getValidAccessToken(connectionId: string): Promise<{
   provider: string
   connectionId: string
 } | null> {
-  const supabase = await createClient()
+  const supabase = getServiceClient()
 
   const { data: connection, error } = await supabase
     .from('calendar_connections')

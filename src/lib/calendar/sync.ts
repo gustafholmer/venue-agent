@@ -1,7 +1,16 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { getCalendarProvider } from './index'
 import { getValidAccessToken } from './token-manager'
 import type { SyncOptions, SyncResult } from './types'
+
+function getServiceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) {
+    throw new Error('Missing Supabase service role configuration')
+  }
+  return createServiceClient(url, key)
+}
 
 /**
  * Sync a Tryffle entity (blocked date or booking) to Google Calendar.
@@ -13,7 +22,7 @@ export async function syncToCalendar(
   options: SyncOptions
 ): Promise<SyncResult> {
   try {
-    const supabase = await createClient()
+    const supabase = getServiceClient()
 
     // Check if this venue has a calendar mapping
     const { data: mapping } = await supabase
