@@ -71,6 +71,10 @@ export async function acceptModification(
       return { success: false, error: 'Du kan inte godkänna ditt eget förslag' }
     }
 
+    // NOTE: This check-then-insert pattern has a theoretical race condition
+    // (same as accept-booking.ts). A proper fix would use an advisory lock
+    // or RPC function. Low practical risk due to human-speed operations.
+
     // If date is changing on an accepted booking, handle calendar
     if (modification.proposed_event_date && booking.status === 'accepted') {
       const newDate = modification.proposed_event_date

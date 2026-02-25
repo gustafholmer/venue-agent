@@ -67,12 +67,19 @@ CREATE POLICY "Users can respond to modifications"
     )
   );
 
--- RLS: Proposers can delete their own pending modifications
-CREATE POLICY "Proposers can cancel their modifications"
+-- RLS: Booking parties can delete pending modifications
+CREATE POLICY "Booking parties can cancel pending modifications"
   ON booking_modifications FOR DELETE
   USING (
-    proposed_by = auth.uid()
-    AND status = 'pending'
+    status = 'pending'
+    AND (
+      proposed_by = auth.uid()
+      OR booking_request_id IN (
+        SELECT br.id FROM booking_requests br
+        JOIN venues v ON br.venue_id = v.id
+        WHERE br.customer_id = auth.uid() OR v.owner_id = auth.uid()
+      )
+    )
   );
 
 -- Updated_at trigger

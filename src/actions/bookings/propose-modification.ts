@@ -68,6 +68,11 @@ export async function proposeModification(
       return { success: false, error: 'Du har inte behörighet att ändra denna bokning' }
     }
 
+    // Customers cannot propose price changes — only venue owners can
+    if (isCustomer && input.proposedBasePrice !== undefined) {
+      return { success: false, error: 'Bara lokalägaren kan föreslå prisändringar' }
+    }
+
     // Check booking status
     if (!['pending', 'accepted'].includes(booking.status)) {
       return { success: false, error: 'Denna bokning kan inte ändras' }
