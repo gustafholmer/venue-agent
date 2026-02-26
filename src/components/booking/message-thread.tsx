@@ -7,15 +7,19 @@ import { markMessagesAsRead } from '@/actions/messages/mark-read'
 import type { ChatMessage } from '@/hooks/use-realtime-chat'
 
 interface MessageThreadProps {
-  bookingId: string
+  threadId: string
+  threadType: 'booking' | 'inquiry'
   currentUserId: string
   participantName?: string
+  readOnly?: boolean
 }
 
 export function MessageThread({
-  bookingId,
+  threadId,
+  threadType,
   currentUserId,
   participantName,
+  readOnly,
 }: MessageThreadProps) {
   const [initialMessages, setInitialMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -25,7 +29,7 @@ export function MessageThread({
   useEffect(() => {
     async function fetchMessages() {
       setIsLoading(true)
-      const result = await getMessages(bookingId)
+      const result = await getMessages(threadId, threadType)
 
       if (result.success && result.messages) {
         // Transform to ChatMessage format
@@ -51,12 +55,12 @@ export function MessageThread({
     }
 
     fetchMessages()
-  }, [bookingId])
+  }, [threadId, threadType])
 
   // Handle marking messages as read
   const handleMessagesRead = useCallback(async () => {
-    await markMessagesAsRead(bookingId)
-  }, [bookingId])
+    await markMessagesAsRead(threadId, undefined, threadType)
+  }, [threadId, threadType])
 
   if (isLoading) {
     return (
@@ -84,10 +88,12 @@ export function MessageThread({
   return (
     <div className="h-[400px] sm:h-[500px]">
       <RealtimeChat
-        bookingId={bookingId}
+        threadId={threadId}
+        threadType={threadType}
         currentUserId={currentUserId}
         initialMessages={initialMessages}
         participantName={participantName}
+        readOnly={readOnly}
         onMessagesRead={handleMessagesRead}
       />
     </div>

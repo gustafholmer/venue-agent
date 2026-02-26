@@ -22,7 +22,8 @@ export interface ChatMessage {
 }
 
 interface UseRealtimeChatOptions {
-  bookingId: string
+  threadId: string
+  threadType: 'booking' | 'inquiry'
   currentUserId: string
   initialMessages?: ChatMessage[]
   onNewMessage?: (message: ChatMessage) => void
@@ -37,7 +38,8 @@ interface UseRealtimeChatReturn {
 }
 
 export function useRealtimeChat({
-  bookingId,
+  threadId,
+  threadType,
   currentUserId,
   initialMessages = [],
   onNewMessage,
@@ -65,7 +67,7 @@ export function useRealtimeChat({
   // Set up realtime subscription
   useEffect(() => {
     const supabase = supabaseRef.current
-    const channelName = `chat:${bookingId}`
+    const channelName = `chat:${threadType}:${threadId}`
 
     setIsConnecting(true)
     setConnectionError(null)
@@ -104,7 +106,7 @@ export function useRealtimeChat({
       channel.unsubscribe()
       channelRef.current = null
     }
-  }, [bookingId, addMessage])
+  }, [threadId, threadType, addMessage])
 
   // Update messages when initialMessages change
   useEffect(() => {
@@ -142,8 +144,8 @@ export function useRealtimeChat({
     const optimisticId = crypto.randomUUID()
     const optimisticMessage: ChatMessage = {
       id: optimisticId,
-      booking_request_id: bookingId,
-      venue_inquiry_id: null,
+      booking_request_id: threadType === 'booking' ? threadId : null,
+      venue_inquiry_id: threadType === 'inquiry' ? threadId : null,
       sender_id: currentUserId,
       content: trimmedContent,
       is_read: false,
@@ -161,15 +163,15 @@ export function useRealtimeChat({
     addMessage(optimisticMessage)
 
     try {
+      // Build insert payload based on thread type
+      const insertPayload = threadType === 'inquiry'
+        ? { venue_inquiry_id: threadId, sender_id: currentUserId, content: trimmedContent, is_read: false }
+        : { booking_request_id: threadId, sender_id: currentUserId, content: trimmedContent, is_read: false }
+
       // Insert into database
       const { data: message, error: insertError } = await supabase
         .from('messages')
-        .insert({
-          booking_request_id: bookingId,
-          sender_id: currentUserId,
-          content: trimmedContent,
-          is_read: false,
-        })
+        .insert(insertPayload)
         .select(`
           *,
           sender:profiles!sender_id(
@@ -207,7 +209,7 @@ export function useRealtimeChat({
       console.error('Error sending message:', error)
       return { success: false, error: 'Ett oväntat fel uppstod' }
     }
-  }, [bookingId, currentUserId, addMessage])
+  }, [threadId, threadType, currentUserId, addMessage])
 
   return {
     messages,

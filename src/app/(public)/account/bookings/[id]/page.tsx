@@ -344,7 +344,8 @@ export default function CustomerBookingDetailPage() {
           {/* Message thread */}
           {currentUserId && (
             <MessageThread
-              bookingId={bookingId}
+              threadId={bookingId}
+              threadType="booking"
               currentUserId={currentUserId}
               participantName={booking.venue.name}
             />
