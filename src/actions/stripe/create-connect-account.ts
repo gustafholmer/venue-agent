@@ -1,0 +1,157 @@
+'use server'
+
+import Stripe from 'stripe'
+import { headers } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
+import { getStripe } from '@/lib/stripe'
+
+export interface CreateConnectAccountInput {
+  companyName: string
+  orgNumber: string
+  phone: string
+  addressLine1: string
+  city: string
+  postalCode: string
+  repFirstName: string
+  repLastName: string
+  repDobDay: number
+  repDobMonth: number
+  repDobYear: number
+  iban: string
+  accountHolderName: string
+}
+
+type Result =
+  | { success: true }
+  | { success: false; error: string }
+
+export async function createConnectAccount(
+  input: CreateConnectAccountInput
+): Promise<Result> {
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return { success: false, error: 'Ej inloggad' }
+    }
+
+    // Check if user already has a connected account
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('stripe_account_id')
+      .eq('id', user.id)
+      .single()
+
+    if (profile?.stripe_account_id) {
+      return { success: false, error: 'Du har redan ett anslutet konto' }
+    }
+
+    // Get client IP for ToS acceptance
+    const headersList = await headers()
+    const ip =
+      headersList.get('x-forwarded-for')?.split(',')[0] ||
+      headersList.get('x-real-ip') ||
+      'unknown'
+
+    const stripe = getStripe()
+
+    // Create Custom connected account
+    const account = await stripe.accounts.create({
+      type: 'custom',
+      country: 'SE',
+      email: user.email,
+      business_type: 'company',
+      company: {
+        name: input.companyName,
+        tax_id: input.orgNumber,
+        phone: input.phone,
+        address: {
+          line1: input.addressLine1,
+          city: input.city,
+          postal_code: input.postalCode,
+          country: 'SE',
+        },
+        owners_provided: true,
+        directors_provided: true,
+        executives_provided: true,
+      },
+      external_account: {
+        object: 'bank_account',
+        country: 'SE',
+        currency: 'sek',
+        account_holder_name: input.accountHolderName,
+        account_holder_type: 'company',
+        account_number: input.iban,
+      },
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true },
+      },
+      tos_acceptance: {
+        date: Math.floor(Date.now() / 1000),
+        ip,
+      },
+      business_profile: {
+        mcc: '7922',
+      },
+    })
+
+    // Add representative
+    await stripe.accounts.createPerson(account.id, {
+      first_name: input.repFirstName,
+      last_name: input.repLastName,
+      email: user.email,
+      phone: input.phone,
+      dob: {
+        day: input.repDobDay,
+        month: input.repDobMonth,
+        year: input.repDobYear,
+      },
+      address: {
+        line1: input.addressLine1,
+        city: input.city,
+        postal_code: input.postalCode,
+        country: 'SE',
+      },
+      relationship: {
+        representative: true,
+        executive: true,
+        owner: true,
+        director: true,
+        percent_ownership: 100,
+        title: 'VD',
+      },
+    })
+
+    // Update profile with Stripe account info
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        stripe_account_id: account.id,
+        stripe_account_status: 'pending',
+      })
+      .eq('id', user.id)
+
+    if (updateError) {
+      // Rollback: delete the Stripe account if DB update fails
+      await stripe.accounts.del(account.id).catch((deleteError) => {
+        console.error('Failed to rollback Stripe account:', deleteError)
+      })
+      return { success: false, error: 'Kunde inte spara kontoinformation' }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error creating Connect account:', error)
+
+    if (error instanceof Stripe.errors.StripeError) {
+      return { success: false, error: error.message }
+    }
+
+    return { success: false, error: 'Ett oväntat fel uppstod' }
+  }
+}
