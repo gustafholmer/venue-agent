@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { getInboxItems, type InboxItem, type InboxFilters } from '@/actions/inbox/get-inbox-items'
 import { formatTimestamp } from '@/components/notifications/notification-utils'
 
@@ -80,7 +81,7 @@ function InboxCard({ item }: { item: InboxItem }) {
           {item.eventDate && (
             <span>{new Date(item.eventDate).toLocaleDateString('sv-SE')}</span>
           )}
-          {item.guestCount && <span>{item.guestCount} gäster</span>}
+          {item.guestCount != null && item.guestCount > 0 && <span>{item.guestCount} gäster</span>}
           {item.eventType && <span>{item.eventType}</span>}
         </div>
       </div>
@@ -94,9 +95,13 @@ function InboxCard({ item }: { item: InboxItem }) {
 }
 
 export default function InboxPage() {
+  const searchParams = useSearchParams()
+  const initialType = searchParams.get('type')
   const [items, setItems] = useState<InboxItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [typeFilter, setTypeFilter] = useState<'all' | 'inquiry' | 'booking'>('all')
+  const [typeFilter, setTypeFilter] = useState<'all' | 'inquiry' | 'booking'>(
+    initialType === 'inquiry' || initialType === 'booking' ? initialType : 'all'
+  )
 
   const fetchItems = useCallback(async () => {
     setLoading(true)

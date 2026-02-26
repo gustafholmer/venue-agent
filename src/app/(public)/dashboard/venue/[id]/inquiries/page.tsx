@@ -108,7 +108,7 @@ export default function VenueInquiriesPage() {
                   {item.eventDate && (
                     <span>{new Date(item.eventDate).toLocaleDateString('sv-SE')}</span>
                   )}
-                  {item.guestCount && <span>{item.guestCount} gäster</span>}
+                  {item.guestCount != null && item.guestCount > 0 && <span>{item.guestCount} gäster</span>}
                   {item.eventType && <span>{item.eventType}</span>}
                 </div>
                 {item.lastMessagePreview && (

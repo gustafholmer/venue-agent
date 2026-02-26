@@ -14,8 +14,8 @@ function DashboardSkeleton() {
       </div>
 
       {/* Stats skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        {[1, 2, 3].map((i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {[1, 2, 3, 4].map((i) => (
           <div key={i} className="bg-white border border-[#e7e5e4] rounded-xl p-4">
             <div className="h-4 bg-[#e7e5e4] rounded w-20 mb-2" />
             <div className="h-8 bg-[#e7e5e4] rounded w-24" />
