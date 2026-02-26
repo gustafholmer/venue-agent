@@ -15,7 +15,8 @@ export type NotificationType =
   | 'booking_modification_proposed' | 'booking_modification_accepted' | 'booking_modification_declined'
   | 'new_message' | 'new_match' | 'payment_completed' | 'payout_sent'
   | 'new_inquiry'
-export type EntityType = 'booking' | 'venue' | 'message' | 'search' | 'inquiry'
+  | 'agent_booking_approval' | 'agent_escalation' | 'agent_counter_offer'
+export type EntityType = 'booking' | 'venue' | 'message' | 'search' | 'inquiry' | 'agent_action'
 
 export interface Database {
   public: {
@@ -661,6 +662,132 @@ export interface Database {
           created_at?: string
           updated_at?: string
           expires_at?: string
+        }
+      }
+      venue_agent_config: {
+        Row: {
+          id: string
+          venue_id: string
+          is_enabled: boolean
+          greeting_message: string | null
+          pricing_rules: Json | null
+          booking_params: Json | null
+          event_types: Json | null
+          policy_config: Json | null
+          faq_entries: Json | null
+          auto_approve: boolean
+          approval_threshold: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          venue_id: string
+          is_enabled?: boolean
+          greeting_message?: string | null
+          pricing_rules?: Json | null
+          booking_params?: Json | null
+          event_types?: Json | null
+          policy_config?: Json | null
+          faq_entries?: Json | null
+          auto_approve?: boolean
+          approval_threshold?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          venue_id?: string
+          is_enabled?: boolean
+          greeting_message?: string | null
+          pricing_rules?: Json | null
+          booking_params?: Json | null
+          event_types?: Json | null
+          policy_config?: Json | null
+          faq_entries?: Json | null
+          auto_approve?: boolean
+          approval_threshold?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      agent_conversations: {
+        Row: {
+          id: string
+          venue_id: string
+          customer_email: string | null
+          customer_name: string | null
+          status: string
+          messages: Json[]
+          collected_data: Json | null
+          created_at: string
+          updated_at: string
+          expires_at: string | null
+        }
+        Insert: {
+          id?: string
+          venue_id: string
+          customer_email?: string | null
+          customer_name?: string | null
+          status?: string
+          messages?: Json[]
+          collected_data?: Json | null
+          created_at?: string
+          updated_at?: string
+          expires_at?: string | null
+        }
+        Update: {
+          id?: string
+          venue_id?: string
+          customer_email?: string | null
+          customer_name?: string | null
+          status?: string
+          messages?: Json[]
+          collected_data?: Json | null
+          created_at?: string
+          updated_at?: string
+          expires_at?: string | null
+        }
+      }
+      agent_actions: {
+        Row: {
+          id: string
+          conversation_id: string
+          venue_id: string
+          action_type: string
+          status: string
+          summary: Json | null
+          owner_response: string | null
+          booking_request_id: string | null
+          created_at: string
+          updated_at: string
+          expires_at: string | null
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          venue_id: string
+          action_type: string
+          status?: string
+          summary?: Json | null
+          owner_response?: string | null
+          booking_request_id?: string | null
+          created_at?: string
+          updated_at?: string
+          expires_at?: string | null
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          venue_id?: string
+          action_type?: string
+          status?: string
+          summary?: Json | null
+          owner_response?: string | null
+          booking_request_id?: string | null
+          created_at?: string
+          updated_at?: string
+          expires_at?: string | null
         }
       }
     }
