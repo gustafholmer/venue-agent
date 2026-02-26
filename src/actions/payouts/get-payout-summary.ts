@@ -22,6 +22,10 @@ export async function getPayoutSummary(): Promise<PayoutSummary | null> {
     .select('id')
     .eq('owner_id', user.id)
 
+  if (venuesError) {
+    console.error('Error fetching venues for payout summary:', venuesError)
+  }
+
   if (venuesError || !venues || venues.length === 0) {
     return {
       totalEarned: 0,
@@ -40,6 +44,10 @@ export async function getPayoutSummary(): Promise<PayoutSummary | null> {
     .in('venue_id', venueIds)
     .in('status', ['completed', 'paid_out'])
     .is('refunded_at', null)
+
+  if (bookingsError) {
+    console.error('Error fetching payout bookings:', bookingsError)
+  }
 
   if (bookingsError || !bookings) {
     return {
