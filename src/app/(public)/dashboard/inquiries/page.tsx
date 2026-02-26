@@ -93,7 +93,7 @@ export default function InquiriesPage() {
       <div className="mb-8">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Förfrågningar</h1>
         <p className="text-[#78716c] mt-1">
-          Hantera inkommande förfrågningar för din lokal
+          Hantera inkommande förfrågningar för dina lokaler
         </p>
       </div>
 
@@ -202,12 +202,14 @@ export default function InquiriesPage() {
               const status = STATUS_LABELS[inquiry.status] || { label: inquiry.status, color: 'bg-gray-100 text-gray-800' }
               const eventType = EVENT_TYPE_LABELS[inquiry.event_type || ''] || inquiry.event_type || '-'
               const customerName = inquiry.profile?.full_name || inquiry.profile?.email || 'Okänd'
+              const venueName = (inquiry.venue as { name: string })?.name
 
               return (
                 <div key={inquiry.id} className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <p className="font-medium text-[#1a1a1a]">{customerName}</p>
+                      {venueName && <p className="text-sm text-[#78716c]">{venueName}</p>}
                     </div>
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${status.color}`}>
                       {status.label}
@@ -254,6 +256,9 @@ export default function InquiriesPage() {
                       Kund
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-[#78716c] uppercase tracking-wider">
+                      Lokal
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-[#78716c] uppercase tracking-wider">
                       Eventdatum
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-[#78716c] uppercase tracking-wider">
@@ -278,6 +283,7 @@ export default function InquiriesPage() {
                     const status = STATUS_LABELS[inquiry.status] || { label: inquiry.status, color: 'bg-gray-100 text-gray-800' }
                     const eventType = EVENT_TYPE_LABELS[inquiry.event_type || ''] || inquiry.event_type || '-'
                     const customerName = inquiry.profile?.full_name || inquiry.profile?.email || 'Okänd'
+                    const venueName = (inquiry.venue as { name: string })?.name
 
                     return (
                       <tr key={inquiry.id} className="hover:bg-[#faf9f7] transition-colors">
@@ -286,6 +292,9 @@ export default function InquiriesPage() {
                             <p className="font-medium text-[#1a1a1a]">{customerName}</p>
                             <p className="text-sm text-[#78716c]">{inquiry.profile?.email}</p>
                           </div>
+                        </td>
+                        <td className="px-6 py-4 text-[#57534e]">
+                          {venueName || '-'}
                         </td>
                         <td className="px-6 py-4 text-[#57534e]">
                           {formatDate(inquiry.event_date)}

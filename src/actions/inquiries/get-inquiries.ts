@@ -106,6 +106,9 @@ export interface VenueInquiryWithProfile extends VenueInquiry {
     full_name: string | null
     email: string
   }
+  venue: {
+    name: string
+  }
 }
 
 export interface GetVenueInquiriesResult {
@@ -126,18 +129,19 @@ export async function getVenueInquiries(
       return { success: false, error: 'Ej inloggad' }
     }
 
-    // Get venue for this owner
-    const { data: venue, error: venueError } = await supabase
+    // Get all venues for this owner
+    const { data: venues, error: venueError } = await supabase
       .from('venues')
       .select('id')
       .eq('owner_id', user.id)
-      .single()
 
-    if (venueError || !venue) {
-      return { success: false, error: 'Ingen lokal hittades' }
+    if (venueError || !venues || venues.length === 0) {
+      return { success: false, error: 'Inga lokaler hittades' }
     }
 
-    // Build query
+    const venueIds = venues.map(v => v.id)
+
+    // Build query across all owned venues
     let query = supabase
       .from('venue_inquiries')
       .select(`
@@ -145,9 +149,12 @@ export async function getVenueInquiries(
         profile:profiles!inner(
           full_name,
           email
+        ),
+        venue:venues!inner(
+          name
         )
       `)
-      .eq('venue_id', venue.id)
+      .in('venue_id', venueIds)
       .order('created_at', { ascending: false })
 
     // Apply status filter
