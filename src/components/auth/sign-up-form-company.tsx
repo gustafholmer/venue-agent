@@ -46,7 +46,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
         )}
 
         {state.formError && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
             {state.formError}
           </div>
         )}
@@ -60,10 +60,12 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             name="contactPerson"
             type="text"
             defaultValue={state.fields?.fullName}
+            aria-invalid={!!state.fieldErrors.fullName}
+            aria-describedby={state.fieldErrors.fullName ? 'fullName-error' : undefined}
             className={state.fieldErrors.fullName ? inputError : inputNormal}
           />
           {state.fieldErrors.fullName && (
-            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.fullName}</p>
+            <p id="fullName-error" className="text-red-600 text-xs mt-1">{state.fieldErrors.fullName}</p>
           )}
         </div>
 
@@ -76,10 +78,12 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             name="companyName"
             type="text"
             defaultValue={state.fields?.companyName}
+            aria-invalid={!!state.fieldErrors.companyName}
+            aria-describedby={state.fieldErrors.companyName ? 'companyName-error' : undefined}
             className={state.fieldErrors.companyName ? inputError : inputNormal}
           />
           {state.fieldErrors.companyName && (
-            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.companyName}</p>
+            <p id="companyName-error" className="text-red-600 text-xs mt-1">{state.fieldErrors.companyName}</p>
           )}
         </div>
 
@@ -102,6 +106,8 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
               maxLength={11}
               defaultValue={state.fields?.orgNumber ?? testOrgNumber}
               placeholder="556123-4567"
+              aria-invalid={!!state.fieldErrors.orgNumber}
+              aria-describedby={state.fieldErrors.orgNumber ? 'orgNumber-error' : undefined}
               className={state.fieldErrors.orgNumber ? inputError : inputNormal}
             />
             {/* TODO: Remove test randomize button before production */}
@@ -115,7 +121,7 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             </button>
           </div>
           {state.fieldErrors.orgNumber && (
-            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.orgNumber}</p>
+            <p id="orgNumber-error" className="text-red-600 text-xs mt-1">{state.fieldErrors.orgNumber}</p>
           )}
         </div>
 
@@ -129,10 +135,12 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             type="email"
             placeholder="namn@exempel.se"
             defaultValue={state.fields?.email}
+            aria-invalid={!!state.fieldErrors.email}
+            aria-describedby={state.fieldErrors.email ? 'email-error' : undefined}
             className={state.fieldErrors.email ? inputError : inputNormal}
           />
           {state.fieldErrors.email && (
-            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.email}</p>
+            <p id="email-error" className="text-red-600 text-xs mt-1">{state.fieldErrors.email}</p>
           )}
         </div>
 
@@ -158,10 +166,12 @@ export function SignUpFormCompany({ returnUrl, signInLink }: SignUpFormCompanyPr
             name="password"
             type="password"
             placeholder="Minst 8 tecken, en versal och en siffra"
+            aria-invalid={!!state.fieldErrors.password}
+            aria-describedby={state.fieldErrors.password ? 'password-error' : undefined}
             className={state.fieldErrors.password ? inputError : inputNormal}
           />
           {state.fieldErrors.password && (
-            <p className="text-red-600 text-xs mt-1">{state.fieldErrors.password}</p>
+            <p id="password-error" className="text-red-600 text-xs mt-1">{state.fieldErrors.password}</p>
           )}
         </div>
 

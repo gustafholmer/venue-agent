@@ -6,17 +6,22 @@ export async function getCalendarConnection(): Promise<{
   providerEmail?: string | null
   connectionId?: string
 }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { connected: false }
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { connected: false }
 
-  const { data: connection } = await supabase
-    .from('calendar_connections')
-    .select('id, provider_email')
-    .eq('user_id', user.id)
-    .eq('provider', 'google')
-    .single()
+    const { data: connection } = await supabase
+      .from('calendar_connections')
+      .select('id, provider_email')
+      .eq('user_id', user.id)
+      .eq('provider', 'google')
+      .single()
 
-  if (!connection) return { connected: false }
-  return { connected: true, providerEmail: connection.provider_email, connectionId: connection.id }
+    if (!connection) return { connected: false }
+    return { connected: true, providerEmail: connection.provider_email, connectionId: connection.id }
+  } catch (error) {
+    console.error('Failed to get calendar connection:', error)
+    return { connected: false }
+  }
 }

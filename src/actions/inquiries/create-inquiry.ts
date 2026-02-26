@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
-import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
+import { inquiryInputSchema } from '@/lib/validation/schemas'
 import { trackEvent } from '@/lib/analytics'
 import { upsertContact } from '@/actions/contacts/upsert-contact'
 
@@ -21,8 +21,6 @@ interface CreateInquiryResult {
   existingInquiryId?: string
   error?: string
 }
-
-const MAX_MESSAGE_LENGTH = 2000
 
 export async function createInquiry(
   input: CreateInquiryInput
@@ -43,52 +41,19 @@ export async function createInquiry(
       return { success: false, error: 'Du måste vara inloggad för att skicka en förfrågan' }
     }
 
-    // Validate required fields
-    if (!input.venueId) {
-      return { success: false, error: 'Lokal-ID saknas' }
+    // Validate input
+    const parsed = inquiryInputSchema.safeParse(input)
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || 'Ogiltiga uppgifter'
+      return { success: false, error: firstError }
     }
-    if (!input.eventDate) {
-      return { success: false, error: 'Välj ett datum' }
-    }
-    if (!input.eventType) {
-      return { success: false, error: 'Välj typ av event' }
-    }
-
-    // Validate event type against allowed values
-    if (!ALLOWED_EVENT_TYPE_VALUES.includes(input.eventType.toLowerCase())) {
-      return { success: false, error: 'Ogiltig eventtyp' }
-    }
-
-    // Validate guest count
-    if (!input.guestCount || input.guestCount < 1) {
-      return { success: false, error: 'Ange antal gäster' }
-    }
-
-    // Validate message
-    if (!input.message?.trim()) {
-      return { success: false, error: 'Skriv ett meddelande' }
-    }
-    if (input.message.trim().length > MAX_MESSAGE_LENGTH) {
-      return {
-        success: false,
-        error: `Meddelandet får max vara ${MAX_MESSAGE_LENGTH} tecken`,
-      }
-    }
-
-    // Validate date is in the future
-    const eventDate = new Date(input.eventDate)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    if (eventDate <= today) {
-      return { success: false, error: 'Datum måste vara i framtiden' }
-    }
+    const validInput = parsed.data
 
     // Check for existing open inquiry for same venue + user
     const { data: existingInquiry, error: existingError } = await supabase
       .from('venue_inquiries')
       .select('id')
-      .eq('venue_id', input.venueId)
+      .eq('venue_id', validInput.venueId)
       .eq('user_id', user.id)
       .eq('status', 'open')
       .limit(1)
@@ -107,7 +72,7 @@ export async function createInquiry(
     const { data: venue, error: venueError } = await supabase
       .from('venues')
       .select('id, name, owner_id, status, min_guests, capacity_standing, capacity_seated, capacity_conference')
-      .eq('id', input.venueId)
+      .eq('id', validInput.venueId)
       .single()
 
     if (venueError || !venue) {
@@ -119,7 +84,7 @@ export async function createInquiry(
     }
 
     // Check minimum guest count
-    if (venue.min_guests && input.guestCount < venue.min_guests) {
+    if (venue.min_guests && validInput.guestCount < venue.min_guests) {
       return {
         success: false,
         error: `Minsta antal gäster för denna lokal är ${venue.min_guests}`,
@@ -132,7 +97,7 @@ export async function createInquiry(
       venue.capacity_seated || 0,
       venue.capacity_conference || 0
     )
-    if (maxCapacity > 0 && input.guestCount > maxCapacity) {
+    if (maxCapacity > 0 && validInput.guestCount > maxCapacity) {
       return {
         success: false,
         error: `Lokalen rymmer max ${maxCapacity} gäster`,
@@ -143,12 +108,12 @@ export async function createInquiry(
     const { data: inquiry, error: insertError } = await supabase
       .from('venue_inquiries')
       .insert({
-        venue_id: input.venueId,
+        venue_id: validInput.venueId,
         user_id: user.id,
-        event_date: input.eventDate,
-        event_type: input.eventType,
-        guest_count: input.guestCount,
-        message: input.message.trim(),
+        event_date: validInput.eventDate,
+        event_type: validInput.eventType,
+        guest_count: validInput.guestCount,
+        message: validInput.message.trim(),
       })
       .select('id')
       .single()
@@ -167,13 +132,13 @@ export async function createInquiry(
 
     if (profile) {
       await upsertContact({
-        venueId: input.venueId,
+        venueId: validInput.venueId,
         customerEmail: profile.email,
         customerName: profile.full_name || profile.email,
         customerId: user.id,
         customerPhone: profile.phone,
         companyName: profile.company_name,
-        eventType: input.eventType,
+        eventType: validInput.eventType,
         source: 'inquiry',
       })
     }
@@ -183,20 +148,20 @@ export async function createInquiry(
       recipient: venue.owner_id,
       category: 'new_inquiry',
       headline: 'Ny förfrågan',
-      body: `Någon vill veta mer om ${venue.name} den ${formatDate(input.eventDate)}`,
+      body: `Någon vill veta mer om ${venue.name} den ${formatDate(validInput.eventDate)}`,
       reference: { kind: 'inquiry', id: inquiry.id },
       author: user.id,
       extra: {
-        event_date: input.eventDate,
-        event_type: input.eventType,
-        guest_count: input.guestCount,
+        event_date: validInput.eventDate,
+        event_type: validInput.eventType,
+        guest_count: validInput.guestCount,
       },
     })
 
     trackEvent('inquiry_created', {
-      venue_id: input.venueId,
-      event_type: input.eventType,
-      guest_count: input.guestCount,
+      venue_id: validInput.venueId,
+      event_type: validInput.eventType,
+      guest_count: validInput.guestCount,
     }, user.id)
 
     return {

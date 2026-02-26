@@ -192,6 +192,9 @@ export const RATE_LIMITS = {
 
   /** Venue agent - 30 messages per hour */
   venueAgent: { limit: 30, windowMs: 60 * 60 * 1000 },
+
+  /** Stripe Connect account creation - 3 per hour */
+  createConnectAccount: { limit: 3, windowMs: 60 * 60 * 1000 },
 } as const
 
 /** Standard Swedish error message for rate limiting */

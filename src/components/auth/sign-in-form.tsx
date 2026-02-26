@@ -25,7 +25,7 @@ export function SignInForm({ returnUrl, signUpLink, defaultEmail }: SignInFormPr
         )}
 
         {state.error && (
-          <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div id="sign-in-error" className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
             {state.error}
           </div>
         )}
@@ -41,6 +41,8 @@ export function SignInForm({ returnUrl, signUpLink, defaultEmail }: SignInFormPr
             required
             defaultValue={defaultEmail ?? undefined}
             placeholder="namn@exempel.se"
+            aria-invalid={!!state.error}
+            aria-describedby={state.error ? 'sign-in-error' : undefined}
             className="w-full h-11 px-4 border border-[#e7e5e4] rounded-xl text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none focus:border-[#c45a3b]"
           />
         </div>
@@ -55,6 +57,8 @@ export function SignInForm({ returnUrl, signUpLink, defaultEmail }: SignInFormPr
             type="password"
             required
             placeholder="••••••••"
+            aria-invalid={!!state.error}
+            aria-describedby={state.error ? 'sign-in-error' : undefined}
             className="w-full h-11 px-4 border border-[#e7e5e4] rounded-xl text-[#1a1a1a] placeholder:text-[#a8a29e] focus:outline-none focus:border-[#c45a3b]"
           />
         </div>

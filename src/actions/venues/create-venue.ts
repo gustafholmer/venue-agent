@@ -1,134 +1,98 @@
 'use server'
 
 import { trackEvent } from '@/lib/analytics'
+import { parseVenueFormData, venueFormSchema } from '@/lib/validation/schemas'
 
 export async function createVenue(formData: FormData): Promise<{ success: boolean; venueId?: string; error?: string }> {
-  const { createClient } = await import('@/lib/supabase/server')
-  const { isDemoMode } = await import('@/lib/demo-mode')
+  try {
+    const { createClient } = await import('@/lib/supabase/server')
+    const { isDemoMode } = await import('@/lib/demo-mode')
 
-  if (isDemoMode()) {
-    return { success: true, venueId: 'demo' }
-  }
-
-  const supabase = await createClient()
-
-  // Get current user
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return { success: false, error: 'Ej inloggad' }
-  }
-
-  // Verify user is a venue owner
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('roles')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile || !profile.roles.includes('venue_owner')) {
-    return { success: false, error: 'Ej behörig' }
-  }
-
-  // Parse form data
-  const name = formData.get('name') as string
-  const description = formData.get('description') as string || null
-  const address = formData.get('address') as string
-  const city = formData.get('city') as string || 'Stockholm'
-  const area = formData.get('area') as string || null
-
-  // Parse venue types (checkboxes)
-  const venueTypes = formData.getAll('venue_types') as string[]
-
-  // Parse vibes (checkboxes)
-  const vibes = formData.getAll('vibes') as string[]
-
-  // Parse capacity
-  const capacityStanding = formData.get('capacity_standing')
-    ? parseInt(formData.get('capacity_standing') as string)
-    : null
-  const capacitySeated = formData.get('capacity_seated')
-    ? parseInt(formData.get('capacity_seated') as string)
-    : null
-  const capacityConference = formData.get('capacity_conference')
-    ? parseInt(formData.get('capacity_conference') as string)
-    : null
-  const minGuests = formData.get('min_guests')
-    ? parseInt(formData.get('min_guests') as string)
-    : 1
-
-  // Parse pricing
-  const pricePerHour = formData.get('price_per_hour')
-    ? parseInt(formData.get('price_per_hour') as string)
-    : null
-  const priceHalfDay = formData.get('price_half_day')
-    ? parseInt(formData.get('price_half_day') as string)
-    : null
-  const priceFullDay = formData.get('price_full_day')
-    ? parseInt(formData.get('price_full_day') as string)
-    : null
-  const priceEvening = formData.get('price_evening')
-    ? parseInt(formData.get('price_evening') as string)
-    : null
-  const priceNotes = formData.get('price_notes') as string || null
-
-  // Parse amenities (checkboxes)
-  const amenities = formData.getAll('amenities') as string[]
-
-  // Parse contact info
-  const contactEmail = formData.get('contact_email') as string || null
-  const contactPhone = formData.get('contact_phone') as string || null
-  const website = formData.get('website') as string || null
-
-  // Generate embedding for description if available
-  let descriptionEmbedding: number[] | null = null
-  if (description) {
-    try {
-      const { generateEmbedding } = await import('@/lib/gemini/embeddings')
-      const embeddingText = `${name}\n${description}\n${venueTypes.join(', ')}\n${vibes.join(', ')}\n${amenities.join(', ')}`
-      descriptionEmbedding = await generateEmbedding(embeddingText)
-    } catch (error) {
-      console.error('Error generating embedding:', error)
-      // Continue without embedding
+    if (isDemoMode()) {
+      return { success: true, venueId: 'demo' }
     }
-  }
 
-  // Create venue with draft status
-  const { data: newVenue, error } = await supabase
-    .from('venues')
-    .insert({
-      owner_id: user.id,
-      name,
-      description,
-      address,
-      city,
-      area,
-      venue_types: venueTypes,
-      vibes,
-      capacity_standing: capacityStanding,
-      capacity_seated: capacitySeated,
-      capacity_conference: capacityConference,
-      min_guests: minGuests,
-      price_per_hour: pricePerHour,
-      price_half_day: priceHalfDay,
-      price_full_day: priceFullDay,
-      price_evening: priceEvening,
-      price_notes: priceNotes,
-      amenities,
-      contact_email: contactEmail,
-      contact_phone: contactPhone,
-      website,
-      status: 'draft',
-      description_embedding: descriptionEmbedding,
-    })
-    .select('id')
-    .single()
+    const supabase = await createClient()
 
-  if (error) {
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return { success: false, error: 'Ej inloggad' }
+    }
+
+    // Verify user is a venue owner
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('roles')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || !profile.roles.includes('venue_owner')) {
+      return { success: false, error: 'Ej behörig' }
+    }
+
+    // Parse and validate form data
+    const rawData = parseVenueFormData(formData)
+    const parsed = venueFormSchema.safeParse(rawData)
+    if (!parsed.success) {
+      return { success: false, error: 'Ogiltiga uppgifter' }
+    }
+    const data = parsed.data
+
+    // Generate embedding for description if available
+    let descriptionEmbedding: number[] | null = null
+    if (data.description) {
+      try {
+        const { generateEmbedding } = await import('@/lib/gemini/embeddings')
+        const embeddingText = `${data.name}\n${data.description}\n${data.venue_types.join(', ')}\n${data.vibes.join(', ')}\n${data.amenities.join(', ')}`
+        descriptionEmbedding = await generateEmbedding(embeddingText)
+      } catch (error) {
+        console.error('Error generating embedding:', error)
+        // Continue without embedding
+      }
+    }
+
+    // Create venue with draft status
+    const { data: newVenue, error } = await supabase
+      .from('venues')
+      .insert({
+        owner_id: user.id,
+        name: data.name,
+        description: data.description,
+        address: data.address,
+        city: data.city,
+        area: data.area,
+        venue_types: data.venue_types,
+        vibes: data.vibes,
+        capacity_standing: data.capacity_standing,
+        capacity_seated: data.capacity_seated,
+        capacity_conference: data.capacity_conference,
+        min_guests: data.min_guests,
+        price_per_hour: data.price_per_hour,
+        price_half_day: data.price_half_day,
+        price_full_day: data.price_full_day,
+        price_evening: data.price_evening,
+        price_notes: data.price_notes,
+        amenities: data.amenities,
+        contact_email: data.contact_email,
+        contact_phone: data.contact_phone,
+        website: data.website,
+        status: 'draft',
+        description_embedding: descriptionEmbedding,
+      })
+      .select('id')
+      .single()
+
+    if (error) {
+      console.error('Error creating venue:', error)
+      return { success: false, error: 'Kunde inte skapa lokalen' }
+    }
+
+    trackEvent('venue_listed', {}, user.id)
+
+    return { success: true, venueId: newVenue.id }
+  } catch (error) {
     console.error('Error creating venue:', error)
-    return { success: false, error: 'Kunde inte skapa lokalen' }
+    return { success: false, error: 'Ett oväntat fel uppstod' }
   }
-
-  trackEvent('venue_listed', {}, user.id)
-
-  return { success: true, venueId: newVenue.id }
 }

@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { serverEnv } from '@/lib/env'
 
-const apiKey = process.env.GEMINI_API_KEY || ''
+const apiKey = serverEnv.GEMINI_API_KEY
 
 // Check if Gemini is properly configured
 export function isGeminiConfigured(): boolean {

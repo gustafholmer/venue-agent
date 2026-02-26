@@ -1,11 +1,12 @@
 import { randomBytes, createCipheriv, createDecipheriv } from 'crypto'
+import { serverEnv } from '@/lib/env'
 
 const ALGORITHM = 'aes-256-gcm'
 const IV_LENGTH = 12
 const AUTH_TAG_LENGTH = 16
 
 function getEncryptionKey(): Buffer {
-  const key = process.env.CALENDAR_ENCRYPTION_KEY
+  const key = serverEnv.CALENDAR_ENCRYPTION_KEY
   if (!key) {
     throw new Error('CALENDAR_ENCRYPTION_KEY environment variable is not set')
   }
