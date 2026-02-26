@@ -2,12 +2,12 @@
 
 import { trackEvent } from '@/lib/analytics'
 
-export async function createVenue(formData: FormData): Promise<{ success: boolean; error?: string }> {
+export async function createVenue(formData: FormData): Promise<{ success: boolean; venueId?: string; error?: string }> {
   const { createClient } = await import('@/lib/supabase/server')
   const { isDemoMode } = await import('@/lib/demo-mode')
 
   if (isDemoMode()) {
-    return { success: true }
+    return { success: true, venueId: 'demo' }
   }
 
   const supabase = await createClient()
@@ -93,7 +93,7 @@ export async function createVenue(formData: FormData): Promise<{ success: boolea
   }
 
   // Create venue with draft status
-  const { error } = await supabase
+  const { data: newVenue, error } = await supabase
     .from('venues')
     .insert({
       owner_id: user.id,
@@ -120,6 +120,8 @@ export async function createVenue(formData: FormData): Promise<{ success: boolea
       status: 'draft',
       description_embedding: descriptionEmbedding,
     })
+    .select('id')
+    .single()
 
   if (error) {
     console.error('Error creating venue:', error)
@@ -128,5 +130,5 @@ export async function createVenue(formData: FormData): Promise<{ success: boolea
 
   trackEvent('venue_listed', {}, user.id)
 
-  return { success: true }
+  return { success: true, venueId: newVenue.id }
 }
