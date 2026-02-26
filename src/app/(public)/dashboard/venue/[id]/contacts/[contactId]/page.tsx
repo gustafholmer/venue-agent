@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { getContactDetail, type ContactDetail, type TimelineItem } from '@/actions/contacts/get-contact-detail'
-import { exportContacts } from '@/actions/contacts/export-contacts'
 import { OutboundInquiryModal } from '@/components/contacts/outbound-inquiry-modal'
 
 function StatusBadge({ status }: { status: string }) {
@@ -48,8 +47,6 @@ export default function ContactDetailPage() {
   const [contact, setContact] = useState<ContactDetail | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isExporting, setIsExporting] = useState(false)
-
   useEffect(() => {
     async function fetchContact() {
       setIsLoading(true)
@@ -69,28 +66,39 @@ export default function ContactDetailPage() {
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('sv-SE').format(amount) + ' kr'
 
-  async function handleExport() {
-    setIsExporting(true)
-    try {
-      const result = await exportContacts(venueId)
-      if (result.success && result.csv) {
-        const blob = new Blob([result.csv], { type: 'text/csv;charset=utf-8;' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `kontakter-${new Date().toISOString().split('T')[0]}.csv`
-        a.click()
-        URL.revokeObjectURL(url)
-      }
-    } finally {
-      setIsExporting(false)
-    }
+  function handleExport() {
+    if (!contact) return
+    const headers = [
+      'Namn', 'E-post', 'Telefon', 'Företag',
+      'Antal bokningar', 'Totalt spenderat (kr)', 'Eventtyper',
+      'Första interaktion', 'Senaste aktivitet',
+    ]
+    const row = [
+      contact.customer_name,
+      contact.customer_email,
+      contact.customer_phone || '',
+      contact.company_name || '',
+      String(contact.completed_bookings),
+      String(contact.total_spend),
+      (contact.event_types || []).join(', '),
+      new Date(contact.first_interaction_at).toLocaleDateString('sv-SE'),
+      new Date(contact.last_interaction_at).toLocaleDateString('sv-SE'),
+    ].map(v => v.includes(',') || v.includes('"') ? `"${v.replace(/"/g, '""')}"` : v)
+
+    const csv = [headers.join(','), row.join(',')].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `kontakt-${contact.customer_name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   // Loading skeleton
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <div className="mb-6">
           <div className="h-4 bg-[#e7e5e4] rounded w-24 animate-pulse" />
         </div>
@@ -120,7 +128,7 @@ export default function ContactDetailPage() {
   // Error state
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <Link
           href={`/dashboard/venue/${venueId}/contacts`}
           className="inline-flex items-center gap-1 text-sm text-[#78716c] hover:text-[#1a1a1a] transition-colors mb-6"
@@ -137,7 +145,7 @@ export default function ContactDetailPage() {
   if (!contact) return null
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       {/* Back link */}
       <Link
         href={`/dashboard/venue/${venueId}/contacts`}
@@ -208,13 +216,12 @@ export default function ContactDetailPage() {
         )}
         <button
           onClick={handleExport}
-          disabled={isExporting}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#1a1a1a] bg-white border border-[#e7e5e4] rounded-lg hover:bg-[#fafaf9] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#1a1a1a] bg-white border border-[#e7e5e4] rounded-lg hover:bg-[#fafaf9] transition-colors"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          {isExporting ? 'Exporterar...' : 'Exportera CSV'}
+          Exportera CSV
         </button>
       </div>
 

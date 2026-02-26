@@ -83,7 +83,10 @@ export default function ContactsPage() {
   }, [search])
 
   useEffect(() => {
-    fetchContacts()
+    const timeout = setTimeout(() => {
+      fetchContacts()
+    }, 300)
+    return () => clearTimeout(timeout)
   }, [fetchContacts])
 
   async function handleExport() {

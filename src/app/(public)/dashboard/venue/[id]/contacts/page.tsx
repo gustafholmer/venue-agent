@@ -15,8 +15,12 @@ export default function VenueContactsPage() {
   const [search, setSearch] = useState('')
   const [isExporting, setIsExporting] = useState(false)
 
-  const fetchContacts = useCallback(async (filters: ContactFilters = {}) => {
+  const fetchContacts = useCallback(async () => {
     setIsLoading(true)
+    const filters: ContactFilters = {}
+    if (search.trim()) {
+      filters.search = search.trim()
+    }
     const result = await getVenueContacts(venueId, filters)
     if (result.success && result.contacts) {
       setContacts(result.contacts)
@@ -26,11 +30,14 @@ export default function VenueContactsPage() {
       setContacts([])
     }
     setIsLoading(false)
-  }, [venueId])
+  }, [venueId, search])
 
   useEffect(() => {
-    fetchContacts({ search: search || undefined })
-  }, [fetchContacts, search])
+    const timeout = setTimeout(() => {
+      fetchContacts()
+    }, 300)
+    return () => clearTimeout(timeout)
+  }, [fetchContacts])
 
   async function handleExport() {
     setIsExporting(true)
@@ -57,7 +64,7 @@ export default function VenueContactsPage() {
     new Date(date).toLocaleDateString('sv-SE')
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       {/* Header */}
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
