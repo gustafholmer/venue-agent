@@ -78,6 +78,7 @@ function PayoutsPageContent() {
   const [hasMore, setHasMore] = useState(false)
   const [isLoadingPayouts, setIsLoadingPayouts] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [payoutError, setPayoutError] = useState(false)
 
   const {
     register,
@@ -104,22 +105,36 @@ function PayoutsPageContent() {
     load()
   }, [reset])
 
+  // Load summary once when connected (independent of tab)
   useEffect(() => {
     if (!connectStatus?.stripeAccountId) return
-    async function loadPayouts() {
+    async function loadSummary() {
+      const result = await getPayoutSummary()
+      if (result) {
+        setSummary(result)
+      } else {
+        setPayoutError(true)
+      }
+    }
+    loadSummary()
+  }, [connectStatus?.stripeAccountId])
+
+  // Load history when connected or tab changes
+  useEffect(() => {
+    if (!connectStatus?.stripeAccountId) return
+    async function loadHistory() {
       setIsLoadingPayouts(true)
-      const [summaryResult, historyResult] = await Promise.all([
-        getPayoutSummary(),
-        getPayoutHistory(activeTab),
-      ])
-      if (summaryResult) setSummary(summaryResult)
-      if (historyResult) {
-        setPayouts(historyResult.items)
-        setHasMore(historyResult.hasMore)
+      setPayoutError(false)
+      const result = await getPayoutHistory(activeTab)
+      if (result) {
+        setPayouts(result.items)
+        setHasMore(result.hasMore)
+      } else {
+        setPayoutError(true)
       }
       setIsLoadingPayouts(false)
     }
-    loadPayouts()
+    loadHistory()
   }, [connectStatus?.stripeAccountId, activeTab])
 
   const handleTabChange = (tab: PayoutStatusFilter) => {
@@ -135,6 +150,8 @@ function PayoutsPageContent() {
     if (result) {
       setPayouts((prev) => [...prev, ...result.items])
       setHasMore(result.hasMore)
+    } else {
+      setPayoutError(true)
     }
     setIsLoadingMore(false)
   }
@@ -273,6 +290,13 @@ function PayoutsPageContent() {
                 Stripe granskar dina uppgifter. Detta tar vanligtvis 1-2 arbetsdagar.
               </p>
             </div>
+          </div>
+        )}
+
+        {/* Error banner */}
+        {payoutError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-800">
+            Kunde inte hämta utbetalningsdata. Försök igen senare.
           </div>
         )}
 
