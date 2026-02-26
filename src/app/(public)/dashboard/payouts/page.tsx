@@ -201,7 +201,22 @@ export default function PayoutsPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Företagsuppgifter */}
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Företagsuppgifter</h2>
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg bg-[#f5f3f0] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-[#1a1a1a]">Företagsuppgifter</h2>
+              <p className="text-sm text-[#78716c]">Grundläggande information om ditt företag</p>
+            </div>
+          </div>
           <div className="space-y-4">
             <div>
               <label htmlFor="companyName" className="block text-sm font-medium text-[#57534e] mb-1">
@@ -274,7 +289,22 @@ export default function PayoutsPage() {
 
         {/* Företrädare */}
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Företrädare</h2>
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg bg-[#f5f3f0] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-[#1a1a1a]">Företrädare</h2>
+              <p className="text-sm text-[#78716c]">Uppgifter om den som företräder bolaget</p>
+            </div>
+          </div>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -330,7 +360,22 @@ export default function PayoutsPage() {
 
         {/* Bankuppgifter */}
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Bankuppgifter</h2>
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg bg-[#f5f3f0] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-[#1a1a1a]">Bankuppgifter</h2>
+              <p className="text-sm text-[#78716c]">Bankkonto för utbetalningar</p>
+            </div>
+          </div>
           <div className="space-y-4">
             <div>
               <label htmlFor="iban" className="block text-sm font-medium text-[#57534e] mb-1">
@@ -350,7 +395,12 @@ export default function PayoutsPage() {
               <label htmlFor="accountHolderName" className="block text-sm font-medium text-[#57534e] mb-1">
                 Kontoinnehavare
               </label>
-              <input type="text" id="accountHolderName" {...register('accountHolderName')} className={inputClass} />
+              <input
+                type="text"
+                id="accountHolderName"
+                {...register('accountHolderName')}
+                className={inputClass}
+              />
               <FieldError message={errors.accountHolderName?.message} />
             </div>
           </div>
