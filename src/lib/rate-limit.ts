@@ -189,6 +189,9 @@ export const RATE_LIMITS = {
 
   /** Inquiry creation - 10 requests per minute */
   createInquiry: { limit: 10, windowMs: 60 * 1000 },
+
+  /** Venue agent - 30 messages per hour */
+  venueAgent: { limit: 30, windowMs: 60 * 60 * 1000 },
 } as const
 
 /** Standard Swedish error message for rate limiting */

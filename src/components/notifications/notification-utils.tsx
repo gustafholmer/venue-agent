@@ -115,6 +115,8 @@ export function getNotificationUrl(entityType: EntityType, entityId: string): st
       return `/dashboard/inquiries/${entityId}`
     case 'search':
       return `/venues`
+    case 'agent_action':
+      return '/dashboard/actions'
     default:
       return '/'
   }

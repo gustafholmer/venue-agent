@@ -4,10 +4,11 @@ import type { Metadata } from 'next'
 import { getVenueBySlug } from '@/actions/venues/get-venue-by-slug'
 import { hasExistingThread } from '@/actions/inquiries/has-existing-thread'
 import { isDemoMode } from '@/lib/demo-mode'
-import { isSupabaseConfigured } from '@/lib/supabase/server'
+import { isSupabaseConfigured, createClient } from '@/lib/supabase/server'
 import { PhotoGallery } from '@/components/venues/photo-gallery'
 import { VenueDetailMap } from '@/components/maps/venue-detail-map'
 import { VenueAssistant } from '@/components/chat/venue-assistant'
+import { VenueAgentChat } from '@/components/agent/venue-agent-chat'
 import { SaveButton } from '@/components/venues/save-button'
 import { VenueActions } from '@/components/inquiry/venue-actions'
 import {
@@ -99,6 +100,15 @@ async function VenueDetailContent({ params }: PageProps) {
 
   // Check if current user has an existing inquiry or booking with this venue
   const showContactInfo = await hasExistingThread(venue.id)
+
+  // Check if this venue has the AI agent enabled
+  const supabase = await createClient()
+  const { data: agentConfig } = await supabase
+    .from('venue_agent_config')
+    .select('agent_enabled')
+    .eq('venue_id', venue.id)
+    .eq('agent_enabled', true)
+    .maybeSingle()
 
   // Compute max capacity for the inquiry modal
   const maxCapacity = Math.max(
@@ -463,27 +473,50 @@ async function VenueDetailContent({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Venue Assistant */}
-      <VenueAssistant
-        venue={{
-          id: venue.id,
-          name: venue.name,
-          slug: venue.slug || venue.id,
-          description: venue.description,
-          area: venue.area,
-          city: venue.city,
-          capacity_standing: venue.capacity_standing,
-          capacity_seated: venue.capacity_seated,
-          capacity_conference: venue.capacity_conference,
-          min_guests: venue.min_guests,
-          amenities: venue.amenities,
-          venue_types: venue.venue_types,
-          price_per_hour: venue.price_per_hour,
-          price_half_day: venue.price_half_day,
-          price_full_day: venue.price_full_day,
-          price_evening: venue.price_evening,
-        }}
-      />
+      {/* Venue Assistant / Agent Chat */}
+      {agentConfig?.agent_enabled ? (
+        <VenueAgentChat
+          venue={{
+            id: venue.id,
+            name: venue.name,
+            slug: venue.slug || venue.id,
+            description: venue.description,
+            area: venue.area,
+            city: venue.city,
+            capacity_standing: venue.capacity_standing,
+            capacity_seated: venue.capacity_seated,
+            capacity_conference: venue.capacity_conference,
+            min_guests: venue.min_guests,
+            amenities: venue.amenities,
+            venue_types: venue.venue_types,
+            price_per_hour: venue.price_per_hour,
+            price_half_day: venue.price_half_day,
+            price_full_day: venue.price_full_day,
+            price_evening: venue.price_evening,
+          }}
+        />
+      ) : (
+        <VenueAssistant
+          venue={{
+            id: venue.id,
+            name: venue.name,
+            slug: venue.slug || venue.id,
+            description: venue.description,
+            area: venue.area,
+            city: venue.city,
+            capacity_standing: venue.capacity_standing,
+            capacity_seated: venue.capacity_seated,
+            capacity_conference: venue.capacity_conference,
+            min_guests: venue.min_guests,
+            amenities: venue.amenities,
+            venue_types: venue.venue_types,
+            price_per_hour: venue.price_per_hour,
+            price_half_day: venue.price_half_day,
+            price_full_day: venue.price_full_day,
+            price_evening: venue.price_evening,
+          }}
+        />
+      )}
     </div>
   )
 }

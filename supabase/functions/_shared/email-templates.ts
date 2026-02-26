@@ -304,3 +304,42 @@ export function modificationAcceptedEmail(
     <a href="${SITE_URL}/account/bookings" class="button">Se bokning</a>
   `)
 }
+
+export function agentBookingApprovalEmail(data: {
+  venueName: string
+  eventType: string
+  guestCount: number
+  date: string
+  price: string
+  actionUrl: string
+}): string {
+  return baseTemplate(`
+    <h2>Ny bokningsförfrågan</h2>
+    <p>En kund vill boka <strong>${escapeHtml(data.venueName)}</strong>.</p>
+    <div style="background: #f5f5f4; border-radius: 8px; padding: 16px; margin: 16px 0;">
+      <p style="margin: 4px 0;"><strong>${escapeHtml(data.eventType)}</strong> · ${data.guestCount} gäster</p>
+      <p style="margin: 4px 0;">${escapeHtml(data.date)}</p>
+      <p style="margin: 4px 0; font-size: 18px; font-weight: bold;">${escapeHtml(data.price)}</p>
+    </div>
+    <a href="${escapeHtml(data.actionUrl)}" style="display: inline-block; background: #c45a3b; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Svara nu</a>
+  `)
+}
+
+export function agentEscalationEmail(data: {
+  venueName: string
+  customerRequest: string
+  reasons: string[]
+  actionUrl: string
+}): string {
+  const reasonsList = data.reasons.map(r => `<li>${escapeHtml(r)}</li>`).join('')
+  return baseTemplate(`
+    <h2>Behöver ditt svar</h2>
+    <p>En kund har en förfrågan om <strong>${escapeHtml(data.venueName)}</strong> som kräver ditt svar.</p>
+    <div style="background: #f5f5f4; border-radius: 8px; padding: 16px; margin: 16px 0;">
+      <p>${escapeHtml(data.customerRequest)}</p>
+      <p style="margin-top: 8px; font-size: 13px; color: #78716c;">Eskalerat pga:</p>
+      <ul style="font-size: 13px; color: #78716c;">${reasonsList}</ul>
+    </div>
+    <a href="${escapeHtml(data.actionUrl)}" style="display: inline-block; background: #c45a3b; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Svara nu</a>
+  `)
+}
