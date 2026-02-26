@@ -198,28 +198,6 @@ export default function SettingsPage() {
           </div>
         </form>
       </div>
-
-      {/* Danger zone */}
-      <div className="bg-white border border-red-200 rounded-xl p-6">
-        <h2 className="text-lg font-semibold text-red-600 mb-2">Farozonen</h2>
-        <p className="text-[#78716c] text-sm mb-4">
-          Dessa åtgärder är permanenta och kan inte ångras.
-        </p>
-        <Button
-          variant="outline"
-          className="border-red-300 text-red-600 hover:bg-red-50"
-          onClick={() => {
-            if (confirm('Är du säker på att du vill logga ut?')) {
-              const supabase = createClient()
-              supabase.auth.signOut().then(() => {
-                window.location.href = '/'
-              })
-            }
-          }}
-        >
-          Logga ut
-        </Button>
-      </div>
     </div>
   )
 }
