@@ -7,6 +7,7 @@ import Link from 'next/link'
 import type { VenueWithDetails } from '@/actions/venues/get-venue-by-slug'
 import { createBookingRequest } from '@/actions/bookings/create-booking-request'
 import { getVenueAvailability } from '@/actions/bookings/get-venue-availability'
+import { getInquiry } from '@/actions/inquiries/get-inquiry'
 import { checkAuth } from '@/actions/auth/check-auth'
 import { saveBookingFormData, getBookingFormData, clearBookingFormData } from '@/lib/booking-form-storage'
 import { calculatePricing, formatPrice, PLATFORM_FEE_RATE } from '@/lib/pricing'
@@ -43,6 +44,10 @@ export function BookingForm({ venue, initialUser, initialProfile }: BookingFormP
   const [companyName, setCompanyName] = useState(initialProfile?.companyName ?? '')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
+  // Inquiry pre-fill state
+  const [inquiryId, setInquiryId] = useState<string | null>(null)
+  const [showInquiryBanner, setShowInquiryBanner] = useState(false)
+
   // Availability state
   const [blockedDates, setBlockedDates] = useState<string[]>([])
   const [bookedDates, setBookedDates] = useState<string[]>([])
@@ -72,6 +77,37 @@ export function BookingForm({ venue, initialUser, initialProfile }: BookingFormP
       window.history.replaceState({}, '', `/book/${slug}`)
     }
   }, [searchParams, slug])
+
+  // On mount: check for ?inquiry=<id> and pre-fill form from inquiry data
+  // This has lower priority than the fromAuth restore flow
+  useEffect(() => {
+    const fromAuth = searchParams.get('fromAuth') === 'true'
+    if (fromAuth) return // fromAuth flow takes priority
+
+    const inquiryParam = searchParams.get('inquiry')
+    if (!inquiryParam) return
+
+    let cancelled = false
+
+    async function fetchAndPrefill() {
+      const result = await getInquiry(inquiryParam!)
+      if (cancelled) return
+
+      if (result.success && result.inquiry) {
+        const inquiry = result.inquiry
+        setInquiryId(inquiry.id)
+        setShowInquiryBanner(true)
+
+        // Pre-fill only the fields that exist in the inquiry
+        if (inquiry.event_date) setEventDate(inquiry.event_date)
+        if (inquiry.event_type) setEventType(inquiry.event_type)
+        if (inquiry.guest_count) setGuestCount(String(inquiry.guest_count))
+      }
+    }
+
+    fetchAndPrefill()
+    return () => { cancelled = true }
+  }, [searchParams]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Track which months have been fetched
   const [fetchedMonths, setFetchedMonths] = useState<Set<string>>(new Set())
@@ -173,6 +209,7 @@ export function BookingForm({ venue, initialUser, initialProfile }: BookingFormP
         customerEmail,
         customerPhone: customerPhone || undefined,
         companyName: companyName || undefined,
+        inquiryId: inquiryId || undefined,
       })
 
       if (result.success && result.bookingId && result.verificationToken) {
@@ -212,6 +249,16 @@ export function BookingForm({ venue, initialUser, initialProfile }: BookingFormP
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Form */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Inquiry Pre-fill Banner */}
+            {showInquiryBanner && (
+              <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-800 text-sm">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Du fyller i en bokning baserad på din förfrågan. Fälten är förifyllda men du kan ändra dem.</span>
+              </div>
+            )}
+
             {/* Event Details Section */}
             <div className="bg-white rounded-xl border border-[#e7e5e4] p-6">
               <h2 className="text-lg font-semibold text-[#1a1a1a] mb-6">

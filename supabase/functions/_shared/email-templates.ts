@@ -203,6 +203,37 @@ export const newMessageEmail = (senderName: string, venueName: string, messagePr
   </div>
 `);
 
+export const inquiryRequestEmail = (
+  customerName: string,
+  venueName: string,
+  eventType: string,
+  eventDate: string,
+  guestCount: number,
+  messagePreview: string
+) =>
+  baseTemplate(`
+  <div class="header">
+    <p class="wordmark">Tryffle</p>
+    <h1>Ny förfrågan</h1>
+  </div>
+  <div class="content">
+    <p><strong>${escapeHtml(customerName)}</strong> har en fråga om <strong>${escapeHtml(venueName)}</strong>.</p>
+    <div class="info-box">
+      <div class="info-row"><span class="info-label">Typ av event:</span> ${escapeHtml(eventType)}</div>
+      <div class="info-row"><span class="info-label">Datum:</span> ${escapeHtml(eventDate)}</div>
+      <div class="info-row"><span class="info-label">Antal gäster:</span> ${guestCount}</div>
+    </div>
+    <div class="message-box">
+      "${escapeHtml(messagePreview)}"
+    </div>
+    <p>Logga in för att läsa och svara på förfrågan.</p>
+    <p style="text-align: center;"><a href="${SITE_URL}/dashboard/inquiries" class="button" style="display:inline-block;background-color:#c45a3b;color:white;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:500;">Visa förfrågan</a></p>
+    <div class="content-footer">
+      <p>Svara gärna inom 24 timmar för bästa kundupplevelse.</p>
+    </div>
+  </div>
+`);
+
 export const confirmationEmail = (confirmationUrl: string) =>
   baseTemplate(`
   <div class="header">

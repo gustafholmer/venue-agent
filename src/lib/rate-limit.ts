@@ -186,6 +186,9 @@ export const RATE_LIMITS = {
 
   /** Sign in - 10 requests per minute */
   signIn: { limit: 10, windowMs: 60 * 1000 },
+
+  /** Inquiry creation - 10 requests per minute */
+  createInquiry: { limit: 10, windowMs: 60 * 1000 },
 } as const
 
 /** Standard Swedish error message for rate limiting */

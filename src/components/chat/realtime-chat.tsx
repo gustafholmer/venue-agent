@@ -7,10 +7,12 @@ import { ChatBubble } from './chat-bubble'
 import { Button } from '@/components/ui/button'
 
 interface RealtimeChatProps {
-  bookingId: string
+  threadId: string
+  threadType: 'booking' | 'inquiry'
   currentUserId: string
   initialMessages?: ChatMessage[]
   participantName?: string
+  readOnly?: boolean
   onMessagesRead?: () => void
 }
 
@@ -92,10 +94,12 @@ function shouldShowSender(
 }
 
 export function RealtimeChat({
-  bookingId,
+  threadId,
+  threadType,
   currentUserId,
   initialMessages = [],
   participantName,
+  readOnly,
   onMessagesRead,
 }: RealtimeChatProps) {
   const [inputValue, setInputValue] = useState('')
@@ -109,7 +113,8 @@ export function RealtimeChat({
     isConnecting,
     connectionError,
   } = useRealtimeChat({
-    bookingId,
+    threadId,
+    threadType,
     currentUserId,
     initialMessages,
   })
@@ -215,58 +220,60 @@ export function RealtimeChat({
         )}
       </div>
 
-      {/* Input area */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex-shrink-0 px-4 py-3 border-t border-[var(--border)] bg-[var(--bg-soft)]"
-      >
-        <div className="flex gap-2">
-          <textarea
-            ref={textareaRef}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={isConnected ? 'Skriv ett meddelande...' : 'Ansluter...'}
-            disabled={!isConnected || isSending}
-            rows={1}
-            className="
-              flex-1 px-3.5 py-2.5 text-sm
-              border border-[var(--border)] rounded-xl
-              bg-white
-              focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]
-              resize-none
-              disabled:opacity-50 disabled:cursor-not-allowed
-              placeholder:text-[var(--text-muted)]
-            "
-          />
-          <Button
-            type="submit"
-            disabled={!isConnected || isSending || !inputValue.trim()}
-            className="self-end px-4"
-          >
-            {isSending ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
-              </svg>
-            )}
-          </Button>
-        </div>
-        <p className="text-[10px] text-[var(--text-muted)] mt-1.5 px-1">
-          Enter för att skicka · Shift+Enter för ny rad
-        </p>
-      </form>
+      {/* Input area — hidden when readOnly */}
+      {!readOnly && (
+        <form
+          onSubmit={handleSubmit}
+          className="flex-shrink-0 px-4 py-3 border-t border-[var(--border)] bg-[var(--bg-soft)]"
+        >
+          <div className="flex gap-2">
+            <textarea
+              ref={textareaRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={isConnected ? 'Skriv ett meddelande...' : 'Ansluter...'}
+              disabled={!isConnected || isSending}
+              rows={1}
+              className="
+                flex-1 px-3.5 py-2.5 text-sm
+                border border-[var(--border)] rounded-xl
+                bg-white
+                focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20 focus:border-[var(--accent)]
+                resize-none
+                disabled:opacity-50 disabled:cursor-not-allowed
+                placeholder:text-[var(--text-muted)]
+              "
+            />
+            <Button
+              type="submit"
+              disabled={!isConnected || isSending || !inputValue.trim()}
+              className="self-end px-4"
+            >
+              {isSending ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  />
+                </svg>
+              )}
+            </Button>
+          </div>
+          <p className="text-[10px] text-[var(--text-muted)] mt-1.5 px-1">
+            Enter för att skicka · Shift+Enter för ny rad
+          </p>
+        </form>
+      )}
     </div>
   )
 }
