@@ -32,6 +32,7 @@ export function MessageThread({
         const messages: ChatMessage[] = result.messages.map(msg => ({
           id: msg.id,
           booking_request_id: msg.booking_request_id,
+          venue_inquiry_id: msg.venue_inquiry_id,
           sender_id: msg.sender_id,
           content: msg.content,
           is_read: msg.is_read,

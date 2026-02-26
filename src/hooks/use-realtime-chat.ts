@@ -6,7 +6,8 @@ import type { RealtimeChannel } from '@supabase/supabase-js'
 
 export interface ChatMessage {
   id: string
-  booking_request_id: string
+  booking_request_id: string | null
+  venue_inquiry_id: string | null
   sender_id: string
   content: string
   is_read: boolean
@@ -142,6 +143,7 @@ export function useRealtimeChat({
     const optimisticMessage: ChatMessage = {
       id: optimisticId,
       booking_request_id: bookingId,
+      venue_inquiry_id: null,
       sender_id: currentUserId,
       content: trimmedContent,
       is_read: false,

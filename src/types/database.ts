@@ -8,10 +8,12 @@ export type Json =
 
 export type BookingStatus = 'pending' | 'accepted' | 'declined' | 'cancelled' | 'completed' | 'paid_out'
 export type VenueStatus = 'draft' | 'published' | 'paused'
+export type InquiryStatus = 'open' | 'closed' | 'converted'
 export type NotificationType =
   | 'booking_request' | 'booking_accepted' | 'booking_declined' | 'booking_cancelled'
   | 'new_message' | 'new_match' | 'payment_completed' | 'payout_sent'
-export type EntityType = 'booking' | 'venue' | 'message' | 'search'
+  | 'new_inquiry'
+export type EntityType = 'booking' | 'venue' | 'message' | 'search' | 'inquiry'
 
 export interface Database {
   public: {
@@ -364,10 +366,52 @@ export interface Database {
           refund_amount?: number | null
         }
       }
+      venue_inquiries: {
+        Row: {
+          id: string
+          venue_id: string
+          user_id: string
+          event_date: string
+          event_type: string
+          guest_count: number
+          message: string
+          status: InquiryStatus
+          booking_request_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          venue_id: string
+          user_id: string
+          event_date: string
+          event_type: string
+          guest_count: number
+          message: string
+          status?: InquiryStatus
+          booking_request_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          venue_id?: string
+          user_id?: string
+          event_date?: string
+          event_type?: string
+          guest_count?: number
+          message?: string
+          status?: InquiryStatus
+          booking_request_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
       messages: {
         Row: {
           id: string
-          booking_request_id: string
+          booking_request_id: string | null
+          venue_inquiry_id: string | null
           sender_id: string
           content: string
           is_read: boolean
@@ -377,7 +421,8 @@ export interface Database {
         }
         Insert: {
           id?: string
-          booking_request_id: string
+          booking_request_id?: string | null
+          venue_inquiry_id?: string | null
           sender_id: string
           content: string
           is_read?: boolean
@@ -387,7 +432,8 @@ export interface Database {
         }
         Update: {
           id?: string
-          booking_request_id?: string
+          booking_request_id?: string | null
+          venue_inquiry_id?: string | null
           sender_id?: string
           content?: string
           is_read?: boolean
@@ -623,6 +669,7 @@ export type VenuePhoto = Tables<'venue_photos'>
 export type VenueBlockedDate = Tables<'venue_blocked_dates'>
 export type Search = Tables<'searches'>
 export type BookingRequest = Tables<'booking_requests'>
+export type VenueInquiry = Tables<'venue_inquiries'>
 export type Message = Tables<'messages'>
 export type Notification = Tables<'notifications'>
 export type NotificationPreference = Tables<'notification_preferences'>
