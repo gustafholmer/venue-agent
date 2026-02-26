@@ -92,8 +92,8 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
 
     revalidatePath('/account/bookings')
     revalidatePath(`/account/bookings/${bookingId}`)
-    revalidatePath('/dashboard/bookings')
-    revalidatePath(`/dashboard/bookings/${bookingId}`)
+    revalidatePath(`/dashboard/venue/${booking.venue_id}/bookings`)
+    revalidatePath(`/dashboard/venue/${booking.venue_id}/bookings/${bookingId}`)
 
     return { success: true }
   } catch (error) {
