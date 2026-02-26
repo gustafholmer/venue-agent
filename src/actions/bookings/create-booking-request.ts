@@ -8,6 +8,7 @@ import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
+import { convertInquiry } from '@/actions/inquiries/convert-inquiry'
 
 export interface CreateBookingInput {
   venueId: string
@@ -21,6 +22,7 @@ export interface CreateBookingInput {
   customerEmail: string
   customerPhone?: string
   companyName?: string
+  inquiryId?: string
 }
 
 interface CreateBookingResult {
@@ -237,6 +239,18 @@ export async function createBookingRequest(
       event_type: input.eventType,
       guest_count: input.guestCount,
     }, user.id)
+
+    // If created from an inquiry, convert the inquiry to linked status
+    if (input.inquiryId) {
+      try {
+        const conversionResult = await convertInquiry(input.inquiryId, row.booking_id)
+        if (!conversionResult.success) {
+          console.error('Failed to convert inquiry:', conversionResult.error)
+        }
+      } catch (conversionError) {
+        console.error('Error converting inquiry after booking creation:', conversionError)
+      }
+    }
 
     return {
       success: true,
