@@ -1,15 +1,15 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getVenueBySlug } from '@/actions/venues/get-venue-by-slug'
+import { hasExistingThread } from '@/actions/inquiries/has-existing-thread'
 import { isDemoMode } from '@/lib/demo-mode'
 import { isSupabaseConfigured } from '@/lib/supabase/server'
 import { PhotoGallery } from '@/components/venues/photo-gallery'
-import { Button } from '@/components/ui/button'
 import { VenueDetailMap } from '@/components/maps/venue-detail-map'
 import { VenueAssistant } from '@/components/chat/venue-assistant'
 import { SaveButton } from '@/components/venues/save-button'
+import { VenueActions } from '@/components/inquiry/venue-actions'
 import {
   generateLocalBusinessSchema,
   generateBreadcrumbSchema,
@@ -96,6 +96,16 @@ async function VenueDetailContent({ params }: PageProps) {
   const hasCapacity = venue.capacity_standing || venue.capacity_seated || venue.capacity_conference
   const hasPricing = venue.price_per_hour || venue.price_half_day || venue.price_full_day || venue.price_evening
   const inDemoMode = isDemoMode() || !isSupabaseConfigured()
+
+  // Check if current user has an existing inquiry or booking with this venue
+  const showContactInfo = await hasExistingThread(venue.id)
+
+  // Compute max capacity for the inquiry modal
+  const maxCapacity = Math.max(
+    venue.capacity_standing || 0,
+    venue.capacity_seated || 0,
+    venue.capacity_conference || 0
+  ) || undefined
 
   // Generate structured data
   const localBusinessSchema = generateLocalBusinessSchema({
@@ -380,15 +390,18 @@ async function VenueDetailContent({ params }: PageProps) {
                 </div>
               )}
 
-              {/* CTA Button */}
-              <Link href={`/book/${bookingSlug}`} className="block">
-                <Button variant="primary" size="lg" className="w-full">
-                  Skicka bokningsförfrågan
-                </Button>
-              </Link>
+              {/* CTA Buttons */}
+              <VenueActions
+                venueId={venue.id}
+                venueSlug={venue.slug || venue.id}
+                venueName={venue.name}
+                bookingSlug={bookingSlug}
+                minCapacity={venue.min_guests > 1 ? venue.min_guests : undefined}
+                maxCapacity={maxCapacity}
+              />
 
-              {/* Contact Info */}
-              {(venue.contact_email || venue.contact_phone || venue.website) && (
+              {/* Contact Info - only shown when user has an existing inquiry or booking */}
+              {showContactInfo && (venue.contact_email || venue.contact_phone || venue.website) && (
                 <div className="mt-6 pt-6 border-t border-[#e7e5e4]">
                   <h3 className="text-sm font-semibold text-[#1a1a1a] mb-3">Kontakt</h3>
                   <div className="space-y-2">
