@@ -71,7 +71,7 @@ export function EditablePhotoGallery({
   if (photos.length === 0) {
     return (
       <div
-        className={`aspect-[16/9] rounded-xl flex items-center justify-center border-2 border-dashed transition-colors ${
+        className={`aspect-[16/9] max-h-[28rem] rounded-xl flex items-center justify-center border-2 border-dashed transition-colors ${
           isDragging
             ? 'border-[#c45a3b] bg-[#c45a3b]/5'
             : 'border-[#d1d5db] bg-[#faf9f7] hover:border-[#a8a29e]'
@@ -123,7 +123,7 @@ export function EditablePhotoGallery({
 
       {/* Main image */}
       <div
-        className={`relative aspect-[16/9] bg-[#faf9f7] rounded-xl overflow-hidden group ${
+        className={`relative aspect-[16/9] max-h-[28rem] bg-[#faf9f7] rounded-xl overflow-hidden group ${
           isDragging ? 'ring-2 ring-[#c45a3b]' : ''
         }`}
       >

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from '@/actions/auth/sign-out'
+import { NAV_ITEMS as DASHBOARD_LINKS } from '@/components/dashboard/nav-items'
 
 const ACCOUNT_LINKS = [
   { href: '/account', label: 'Mitt konto' },
@@ -11,14 +12,6 @@ const ACCOUNT_LINKS = [
   { href: '/account/inquiries', label: 'Mina förfrågningar' },
   { href: '/account/saved', label: 'Sparade lokaler' },
   { href: '/account/settings', label: 'Inställningar' },
-]
-
-const DASHBOARD_LINKS = [
-  { href: '/dashboard', label: 'Översikt' },
-  { href: '/dashboard/venue', label: 'Mina lokaler' },
-  { href: '/dashboard/inbox', label: 'Inkorg' },
-  { href: '/dashboard/payouts', label: 'Utbetalningar' },
-  { href: '/dashboard/settings', label: 'Inställningar' },
 ]
 
 export function UserMenu({ isVenueOwner }: { isVenueOwner: boolean }) {
