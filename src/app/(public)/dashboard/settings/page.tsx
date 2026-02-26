@@ -108,11 +108,13 @@ export default function SettingsPage() {
       setMessage({ type: 'error', text: 'Kunde inte spara ändringar' })
     } else {
       setMessage({ type: 'success', text: 'Ändringar sparade' })
-      setProfile({
+      setProfile((prev) => ({
+        ...prev,
         full_name: formData.full_name || null,
         company_name: formData.company_name || null,
         phone: formData.phone || null,
-      })
+        org_number: prev?.org_number ?? null,
+      }))
     }
 
     setIsSaving(false)
