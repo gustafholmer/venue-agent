@@ -8,6 +8,7 @@ import { signOut } from '@/actions/auth/sign-out'
 const ACCOUNT_LINKS = [
   { href: '/account', label: 'Mitt konto' },
   { href: '/account/bookings', label: 'Mina bokningar' },
+  { href: '/account/inquiries', label: 'Mina förfrågningar' },
   { href: '/account/saved', label: 'Sparade lokaler' },
   { href: '/account/settings', label: 'Inställningar' },
 ]
@@ -15,6 +16,8 @@ const ACCOUNT_LINKS = [
 const DASHBOARD_LINKS = [
   { href: '/dashboard', label: 'Översikt' },
   { href: '/dashboard/venue', label: 'Mina lokaler' },
+  { href: '/dashboard/inquiries', label: 'Förfrågningar' },
+  { href: '/dashboard/payouts', label: 'Utbetalningar' },
   { href: '/dashboard/settings', label: 'Inställningar' },
 ]
 
