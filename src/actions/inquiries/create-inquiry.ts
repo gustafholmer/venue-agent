@@ -67,9 +67,6 @@ export async function createInquiry(
     if (!input.message?.trim()) {
       return { success: false, error: 'Skriv ett meddelande' }
     }
-    if (input.message.trim().length < 1) {
-      return { success: false, error: 'Skriv ett meddelande' }
-    }
     if (input.message.trim().length > MAX_MESSAGE_LENGTH) {
       return {
         success: false,

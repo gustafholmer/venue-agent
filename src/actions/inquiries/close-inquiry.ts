@@ -74,7 +74,7 @@ export async function closeInquiry(inquiryId: string): Promise<{ success: boolea
     // Notify the inquiry creator that the inquiry was closed
     await dispatchNotification({
       recipient: inquiry.user_id,
-      category: 'new_message',
+      category: 'new_inquiry',
       headline: 'Förfrågan avslutad',
       body: `Din förfrågan om ${venue.name} har avslutats av lokalägaren.`,
       reference: { kind: 'inquiry', id: inquiry.id },

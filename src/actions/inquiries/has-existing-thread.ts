@@ -34,7 +34,7 @@ export async function hasExistingThread(venueId: string): Promise<boolean> {
       .from('booking_requests')
       .select('id')
       .eq('venue_id', venueId)
-      .eq('user_id', user.id)
+      .eq('customer_id', user.id)
       .limit(1)
       .maybeSingle()
 
