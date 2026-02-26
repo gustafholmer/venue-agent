@@ -344,7 +344,7 @@ export default function InquiryDetailPage() {
               <p className="text-sm text-green-700 mb-3">
                 Denna förfrågan har konverterats till en bokningsförfrågan.
               </p>
-              <Link href={`/dashboard/bookings/${inquiry.booking_request_id}`}>
+              <Link href={`/dashboard/venue/${inquiry.venue_id}/bookings/${inquiry.booking_request_id}`}>
                 <Button variant="outline" className="w-full">
                   Visa bokning
                 </Button>
