@@ -2,12 +2,12 @@
 
 import { redirect } from 'next/navigation'
 
-export async function updateVenue(formData: FormData) {
+export async function updateVenue(venueId: string, formData: FormData) {
   const { createClient } = await import('@/lib/supabase/server')
   const { isDemoMode } = await import('@/lib/demo-mode')
 
   if (isDemoMode()) {
-    return redirect('/dashboard/venue?success=demo')
+    return redirect(`/dashboard/venue/${venueId}?success=demo`)
   }
 
   const supabase = await createClient()
@@ -22,6 +22,7 @@ export async function updateVenue(formData: FormData) {
   const { data: existingVenue } = await supabase
     .from('venues')
     .select('id, description')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -131,8 +132,8 @@ export async function updateVenue(formData: FormData) {
 
   if (error) {
     console.error('Error updating venue:', error)
-    return redirect('/dashboard/venue?error=update_failed')
+    return redirect(`/dashboard/venue/${venueId}?error=update_failed`)
   }
 
-  return redirect('/dashboard/venue?success=venue_updated')
+  return redirect(`/dashboard/venue/${venueId}?success=venue_updated`)
 }

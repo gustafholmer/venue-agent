@@ -14,7 +14,7 @@ export interface PublishVenueResult {
   errors?: PublishValidationError[]
 }
 
-export async function publishVenue(): Promise<PublishVenueResult> {
+export async function publishVenue(venueId: string): Promise<PublishVenueResult> {
   if (isDemoMode()) {
     return { success: true }
   }
@@ -45,6 +45,7 @@ export async function publishVenue(): Promise<PublishVenueResult> {
       price_full_day,
       price_evening
     `)
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -125,7 +126,7 @@ export async function publishVenue(): Promise<PublishVenueResult> {
   return { success: true }
 }
 
-export async function getPublishValidation(): Promise<PublishValidationError[]> {
+export async function getPublishValidation(venueId: string): Promise<PublishValidationError[]> {
   if (isDemoMode()) {
     return []
   }
@@ -153,6 +154,7 @@ export async function getPublishValidation(): Promise<PublishValidationError[]> 
       price_full_day,
       price_evening
     `)
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 

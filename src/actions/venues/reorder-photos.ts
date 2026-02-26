@@ -9,7 +9,7 @@ interface PhotoOrder {
   sort_order: number
 }
 
-export async function reorderPhotos(photoOrders: PhotoOrder[]) {
+export async function reorderPhotos(venueId: string, photoOrders: PhotoOrder[]) {
   if (isDemoMode()) {
     return { success: false, error: 'Demo mode - reordering disabled' }
   }
@@ -26,6 +26,7 @@ export async function reorderPhotos(photoOrders: PhotoOrder[]) {
   const { data: venue } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -65,6 +66,6 @@ export async function reorderPhotos(photoOrders: PhotoOrder[]) {
     return { success: false, error: 'Kunde inte uppdatera ordningen' }
   }
 
-  revalidatePath('/dashboard/venue')
+  revalidatePath(`/dashboard/venue/${venueId}`)
   return { success: true }
 }

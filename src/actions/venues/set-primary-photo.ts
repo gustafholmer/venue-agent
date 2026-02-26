@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
 
-export async function setPrimaryPhoto(photoId: string) {
+export async function setPrimaryPhoto(venueId: string, photoId: string) {
   if (isDemoMode()) {
     return { success: false, error: 'Demo mode - updates disabled' }
   }
@@ -21,6 +21,7 @@ export async function setPrimaryPhoto(photoId: string) {
   const { data: venue } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -62,6 +63,6 @@ export async function setPrimaryPhoto(photoId: string) {
     return { success: false, error: 'Kunde inte satta primarbild' }
   }
 
-  revalidatePath('/dashboard/venue')
+  revalidatePath(`/dashboard/venue/${venueId}`)
   return { success: true }
 }

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
 
-export async function deletePhoto(photoId: string) {
+export async function deletePhoto(venueId: string, photoId: string) {
   if (isDemoMode()) {
     return { success: false, error: 'Demo mode - deletion disabled' }
   }
@@ -21,6 +21,7 @@ export async function deletePhoto(photoId: string) {
   const { data: venue } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -84,6 +85,6 @@ export async function deletePhoto(photoId: string) {
     }
   }
 
-  revalidatePath('/dashboard/venue')
+  revalidatePath(`/dashboard/venue/${venueId}`)
   return { success: true }
 }

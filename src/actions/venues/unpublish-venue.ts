@@ -8,7 +8,7 @@ export interface UnpublishVenueResult {
   error?: string
 }
 
-export async function unpublishVenue(): Promise<UnpublishVenueResult> {
+export async function unpublishVenue(venueId: string): Promise<UnpublishVenueResult> {
   if (isDemoMode()) {
     return { success: true }
   }
@@ -28,6 +28,7 @@ export async function unpublishVenue(): Promise<UnpublishVenueResult> {
   const { data: venue } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
