@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { getContactDetail, type ContactDetail, type TimelineItem } from '@/actions/contacts/get-contact-detail'
 import { exportContacts } from '@/actions/contacts/export-contacts'
+import { OutboundInquiryModal } from '@/components/contacts/outbound-inquiry-modal'
 
 function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { label: string; className: string }> = {
@@ -176,17 +177,35 @@ export default function ContactDetailPage() {
 
       {/* 2. Action Bar */}
       <div className="flex gap-3 mb-8">
-        <button
-          id="send-message-btn"
-          disabled={!contact.customer_id}
-          title={!contact.customer_id ? 'Kunden behöver ett Tryffle-konto' : undefined}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#c45a3b] rounded-lg hover:bg-[#b04e33] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-          Skicka meddelande
-        </button>
+        {contact.customer_id ? (
+          <OutboundInquiryModal
+            contactId={contactId}
+            contactName={contact.customer_name}
+            defaultEventType={contact.event_types[0]}
+          >
+            <button
+              id="send-message-btn"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#c45a3b] rounded-lg hover:bg-[#b04e33] transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              Skicka meddelande
+            </button>
+          </OutboundInquiryModal>
+        ) : (
+          <button
+            id="send-message-btn"
+            disabled
+            title="Kunden behöver ett Tryffle-konto"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#c45a3b] rounded-lg hover:bg-[#b04e33] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            Skicka meddelande
+          </button>
+        )}
         <button
           onClick={handleExport}
           disabled={isExporting}
