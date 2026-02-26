@@ -226,8 +226,8 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
 
         <p className="text-[#57534e] mb-2">
           {isDragging
-            ? 'Slapp bilderna har'
-            : 'Dra och slapp bilder har, eller'}
+            ? 'Släpp bilderna här'
+            : 'Dra och släpp bilder här, eller'}
         </p>
 
         <Button

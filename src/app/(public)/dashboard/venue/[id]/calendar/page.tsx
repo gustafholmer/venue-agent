@@ -78,7 +78,7 @@ export default function CalendarPage() {
 
   const handleDateClick = async (day: DayData) => {
     if (!calendarData?.venueId) {
-      showErrorMessage('Du maste skapa en lokal forst')
+      showErrorMessage('Du måste skapa en lokal först')
       return
     }
 
@@ -121,12 +121,12 @@ export default function CalendarPage() {
 
   const handleBlockRange = async () => {
     if (!rangeStartDate || !rangeEndDate) {
-      showErrorMessage('Valj bade start- och slutdatum')
+      showErrorMessage('Välj både start- och slutdatum')
       return
     }
 
     if (new Date(rangeStartDate) > new Date(rangeEndDate)) {
-      showErrorMessage('Startdatum maste vara fore slutdatum')
+      showErrorMessage('Startdatum måste vara före slutdatum')
       return
     }
 
@@ -341,7 +341,7 @@ export default function CalendarPage() {
           <button
             onClick={handlePrevMonth}
             className="p-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
-            aria-label="Foregaende manad"
+            aria-label="Föregående månad"
           >
             <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -353,7 +353,7 @@ export default function CalendarPage() {
           <button
             onClick={handleNextMonth}
             className="p-2 hover:bg-[#f3f4f6] rounded-lg transition-colors"
-            aria-label="Nasta manad"
+            aria-label="Nästa månad"
           >
             <svg className="w-5 h-5 text-[#57534e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

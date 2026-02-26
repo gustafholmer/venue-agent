@@ -95,13 +95,13 @@ export function EditablePhotoGallery({
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-[#78716c] mb-3">Dra och slapp bilder har</p>
+          <p className="text-[#78716c] mb-3">Dra och släpp bilder här</p>
           <Button
             type="button"
             variant="outline"
             onClick={() => fileInputRef.current?.click()}
           >
-            Valj filer
+            Välj filer
           </Button>
           <p className="text-sm text-[#a8a29e] mt-3">JPG, PNG eller WebP</p>
         </div>
@@ -140,7 +140,7 @@ export function EditablePhotoGallery({
           onClick={() => fileInputRef.current?.click()}
           className="absolute top-4 right-4 bg-white/90 hover:bg-white px-3 py-1.5 rounded-full text-sm font-medium text-[#1a1a1a] transition-colors shadow-sm"
         >
-          + Lagg till fler
+          + Lägg till fler
         </button>
 
         {/* Navigation arrows */}
@@ -150,7 +150,7 @@ export function EditablePhotoGallery({
               type="button"
               onClick={handlePrevious}
               className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#1a1a1a] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
-              aria-label="Foregaende bild"
+              aria-label="Föregående bild"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -160,7 +160,7 @@ export function EditablePhotoGallery({
               type="button"
               onClick={handleNext}
               className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-full flex items-center justify-center text-[#1a1a1a] hover:bg-white transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
-              aria-label="Nasta bild"
+              aria-label="Nästa bild"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

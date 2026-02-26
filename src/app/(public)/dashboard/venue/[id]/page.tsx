@@ -420,7 +420,7 @@ export default function VenueEditPage() {
 
               <div>
                 <label className="block text-sm font-medium text-[#57534e] mb-2">
-                  Stil/kansla
+                  Stil/känsla
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {VIBES.map(vibe => (
@@ -474,7 +474,7 @@ export default function VenueEditPage() {
                     onChange={e => updateField('area', e.target.value)}
                     className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
                   >
-                    <option value="">Valj omrade</option>
+                    <option value="">Välj område</option>
                     {AREAS.map(area => (
                       <option key={area} value={area}>
                         {area}

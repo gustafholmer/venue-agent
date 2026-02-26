@@ -232,7 +232,7 @@ export default function NewVenuePage() {
                     onChange={(e) => updateField('area', e.target.value)}
                     className="bg-transparent border-none outline-none text-[#78716c] cursor-pointer appearance-none pr-1"
                   >
-                    <option value="">Valj omrade</option>
+                    <option value="">Välj område</option>
                     {AREAS.map((area) => (
                       <option key={area} value={area}>
                         {area}
@@ -338,31 +338,31 @@ export default function NewVenuePage() {
                 onChange={(v) => updateField('amenities', v)}
                 pillClassName="bg-[#faf9f7] rounded-full text-sm text-[#57534e]"
                 showCheckIcon
-                emptyText="Lagg till faciliteter"
+                emptyText="Lägg till faciliteter"
               />
             </div>
 
             {/* Venue Types */}
             <div>
-              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Passar for</h2>
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Passar för</h2>
               <EditablePillPicker
                 selected={formData.venue_types}
                 options={VENUE_TYPES}
                 onChange={(v) => updateField('venue_types', v)}
                 pillClassName="bg-[#c45a3b]/10 rounded-full text-sm text-[#c45a3b] font-medium"
-                emptyText="Lagg till typer"
+                emptyText="Lägg till typer"
               />
             </div>
 
             {/* Vibes */}
             <div>
-              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Kansla</h2>
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Känsla</h2>
               <EditablePillPicker
                 selected={formData.vibes}
                 options={VIBES}
                 onChange={(v) => updateField('vibes', v)}
                 pillClassName="bg-[#f3f4f6] rounded-full text-sm text-[#57534e]"
-                emptyText="Lagg till kansla"
+                emptyText="Lägg till känsla"
               />
             </div>
 
