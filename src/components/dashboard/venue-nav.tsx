@@ -11,7 +11,6 @@ const NAV_ITEMS = [
   { path: '', label: 'Lokal' },
   { path: '/bookings', label: 'Bokningar' },
   { path: '/calendar', label: 'Kalender' },
-  { path: '/payouts', label: 'Utbetalningar' },
 ]
 
 export function VenueNav({ venueId }: VenueNavProps) {
