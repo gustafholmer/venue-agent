@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { dispatchNotification } from '@/lib/notifications/create-notification'
 
 // UUID format validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -67,6 +68,13 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
       return { success: false, error: 'Kunde inte avboka bokningen' }
     }
 
+    // Clean up any pending modification
+    await supabase
+      .from('booking_modifications')
+      .delete()
+      .eq('booking_request_id', bookingId)
+      .eq('status', 'pending')
+
     // If the booking was accepted, unblock the date in the calendar
     if (booking.status === 'accepted') {
       await supabase
@@ -74,20 +82,25 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
         .delete()
         .eq('venue_id', booking.venue_id)
         .eq('blocked_date', booking.event_date)
-        .eq('reason', `Bokning: ${bookingId}`)
+        .eq('reason', `Bokning: ${booking.customer_name}`)
     }
 
     // Create notification for the venue owner
     const venueOwnerId = (booking.venue as unknown as { owner_id: string }).owner_id
     const venueName = (booking.venue as unknown as { name: string }).name
 
-    await supabase.from('notifications').insert({
-      user_id: venueOwnerId,
-      type: 'booking_cancelled',
-      title: 'Bokning avbokad',
-      message: `${booking.customer_name} har avbokat bokningen for ${venueName} den ${new Date(booking.event_date).toLocaleDateString('sv-SE')}.`,
-      entity_type: 'booking',
-      entity_id: bookingId,
+    await dispatchNotification({
+      recipient: venueOwnerId,
+      category: 'booking_cancelled',
+      headline: 'Bokning avbokad',
+      body: `${booking.customer_name} har avbokat bokningen för ${venueName} den ${new Date(booking.event_date).toLocaleDateString('sv-SE')}.`,
+      reference: { kind: 'booking', id: bookingId },
+      author: user.id,
+      extra: {
+        customer_name: booking.customer_name,
+        venue_name: venueName,
+        event_date: booking.event_date,
+      },
     })
 
     revalidatePath('/account/bookings')

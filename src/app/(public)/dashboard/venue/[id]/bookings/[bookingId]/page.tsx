@@ -7,9 +7,13 @@ import { Button } from '@/components/ui/button'
 import { getBooking, type BookingWithVenue } from '@/actions/bookings/get-booking'
 import { acceptBooking } from '@/actions/bookings/accept-booking'
 import { declineBooking } from '@/actions/bookings/decline-booking'
+import { getBookingModification } from '@/actions/bookings/get-booking-modification'
 import { formatPrice } from '@/lib/pricing'
 import { MessageThread } from '@/components/booking/message-thread'
+import { ModificationBanner } from '@/components/booking/modification-banner'
+import { ModificationForm } from '@/components/booking/modification-form'
 import { createClient } from '@/lib/supabase/client'
+import type { BookingModification } from '@/types/database'
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   pending: { label: 'Väntande', color: 'bg-yellow-100 text-yellow-800 border-yellow-200' },
@@ -42,6 +46,9 @@ export default function BookingDetailPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
+  const [modification, setModification] = useState<BookingModification | undefined>()
+  const [showModificationForm, setShowModificationForm] = useState(false)
+
   // Decline modal state
   const [showDeclineModal, setShowDeclineModal] = useState(false)
   const [declineReason, setDeclineReason] = useState('')
@@ -63,6 +70,11 @@ export default function BookingDetailPage() {
     if (result.success && result.booking) {
       setBooking(result.booking)
       setError(null)
+      // Fetch pending modification
+      const modResult = await getBookingModification(bookingId)
+      if (modResult.success) {
+        setModification(modResult.modification)
+      }
     } else {
       setError(result.error || 'Kunde inte hämta bokningen')
       setBooking(null)
@@ -234,6 +246,15 @@ export default function BookingDetailPage() {
         </div>
       )}
 
+      {modification && currentUserId && booking && (
+        <ModificationBanner
+          booking={booking}
+          modification={modification}
+          currentUserId={currentUserId}
+          onResolved={fetchBooking}
+        />
+      )}
+
       {/* Header with status */}
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -256,24 +277,36 @@ export default function BookingDetailPage() {
           </div>
         </div>
 
-        {/* Action buttons for pending bookings */}
-        {booking.status === 'pending' && (
+        {/* Action buttons for pending/accepted bookings */}
+        {['pending', 'accepted'].includes(booking.status) && (booking.status === 'pending' || !modification) && (
           <div className="flex gap-3 mt-6 pt-6 border-t border-[#e7e5e4]">
-            <Button
-              onClick={handleAccept}
-              loading={isSubmitting}
-              className="flex-1 sm:flex-none"
-            >
-              Godkänna
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setShowDeclineModal(true)}
-              disabled={isSubmitting}
-              className="flex-1 sm:flex-none"
-            >
-              Neka
-            </Button>
+            {booking.status === 'pending' && (
+              <>
+                <Button
+                  onClick={handleAccept}
+                  loading={isSubmitting}
+                  className="flex-1 sm:flex-none"
+                >
+                  Godkänna
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowDeclineModal(true)}
+                  disabled={isSubmitting}
+                  className="flex-1 sm:flex-none"
+                >
+                  Neka
+                </Button>
+              </>
+            )}
+            {['pending', 'accepted'].includes(booking.status) && !modification && (
+              <button
+                onClick={() => setShowModificationForm(true)}
+                className="px-4 py-2 text-sm font-medium text-[#c45a3b] border border-[#c45a3b] rounded-lg hover:bg-[#c45a3b]/5"
+              >
+                Föreslå ändring
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -426,6 +459,18 @@ export default function BookingDetailPage() {
           )}
         </div>
       </div>
+
+      {showModificationForm && booking && (
+        <ModificationForm
+          booking={booking}
+          canEditPrice={true}
+          onClose={() => setShowModificationForm(false)}
+          onSuccess={() => {
+            setShowModificationForm(false)
+            fetchBooking()
+          }}
+        />
+      )}
 
       {/* Decline modal */}
       {showDeclineModal && (

@@ -93,6 +93,13 @@ export async function declineBooking(
       return { success: false, error: 'Kunde inte neka bokningen' }
     }
 
+    // Clean up any pending modification
+    await supabase
+      .from('booking_modifications')
+      .delete()
+      .eq('booking_request_id', bookingId)
+      .eq('status', 'pending')
+
     // Create notification for customer (if they have an account)
     if (booking.customer_id) {
       await dispatchNotification({

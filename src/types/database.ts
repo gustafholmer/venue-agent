@@ -7,9 +7,11 @@ export type Json =
   | Json[]
 
 export type BookingStatus = 'pending' | 'accepted' | 'declined' | 'cancelled' | 'completed' | 'paid_out'
+export type BookingModificationStatus = 'pending' | 'accepted' | 'declined'
 export type VenueStatus = 'draft' | 'published' | 'paused'
 export type NotificationType =
   | 'booking_request' | 'booking_accepted' | 'booking_declined' | 'booking_cancelled'
+  | 'booking_modification_proposed' | 'booking_modification_accepted' | 'booking_modification_declined'
   | 'new_message' | 'new_match' | 'payment_completed' | 'payout_sent'
 export type EntityType = 'booking' | 'venue' | 'message' | 'search'
 
@@ -364,6 +366,65 @@ export interface Database {
           refund_amount?: number | null
         }
       }
+      booking_modifications: {
+        Row: {
+          id: string
+          booking_request_id: string
+          proposed_by: string
+          status: BookingModificationStatus
+          proposed_event_date: string | null
+          proposed_start_time: string | null
+          proposed_end_time: string | null
+          proposed_guest_count: number | null
+          proposed_base_price: number | null
+          proposed_platform_fee: number | null
+          proposed_total_price: number | null
+          proposed_venue_payout: number | null
+          reason: string | null
+          responded_at: string | null
+          decline_reason: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          booking_request_id: string
+          proposed_by: string
+          status?: BookingModificationStatus
+          proposed_event_date?: string | null
+          proposed_start_time?: string | null
+          proposed_end_time?: string | null
+          proposed_guest_count?: number | null
+          proposed_base_price?: number | null
+          proposed_platform_fee?: number | null
+          proposed_total_price?: number | null
+          proposed_venue_payout?: number | null
+          reason?: string | null
+          responded_at?: string | null
+          decline_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          booking_request_id?: string
+          proposed_by?: string
+          status?: BookingModificationStatus
+          proposed_event_date?: string | null
+          proposed_start_time?: string | null
+          proposed_end_time?: string | null
+          proposed_guest_count?: number | null
+          proposed_base_price?: number | null
+          proposed_platform_fee?: number | null
+          proposed_total_price?: number | null
+          proposed_venue_payout?: number | null
+          reason?: string | null
+          responded_at?: string | null
+          decline_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
       messages: {
         Row: {
           id: string
@@ -623,6 +684,7 @@ export type VenuePhoto = Tables<'venue_photos'>
 export type VenueBlockedDate = Tables<'venue_blocked_dates'>
 export type Search = Tables<'searches'>
 export type BookingRequest = Tables<'booking_requests'>
+export type BookingModification = Tables<'booking_modifications'>
 export type Message = Tables<'messages'>
 export type Notification = Tables<'notifications'>
 export type NotificationPreference = Tables<'notification_preferences'>
