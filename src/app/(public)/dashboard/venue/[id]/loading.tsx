@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="max-w-4xl mx-auto animate-pulse">
+    <div className="animate-pulse">
       {/* Header with status badge */}
       <div className="mb-8">
         <div className="flex items-center justify-between">

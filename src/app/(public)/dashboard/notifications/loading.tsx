@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="max-w-3xl mx-auto animate-pulse">
+    <div className="animate-pulse">
       {/* Header with mark all read */}
       <div className="flex items-center justify-between mb-6">
         <div>

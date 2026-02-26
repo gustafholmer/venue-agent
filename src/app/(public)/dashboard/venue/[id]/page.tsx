@@ -282,7 +282,7 @@ export default function VenueEditPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div>
         <div className="animate-pulse">
           <div className="h-8 bg-[#e7e5e4] rounded w-1/3 mb-4"></div>
           <div className="h-4 bg-[#e7e5e4] rounded w-1/2 mb-8"></div>
@@ -307,7 +307,7 @@ export default function VenueEditPage() {
   const showPauseButton = venue.status === 'published'
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">

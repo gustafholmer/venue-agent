@@ -37,7 +37,9 @@ export default async function DashboardLayout({
         {/* Main content */}
         <div className="flex-1 min-w-0">
           <div className="p-6">
-            {children}
+            <div className="max-w-6xl mx-auto">
+              {children}
+            </div>
           </div>
         </div>
       </div>

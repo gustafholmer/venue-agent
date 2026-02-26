@@ -190,7 +190,7 @@ function PayoutsPageContent() {
   // Loading skeleton
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto animate-pulse">
+      <div className="animate-pulse">
         <div className="mb-8">
           <div className="h-8 bg-[#e7e5e4] rounded w-48 mb-2" />
           <div className="h-5 bg-[#e7e5e4] rounded w-72" />
@@ -227,7 +227,7 @@ function PayoutsPageContent() {
           : { label: 'Väntar', color: 'bg-blue-100 text-blue-800' }
 
     return (
-      <div className="max-w-4xl mx-auto">
+      <div>
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3">
@@ -514,7 +514,7 @@ function PayoutsPageContent() {
 
   // Onboarding form
   return (
-    <div className="max-w-2xl mx-auto">
+    <div>
       <div className="mb-8">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
           Utbetalningar
@@ -780,7 +780,7 @@ export default function PayoutsPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-4xl mx-auto animate-pulse">
+        <div className="animate-pulse">
           <div className="mb-8">
             <div className="h-8 bg-[#e7e5e4] rounded w-48 mb-2" />
             <div className="h-5 bg-[#e7e5e4] rounded w-72" />

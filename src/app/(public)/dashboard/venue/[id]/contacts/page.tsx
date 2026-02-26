@@ -64,7 +64,7 @@ export default function VenueContactsPage() {
     new Date(date).toLocaleDateString('sv-SE')
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       {/* Header */}
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">

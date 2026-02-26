@@ -121,7 +121,7 @@ export default function InboxPage() {
   }, [fetchItems])
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
           Inkorg

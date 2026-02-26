@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="max-w-5xl mx-auto animate-pulse">
+    <div className="animate-pulse">
       {/* Header with export button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="h-8 w-28 bg-[#e7e5e4] rounded-lg" />

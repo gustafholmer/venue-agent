@@ -271,7 +271,7 @@ export default function CalendarPage() {
   const today = new Date().toISOString().split('T')[0]
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <div>

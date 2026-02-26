@@ -92,7 +92,7 @@ export default function BookingsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div>
       {/* Header */}
       <div className="mb-8">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Bokningar</h1>

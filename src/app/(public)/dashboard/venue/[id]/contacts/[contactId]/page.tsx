@@ -98,7 +98,7 @@ export default function ContactDetailPage() {
   // Loading skeleton
   if (isLoading) {
     return (
-      <div className="max-w-5xl mx-auto">
+      <div>
         <div className="mb-6">
           <div className="h-4 bg-[#e7e5e4] rounded w-24 animate-pulse" />
         </div>
@@ -128,7 +128,7 @@ export default function ContactDetailPage() {
   // Error state
   if (error) {
     return (
-      <div className="max-w-5xl mx-auto">
+      <div>
         <Link
           href={`/dashboard/venue/${venueId}/contacts`}
           className="inline-flex items-center gap-1 text-sm text-[#78716c] hover:text-[#1a1a1a] transition-colors mb-6"
@@ -145,7 +145,7 @@ export default function ContactDetailPage() {
   if (!contact) return null
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       {/* Back link */}
       <Link
         href={`/dashboard/venue/${venueId}/contacts`}

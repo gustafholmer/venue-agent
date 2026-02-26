@@ -130,7 +130,7 @@ export default function InquiryDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div>
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-12 text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#c45a3b] border-t-transparent"></div>
           <p className="text-[#78716c] mt-2">Laddar förfrågan...</p>
@@ -141,7 +141,7 @@ export default function InquiryDetailPage() {
 
   if (error && !inquiry) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div>
         <div className="bg-red-50 border border-red-200 rounded-xl p-6">
           <h2 className="text-lg font-medium text-red-800 mb-2">Fel</h2>
           <p className="text-red-700 mb-4">{error}</p>
@@ -175,7 +175,7 @@ export default function InquiryDetailPage() {
   ]
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
       {/* Back link */}
       <Link
         href="/dashboard/inquiries"

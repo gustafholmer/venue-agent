@@ -304,7 +304,7 @@ export default function VenueAgentPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div>
         <div className="animate-pulse">
           <div className="h-8 bg-[#e7e5e4] rounded w-1/3 mb-4" />
           <div className="h-4 bg-[#e7e5e4] rounded w-1/2 mb-8" />
@@ -321,7 +321,7 @@ export default function VenueAgentPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
       {/* Header */}
       <div className="mb-8">
         <p className="text-[#78716c]">

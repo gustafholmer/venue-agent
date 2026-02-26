@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="max-w-4xl mx-auto animate-pulse">
+    <div className="animate-pulse">
       {/* Header with filter */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div className="h-8 w-24 bg-[#e7e5e4] rounded-lg" />

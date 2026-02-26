@@ -254,7 +254,7 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-2xl mx-auto animate-pulse">
+      <div className="animate-pulse">
         <div className="mb-8">
           <div className="h-8 bg-[#e7e5e4] rounded w-32 mb-2" />
           <div className="h-5 bg-[#e7e5e4] rounded w-48" />
@@ -271,7 +271,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div>
       {/* Header */}
       <div className="mb-8">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Inställningar</h1>
