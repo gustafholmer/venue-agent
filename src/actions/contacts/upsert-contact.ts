@@ -1,6 +1,4 @@
-import type { createClient } from '@/lib/supabase/server'
-
-type SupabaseClient = Awaited<ReturnType<typeof createClient>>
+import { createServiceClient } from '@/lib/supabase/service'
 
 interface UpsertContactInput {
   venueId: string
@@ -14,10 +12,10 @@ interface UpsertContactInput {
 }
 
 export async function upsertContact(
-  supabase: SupabaseClient,
   input: UpsertContactInput
 ): Promise<void> {
   try {
+    const supabase = createServiceClient()
     const email = input.customerEmail.trim().toLowerCase()
     const now = new Date().toISOString()
 
@@ -82,5 +80,36 @@ export async function upsertContact(
   } catch (error) {
     // Log but don't throw — contact upsert should never block the primary action
     console.error('Error upserting contact:', error)
+  }
+}
+
+export async function updateContactBookingCompleted(
+  venueId: string,
+  customerEmail: string,
+  totalPrice: number
+): Promise<void> {
+  try {
+    const supabase = createServiceClient()
+    const email = customerEmail.trim().toLowerCase()
+
+    const { data: contact } = await supabase
+      .from('venue_contacts')
+      .select('id, completed_bookings, total_spend')
+      .eq('venue_id', venueId)
+      .eq('customer_email', email)
+      .maybeSingle()
+
+    if (contact) {
+      await supabase
+        .from('venue_contacts')
+        .update({
+          completed_bookings: contact.completed_bookings + 1,
+          total_spend: contact.total_spend + totalPrice,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', contact.id)
+    }
+  } catch (error) {
+    console.error('Error updating contact booking completed:', error)
   }
 }

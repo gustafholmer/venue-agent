@@ -166,7 +166,7 @@ export async function createInquiry(
       .single()
 
     if (profile) {
-      await upsertContact(supabase, {
+      await upsertContact({
         venueId: input.venueId,
         customerEmail: profile.email,
         customerName: profile.full_name || profile.email,

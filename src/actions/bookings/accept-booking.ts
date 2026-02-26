@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
+import { updateContactBookingCompleted } from '@/actions/contacts/upsert-contact'
 
 // UUID format validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -105,6 +106,13 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
       console.error('Error accepting booking:', updateError)
       return { success: false, error: 'Kunde inte godkänna bokningen' }
     }
+
+    // Update contact completed_bookings and total_spend
+    await updateContactBookingCompleted(
+      booking.venue_id,
+      booking.customer_email,
+      booking.total_price
+    )
 
     // Block the date in venue calendar to prevent double bookings
     const { error: blockError } = await supabase

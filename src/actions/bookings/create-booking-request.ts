@@ -220,7 +220,7 @@ export async function createBookingRequest(
     }
 
     // Upsert venue contact
-    await upsertContact(supabase, {
+    await upsertContact({
       venueId: input.venueId,
       customerEmail: input.customerEmail,
       customerName: input.customerName,

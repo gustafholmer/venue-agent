@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { sendMessage } from '@/actions/messages/send-message'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { upsertContact } from '@/actions/contacts/upsert-contact'
@@ -84,8 +85,23 @@ export async function createOutboundInquiry(
       return { success: false, error: 'Meddelandet får max vara 2000 tecken' }
     }
 
+    // Check for existing open inquiry
+    const { data: existingInquiry } = await supabase
+      .from('venue_inquiries')
+      .select('id')
+      .eq('venue_id', contact.venue_id)
+      .eq('user_id', contact.customer_id)
+      .eq('status', 'open')
+      .maybeSingle()
+
+    if (existingInquiry) {
+      return { success: true, inquiryId: existingInquiry.id }
+    }
+
     // Create the inquiry with customer as user_id (shows in their list)
-    const { data: inquiry, error: insertError } = await supabase
+    // Use service client to bypass RLS (auth user is venue owner, not customer)
+    const serviceClient = createServiceClient()
+    const { data: inquiry, error: insertError } = await serviceClient
       .from('venue_inquiries')
       .insert({
         venue_id: contact.venue_id,
@@ -121,7 +137,7 @@ export async function createOutboundInquiry(
     })
 
     // Update contact stats
-    await upsertContact(supabase, {
+    await upsertContact({
       venueId: contact.venue_id,
       customerEmail: contact.customer_email,
       customerName: contact.customer_name,
