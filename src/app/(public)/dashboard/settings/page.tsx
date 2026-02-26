@@ -9,6 +9,7 @@ interface Profile {
   full_name: string | null
   company_name: string | null
   phone: string | null
+  org_number: string | null
 }
 
 interface NotificationPreferences {
@@ -48,7 +49,7 @@ export default function SettingsPage() {
 
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('full_name, company_name, phone')
+          .select('full_name, company_name, phone, org_number')
           .eq('id', user.id)
           .single()
 
@@ -191,6 +192,21 @@ export default function SettingsPage() {
               E-postadressen kan inte ändras
             </p>
           </div>
+
+          {profile?.org_number && (
+            <div>
+              <label htmlFor="org_number" className="block text-sm font-medium text-[#57534e] mb-1">
+                Organisationsnummer
+              </label>
+              <input
+                type="text"
+                id="org_number"
+                value={profile.org_number}
+                disabled
+                className="w-full px-3 py-2 bg-[#faf9f7] border border-[#e7e5e4] rounded-lg text-[#78716c] cursor-not-allowed"
+              />
+            </div>
+          )}
 
           <div>
             <label htmlFor="full_name" className="block text-sm font-medium text-[#57534e] mb-1">
