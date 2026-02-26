@@ -3,11 +3,18 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
+import { updateNotificationPreferences, getNotificationPreferences } from '@/actions/account/update-notification-preferences'
 
 interface Profile {
   full_name: string | null
   company_name: string | null
   phone: string | null
+}
+
+interface NotificationPreferences {
+  email_booking_request: boolean
+  email_new_message: boolean
+  email_reminders: boolean
 }
 
 export default function SettingsPage() {
@@ -22,6 +29,14 @@ export default function SettingsPage() {
     company_name: '',
     phone: '',
   })
+
+  const [prefs, setPrefs] = useState<NotificationPreferences>({
+    email_booking_request: true,
+    email_new_message: true,
+    email_reminders: true,
+  })
+  const [isSavingPrefs, setIsSavingPrefs] = useState(false)
+  const [prefsMessage, setPrefsMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   useEffect(() => {
     async function loadProfile() {
@@ -50,6 +65,19 @@ export default function SettingsPage() {
     }
 
     loadProfile()
+
+    async function loadPreferences() {
+      const result = await getNotificationPreferences()
+      if (result.success && result.preferences) {
+        setPrefs({
+          email_booking_request: result.preferences.email_booking_request ?? true,
+          email_new_message: result.preferences.email_new_message ?? true,
+          email_reminders: result.preferences.email_reminders ?? true,
+        })
+      }
+    }
+
+    loadPreferences()
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -89,6 +117,32 @@ export default function SettingsPage() {
     setIsSaving(false)
   }
 
+  const handleSavePreferences = async () => {
+    setIsSavingPrefs(true)
+    setPrefsMessage(null)
+
+    const result = await updateNotificationPreferences({
+      email_booking_request: prefs.email_booking_request,
+      email_new_message: prefs.email_new_message,
+      email_reminders: prefs.email_reminders,
+    })
+
+    if (result.success) {
+      setPrefsMessage({ type: 'success', text: 'Aviseringsinställningar sparade' })
+    } else {
+      setPrefsMessage({ type: 'error', text: result.error || 'Kunde inte spara aviseringsinställningar' })
+    }
+
+    setIsSavingPrefs(false)
+  }
+
+  const handlePrefsChange = (key: keyof NotificationPreferences) => {
+    setPrefs(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }))
+  }
+
   if (isLoading) {
     return (
       <div className="max-w-2xl mx-auto animate-pulse">
@@ -113,7 +167,7 @@ export default function SettingsPage() {
       <div className="mb-8">
         <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Inställningar</h1>
         <p className="text-[#78716c] mt-1">
-          Hantera din profil och kontoinställningar
+          Hantera din profil och aviseringsinställningar
         </p>
       </div>
 
@@ -197,6 +251,74 @@ export default function SettingsPage() {
             </Button>
           </div>
         </form>
+      </div>
+
+      {/* Notification preferences */}
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Aviseringar</h2>
+        <p className="text-sm text-[#78716c] mb-6">
+          Välj vilka e-postaviseringar du vill ta emot
+        </p>
+
+        {prefsMessage && (
+          <div
+            className={`mb-4 p-3 rounded-lg text-sm flex items-start gap-2 ${
+              prefsMessage.type === 'success'
+                ? 'bg-green-50 text-green-700 border border-green-200'
+                : 'bg-red-50 text-red-700 border border-red-200'
+            }`}
+          >
+            <span className="flex-1">{prefsMessage.text}</span>
+            <button onClick={() => setPrefsMessage(null)} className={`flex-shrink-0 p-1 rounded ${prefsMessage.type === 'success' ? 'hover:bg-green-100' : 'hover:bg-red-100'}`} aria-label="Stäng"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+          </div>
+        )}
+
+        <div className="space-y-4">
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
+            <div>
+              <p className="font-medium text-[#1a1a1a]">Bokningsförfrågningar</p>
+              <p className="text-sm text-[#78716c]">När en kund skickar en bokningsförfrågan</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={prefs.email_booking_request}
+              onChange={() => handlePrefsChange('email_booking_request')}
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
+            />
+          </label>
+
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
+            <div>
+              <p className="font-medium text-[#1a1a1a]">Nya meddelanden</p>
+              <p className="text-sm text-[#78716c]">När du får ett nytt meddelande från en kund</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={prefs.email_new_message}
+              onChange={() => handlePrefsChange('email_new_message')}
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
+            />
+          </label>
+
+          <label className="flex items-center justify-between p-3 bg-[#faf9f7] rounded-lg cursor-pointer hover:bg-[#f5f5f4] transition-colors">
+            <div>
+              <p className="font-medium text-[#1a1a1a]">Påminnelser</p>
+              <p className="text-sm text-[#78716c]">Påminnelser om kommande event</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={prefs.email_reminders}
+              onChange={() => handlePrefsChange('email_reminders')}
+              className="w-5 h-5 text-[#c45a3b] rounded focus:ring-[#c45a3b]"
+            />
+          </label>
+        </div>
+
+        <div className="pt-6">
+          <Button onClick={handleSavePreferences} loading={isSavingPrefs}>
+            Spara aviseringsinställningar
+          </Button>
+        </div>
       </div>
     </div>
   )
