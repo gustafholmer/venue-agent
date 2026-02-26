@@ -84,7 +84,11 @@ export default async function PublicLayout({
                   {profile?.roles?.includes('venue_owner') && (
                     <WorkspaceSwitcher />
                   )}
-                  <NotificationBell viewAllHref="/account/notifications" />
+                  <NotificationBell viewAllHref={
+                    profile?.roles?.includes('venue_owner')
+                      ? '/dashboard/notifications'
+                      : '/account/notifications'
+                  } />
                   <UserMenu isVenueOwner={profile?.roles?.includes('venue_owner') ?? false} />
                 </div>
               ) : (
