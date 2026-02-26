@@ -8,7 +8,8 @@ export function DashboardNav() {
   const pathname = usePathname()
 
   function isActive(href: string) {
-    return pathname === href
+    if (href === '/dashboard') return pathname === '/dashboard'
+    return pathname.startsWith(href)
   }
 
   return (
