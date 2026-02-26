@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 const NAV_ITEMS = [
   { href: '/account', label: 'Mitt konto', exact: true },
   { href: '/account/bookings', label: 'Mina bokningar' },
+  { href: '/account/inquiries', label: 'Mina förfrågningar' },
   { href: '/account/saved', label: 'Sparade lokaler' },
   { href: '/account/settings', label: 'Inställningar' },
 ]
