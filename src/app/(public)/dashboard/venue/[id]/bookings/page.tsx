@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams, useRouter, useParams } from 'next/navigation'
 import { getVenueBookings, type VenueBooking, type BookingStatusFilter } from '@/actions/bookings/get-venue-bookings'
 
 const STATUS_TABS: { value: BookingStatusFilter; label: string }[] = [
@@ -35,6 +35,7 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
 export default function BookingsPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const { id: venueId } = useParams<{ id: string }>()
   const initialStatus = (searchParams.get('status') as BookingStatusFilter) || 'all'
 
   const [bookings, setBookings] = useState<VenueBooking[]>([])
@@ -45,7 +46,7 @@ export default function BookingsPage() {
   useEffect(() => {
     async function fetchBookings() {
       setIsLoading(true)
-      const result = await getVenueBookings(activeTab)
+      const result = await getVenueBookings(venueId, activeTab)
       if (result.success && result.bookings) {
         setBookings(result.bookings)
         setError(null)
@@ -57,7 +58,7 @@ export default function BookingsPage() {
     }
 
     fetchBookings()
-  }, [activeTab])
+  }, [venueId, activeTab])
 
   const handleTabChange = (tab: BookingStatusFilter) => {
     setActiveTab(tab)
@@ -66,7 +67,7 @@ export default function BookingsPage() {
     if (tab !== 'all') {
       params.set('status', tab)
     }
-    const newUrl = params.toString() ? `?${params.toString()}` : '/dashboard/bookings'
+    const newUrl = params.toString() ? `?${params.toString()}` : `/dashboard/venue/${venueId}/bookings`
     router.push(newUrl)
   }
 
@@ -240,7 +241,7 @@ export default function BookingsPage() {
                   </div>
                   <div className="mt-3 pt-3 border-t border-[#e7e5e4]">
                     <Link
-                      href={`/dashboard/bookings/${booking.id}`}
+                      href={`/dashboard/venue/${venueId}/bookings/${booking.id}`}
                       className="text-[#c45a3b] hover:text-[#1e40af] font-medium text-sm"
                     >
                       Visa detaljer
@@ -321,7 +322,7 @@ export default function BookingsPage() {
                         </td>
                         <td className="px-6 py-4 text-right">
                           <Link
-                            href={`/dashboard/bookings/${booking.id}`}
+                            href={`/dashboard/venue/${venueId}/bookings/${booking.id}`}
                             className="text-[#c45a3b] hover:text-[#1e40af] font-medium text-sm"
                           >
                             Visa detaljer
