@@ -310,21 +310,10 @@ export default function VenueEditPage() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <Link
-          href="/dashboard"
-          className="text-sm text-[#78716c] hover:text-[#c45a3b]"
-        >
-          &larr; Tillbaka till dashboard
-        </Link>
-        <div className="flex items-center justify-between mt-4">
-          <div>
-            <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">
-              Redigera lokal
-            </h1>
-            <p className="text-[#78716c] mt-1">
-              Uppdatera information om din lokal
-            </p>
-          </div>
+        <div className="flex items-center justify-between">
+          <p className="text-[#78716c]">
+            Uppdatera information om din lokal
+          </p>
           <div className="flex items-center gap-3">
             {venue.status === 'published' && venue.slug && (
               <Link href={`/venue/${venue.slug}`} target="_blank">
