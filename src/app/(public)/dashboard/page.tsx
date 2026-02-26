@@ -32,33 +32,85 @@ function DashboardSkeleton() {
   )
 }
 
+function StatusBadge({ status }: { status: string }) {
+  const config: Record<string, { label: string; className: string }> = {
+    draft: { label: 'Utkast', className: 'bg-[#f5f3f0] text-[#78716c]' },
+    published: { label: 'Publicerad', className: 'bg-[#d1fae5] text-[#065f46]' },
+    paused: { label: 'Pausad', className: 'bg-[#fef3c7] text-[#92400e]' },
+  }
+  const { label, className } = config[status] || config.draft
+  return (
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${className}`}>
+      {label}
+    </span>
+  )
+}
+
 async function DashboardContent() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Get venue
-  const { data: venue } = await supabase
+  // Get all venues
+  const { data: venues } = await supabase
     .from('venues')
     .select('id, name, status')
     .eq('owner_id', user!.id)
-    .single()
+    .order('created_at', { ascending: false })
 
-  // Get pending bookings count
-  const { count: pendingCount } = await supabase
-    .from('booking_requests')
-    .select('*', { count: 'exact', head: true })
-    .eq('venue_id', venue?.id || '')
-    .eq('status', 'pending')
+  const venueIds = (venues || []).map(v => v.id)
 
-  // Get upcoming bookings
-  const { data: upcomingBookings } = await supabase
-    .from('booking_requests')
-    .select('*')
-    .eq('venue_id', venue?.id || '')
-    .eq('status', 'accepted')
-    .gte('event_date', new Date().toISOString().split('T')[0])
-    .order('event_date', { ascending: true })
-    .limit(5)
+  // Get pending bookings count across all venues
+  const { count: pendingCount } = venueIds.length > 0
+    ? await supabase
+        .from('booking_requests')
+        .select('*', { count: 'exact', head: true })
+        .in('venue_id', venueIds)
+        .eq('status', 'pending')
+    : { count: 0 }
+
+  // Get upcoming bookings across all venues (include venue name via join)
+  const { data: upcomingBookings } = venueIds.length > 0
+    ? await supabase
+        .from('booking_requests')
+        .select('*, venues(name)')
+        .in('venue_id', venueIds)
+        .eq('status', 'accepted')
+        .gte('event_date', new Date().toISOString().split('T')[0])
+        .order('event_date', { ascending: true })
+        .limit(5)
+    : { data: [] }
+
+  const venueCount = venues?.length || 0
+  const publishedCount = (venues || []).filter(v => v.status === 'published').length
+
+  // Zero venues: empty state
+  if (venueCount === 0) {
+    return (
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Dashboard</h1>
+          <p className="text-[#78716c]">Ingen lokal ännu</p>
+        </div>
+
+        <div className="bg-[#c45a3b]/5 border border-[#c45a3b]/20 rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-[#c45a3b] mb-2">
+            Kom igång
+          </h2>
+          <p className="text-[#57534e] mb-4">
+            Skapa din första lokal för att börja ta emot bokningsförfrågningar.
+          </p>
+          <Link href="/dashboard/venue/new">
+            <Button>Skapa lokal</Button>
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // Determine bookings link based on venue count
+  const bookingsHref = venueCount === 1
+    ? `/dashboard/venue/${venues![0].id}/bookings?status=pending`
+    : '/dashboard/venue'
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -66,23 +118,22 @@ async function DashboardContent() {
         <div>
           <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Dashboard</h1>
           <p className="text-[#78716c]">
-            {venue ? venue.name : 'Ingen lokal ännu'}
+            {venueCount === 1
+              ? venues![0].name
+              : `Du har ${venueCount} lokaler`}
           </p>
         </div>
-        {!venue && (
-          <Link href="/dashboard/venue/new">
-            <Button>Skapa lokal</Button>
-          </Link>
-        )}
+        <Link href="/dashboard/venue/new">
+          <Button variant="outline">Skapa ny lokal</Button>
+        </Link>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
-          <p className="text-sm text-[#78716c]">Status</p>
+          <p className="text-sm text-[#78716c]">Lokaler</p>
           <p className="text-2xl font-semibold text-[#1a1a1a]">
-            {venue?.status === 'published' ? 'Publicerad' :
-             venue?.status === 'draft' ? 'Utkast' : 'Ingen lokal'}
+            {publishedCount} / {venueCount} publicerade
           </p>
         </div>
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
@@ -105,26 +156,35 @@ async function DashboardContent() {
           <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">
             Väntar på svar ({pendingCount})
           </h2>
-          <Link href="/dashboard/bookings?status=pending">
+          <Link href={bookingsHref}>
             <Button variant="outline">Visa förfrågningar</Button>
           </Link>
         </div>
       )}
 
-      {/* Quick actions */}
-      {!venue && (
-        <div className="bg-[#c45a3b]/5 border border-[#c45a3b]/20 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-[#c45a3b] mb-2">
-            Kom igång
-          </h2>
-          <p className="text-[#57534e] mb-4">
-            Skapa din lokal för att börja ta emot bokningsförfrågningar.
-          </p>
-          <Link href="/dashboard/venue/new">
-            <Button>Skapa lokal</Button>
-          </Link>
+      {/* Venue list */}
+      <div className="bg-white border border-[#e7e5e4] rounded-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-[#e7e5e4]">
+          <h2 className="text-lg font-semibold text-[#1a1a1a]">Dina lokaler</h2>
         </div>
-      )}
+        <div className="divide-y divide-[#e7e5e4]">
+          {venues!.map((venue) => (
+            <Link
+              key={venue.id}
+              href={`/dashboard/venue/${venue.id}`}
+              className="flex items-center justify-between px-6 py-4 hover:bg-[#fafaf9] transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-[#1a1a1a] font-medium">{venue.name}</span>
+                <StatusBadge status={venue.status} />
+              </div>
+              <svg className="w-5 h-5 text-[#a8a29e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
