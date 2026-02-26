@@ -9,7 +9,7 @@ export interface CalendarData {
   venueId: string | null
 }
 
-export async function getCalendarData(year: number, month: number): Promise<{
+export async function getCalendarData(venueId: string, year: number, month: number): Promise<{
   success: boolean
   data?: CalendarData
   error?: string
@@ -26,6 +26,7 @@ export async function getCalendarData(year: number, month: number): Promise<{
   const { data: venue, error: venueError } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 

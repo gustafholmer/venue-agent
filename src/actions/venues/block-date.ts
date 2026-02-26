@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 
 export async function blockDate(
+  venueId: string,
   date: string,
   reason?: string
 ): Promise<{ success: boolean; error?: string }> {
@@ -18,6 +19,7 @@ export async function blockDate(
   const { data: venue, error: venueError } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -72,6 +74,7 @@ export async function blockDate(
 }
 
 export async function blockDateRange(
+  venueId: string,
   startDate: string,
   endDate: string,
   reason?: string
@@ -88,6 +91,7 @@ export async function blockDateRange(
   const { data: venue, error: venueError } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
