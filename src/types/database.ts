@@ -715,11 +715,11 @@ export interface Database {
         Row: {
           id: string
           venue_id: string
-          customer_email: string | null
-          customer_name: string | null
+          customer_id: string | null
           status: string
           messages: Json[]
-          collected_data: Json | null
+          collected_booking_data: Json | null
+          tier: number | null
           created_at: string
           updated_at: string
           expires_at: string | null
@@ -727,11 +727,11 @@ export interface Database {
         Insert: {
           id?: string
           venue_id: string
-          customer_email?: string | null
-          customer_name?: string | null
+          customer_id?: string | null
           status?: string
           messages?: Json[]
-          collected_data?: Json | null
+          collected_booking_data?: Json | null
+          tier?: number | null
           created_at?: string
           updated_at?: string
           expires_at?: string | null
@@ -739,11 +739,11 @@ export interface Database {
         Update: {
           id?: string
           venue_id?: string
-          customer_email?: string | null
-          customer_name?: string | null
+          customer_id?: string | null
           status?: string
           messages?: Json[]
-          collected_data?: Json | null
+          collected_booking_data?: Json | null
+          tier?: number | null
           created_at?: string
           updated_at?: string
           expires_at?: string | null
@@ -752,42 +752,45 @@ export interface Database {
       agent_actions: {
         Row: {
           id: string
-          conversation_id: string
           venue_id: string
+          conversation_id: string
+          customer_id: string | null
           action_type: string
           status: string
-          summary: Json | null
-          owner_response: string | null
+          summary: Json
+          owner_response: Json | null
           booking_request_id: string | null
           created_at: string
           updated_at: string
-          expires_at: string | null
+          resolved_at: string | null
         }
         Insert: {
           id?: string
-          conversation_id: string
           venue_id: string
+          conversation_id: string
+          customer_id?: string | null
           action_type: string
           status?: string
-          summary?: Json | null
-          owner_response?: string | null
+          summary?: Json
+          owner_response?: Json | null
           booking_request_id?: string | null
           created_at?: string
           updated_at?: string
-          expires_at?: string | null
+          resolved_at?: string | null
         }
         Update: {
           id?: string
-          conversation_id?: string
           venue_id?: string
+          conversation_id?: string
+          customer_id?: string | null
           action_type?: string
           status?: string
-          summary?: Json | null
-          owner_response?: string | null
+          summary?: Json
+          owner_response?: Json | null
           booking_request_id?: string | null
           created_at?: string
           updated_at?: string
-          expires_at?: string | null
+          resolved_at?: string | null
         }
       }
     }
