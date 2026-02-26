@@ -93,15 +93,14 @@ export function getNotificationStyle(type: NotificationType): {
 export function getNotificationUrl(entityType: EntityType, entityId: string): string {
   switch (entityType) {
     case 'booking':
-      // For venue owners, go to dashboard booking detail
-      // For customers, go to public booking page
-      // We'll check user type in the component but default to dashboard
-      return `/dashboard/bookings/${entityId}`
+      // Link to the customer-facing booking detail page which works for all users
+      // (venue-owner dashboard bookings are now per-venue at /dashboard/venue/[id]/bookings)
+      return `/account/bookings/${entityId}`
     case 'venue':
       return `/venues/${entityId}`
     case 'message':
       // Messages are linked to bookings, so entityId is booking_request_id
-      return `/dashboard/bookings/${entityId}`
+      return `/account/bookings/${entityId}`
     case 'search':
       return `/venues`
     default:

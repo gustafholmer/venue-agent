@@ -32,9 +32,8 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
 }
 
 export default function BookingDetailPage() {
-  const params = useParams()
+  const { id: venueId, bookingId } = useParams<{ id: string; bookingId: string }>()
   const router = useRouter()
-  const bookingId = params.id as string
 
   const [booking, setBooking] = useState<BookingWithVenue | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -159,7 +158,7 @@ export default function BookingDetailPage() {
         <div className="bg-red-50 border border-red-200 rounded-xl p-6">
           <h2 className="text-lg font-medium text-red-800 mb-2">Fel</h2>
           <p className="text-red-700 mb-4">{error}</p>
-          <Link href="/dashboard/bookings">
+          <Link href={`/dashboard/venue/${venueId}/bookings`}>
             <Button variant="outline">Tillbaka till bokningar</Button>
           </Link>
         </div>
@@ -208,7 +207,7 @@ export default function BookingDetailPage() {
     <div className="max-w-4xl mx-auto">
       {/* Back link */}
       <Link
-        href="/dashboard/bookings"
+        href={`/dashboard/venue/${venueId}/bookings`}
         className="inline-flex items-center text-[#78716c] hover:text-[#57534e] mb-6"
       >
         <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

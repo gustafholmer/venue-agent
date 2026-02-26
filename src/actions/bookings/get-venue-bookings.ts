@@ -18,6 +18,7 @@ export interface GetVenueBookingsResult {
 }
 
 export async function getVenueBookings(
+  venueId: string,
   statusFilter: BookingStatusFilter = 'all'
 ): Promise<GetVenueBookingsResult> {
   try {
@@ -33,6 +34,7 @@ export async function getVenueBookings(
     const { data: venue, error: venueError } = await supabase
       .from('venues')
       .select('id')
+      .eq('id', venueId)
       .eq('owner_id', user.id)
       .single()
 

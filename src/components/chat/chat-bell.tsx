@@ -10,7 +10,7 @@ interface ChatBellProps {
   href?: string
 }
 
-export function ChatBell({ userId, href = '/dashboard/bookings' }: ChatBellProps) {
+export function ChatBell({ userId, href = '/dashboard/venue' }: ChatBellProps) {
   const router = useRouter()
   const { unreadCount, isLoading } = useUnreadMessages({ userId })
 

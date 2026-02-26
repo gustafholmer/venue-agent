@@ -131,6 +131,14 @@ export default function NewVenuePage() {
       return
     }
 
+    const newVenueId = result.venueId
+    if (!newVenueId) {
+      setUploadProgress('')
+      setIsSubmitting(false)
+      alert('Lokalen skapades men ett fel uppstod. Kontakta support.')
+      return
+    }
+
     // Upload photos sequentially
     if (selectedFiles.length > 0) {
       for (let i = 0; i < selectedFiles.length; i++) {
@@ -138,14 +146,14 @@ export default function NewVenuePage() {
         const resizedFile = await resizeImage(selectedFiles[i].file)
         const photoForm = new window.FormData()
         photoForm.append('file', resizedFile)
-        const photoResult = await uploadPhoto(photoForm)
+        const photoResult = await uploadPhoto(newVenueId, photoForm)
         if (!photoResult.success) {
           console.error('Photo upload failed:', photoResult.error)
         }
       }
     }
 
-    router.push('/dashboard/venue?success=venue_created')
+    router.push(`/dashboard/venue/${newVenueId}?success=venue_created`)
   }
 
   const hasPricing =

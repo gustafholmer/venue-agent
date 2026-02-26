@@ -2,7 +2,14 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const venueId = searchParams.get('venueId')
+
+  if (!venueId) {
+    return NextResponse.json({ error: 'venueId krävs' }, { status: 400 })
+  }
+
   // Check rate limit
   const rateLimitResult = await rateLimit('venue-photos', RATE_LIMITS.photoUpload)
   if (!rateLimitResult.success) {
@@ -29,6 +36,7 @@ export async function GET() {
   const { data: venue } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 

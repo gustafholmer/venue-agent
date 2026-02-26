@@ -17,7 +17,11 @@ interface Photo {
   is_primary: boolean
 }
 
-export function VenuePhotoManager() {
+interface VenuePhotoManagerProps {
+  venueId: string
+}
+
+export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
   const [photos, setPhotos] = useState<Photo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
@@ -33,7 +37,7 @@ export function VenuePhotoManager() {
 
   const fetchPhotos = async () => {
     try {
-      const response = await fetch('/api/venue/photos')
+      const response = await fetch(`/api/venue/photos?venueId=${venueId}`)
       if (response.ok) {
         const data = await response.json()
         setPhotos(data.photos || [])
@@ -66,7 +70,7 @@ export function VenuePhotoManager() {
       const formData = new FormData()
       formData.append('file', resizedFile)
 
-      const result = await uploadPhoto(formData)
+      const result = await uploadPhoto(venueId, formData)
       if (!result.success) {
         showError(result.error || 'Uppladdning misslyckades')
       }
@@ -96,7 +100,7 @@ export function VenuePhotoManager() {
   const handleDelete = async (photoId: string) => {
     if (!confirm('Ar du saker pa att du vill ta bort denna bild?')) return
 
-    const result = await deletePhoto(photoId)
+    const result = await deletePhoto(venueId, photoId)
     if (result.success) {
       setPhotos(photos.filter(p => p.id !== photoId))
       showSuccess('Bilden har tagits bort')
@@ -106,7 +110,7 @@ export function VenuePhotoManager() {
   }
 
   const handleSetPrimary = async (photoId: string) => {
-    const result = await setPrimaryPhoto(photoId)
+    const result = await setPrimaryPhoto(venueId, photoId)
     if (result.success) {
       setPhotos(photos.map(p => ({
         ...p,
@@ -134,7 +138,7 @@ export function VenuePhotoManager() {
 
     setPhotos(newPhotos.map((p, i) => ({ ...p, sort_order: i })))
 
-    const result = await reorderPhotos(photoOrders)
+    const result = await reorderPhotos(venueId, photoOrders)
     if (!result.success) {
       showError(result.error || 'Kunde inte andra ordningen')
       await fetchPhotos() // Revert on error
@@ -157,7 +161,7 @@ export function VenuePhotoManager() {
 
     setPhotos(newPhotos.map((p, i) => ({ ...p, sort_order: i })))
 
-    const result = await reorderPhotos(photoOrders)
+    const result = await reorderPhotos(venueId, photoOrders)
     if (!result.success) {
       showError(result.error || 'Kunde inte andra ordningen')
       await fetchPhotos() // Revert on error

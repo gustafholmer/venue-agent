@@ -8,7 +8,7 @@ import { trackEvent } from '@/lib/analytics'
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
-export async function uploadPhoto(formData: FormData) {
+export async function uploadPhoto(venueId: string, formData: FormData) {
   if (isDemoMode()) {
     return { success: false, error: 'Demo mode - uploads disabled' }
   }
@@ -25,6 +25,7 @@ export async function uploadPhoto(formData: FormData) {
   const { data: venue } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
@@ -109,7 +110,7 @@ export async function uploadPhoto(formData: FormData) {
     return { success: false, error: 'Kunde inte spara bildinformation' }
   }
 
-  revalidatePath('/dashboard/venue')
+  revalidatePath(`/dashboard/venue/${venueId}`)
   trackEvent('venue_photo_uploaded', { venue_id: venue.id }, user.id)
   return { success: true, photoId }
 }

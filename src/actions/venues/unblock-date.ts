@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 
 export async function unblockDate(
+  venueId: string,
   date: string
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = await createClient()
@@ -17,6 +18,7 @@ export async function unblockDate(
   const { data: venue, error: venueError } = await supabase
     .from('venues')
     .select('id')
+    .eq('id', venueId)
     .eq('owner_id', user.id)
     .single()
 
