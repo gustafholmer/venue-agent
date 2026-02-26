@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
+import { syncToCalendar } from '@/lib/calendar/sync'
 
 // UUID format validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -10,6 +11,7 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 export async function cancelBooking(bookingId: string, reason?: string): Promise<{
   success: boolean
   error?: string
+  calendarSyncFailed?: boolean
 }> {
   try {
     const supabase = await createClient()
@@ -85,6 +87,17 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
         .eq('reason', `Bokning: ${booking.customer_name}`)
     }
 
+    // Sync deletion to external calendar
+    let calendarSyncFailed: boolean | undefined
+    if (booking.status === 'accepted') {
+      const syncResult = await syncToCalendar(booking.venue_id, {
+        entityType: 'booking',
+        entityId: booking.id,
+        action: 'delete',
+      })
+      calendarSyncFailed = syncResult.calendarSyncFailed
+    }
+
     // Create notification for the venue owner
     const venueOwnerId = (booking.venue as unknown as { owner_id: string }).owner_id
     const venueName = (booking.venue as unknown as { name: string }).name
@@ -108,7 +121,7 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
     revalidatePath(`/dashboard/venue/${booking.venue_id}/bookings`)
     revalidatePath(`/dashboard/venue/${booking.venue_id}/bookings/${bookingId}`)
 
-    return { success: true }
+    return { success: true, calendarSyncFailed }
   } catch (error) {
     console.error('Unexpected error cancelling booking:', error)
     return {

@@ -4,6 +4,11 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { updateNotificationPreferences, getNotificationPreferences } from '@/actions/account/update-notification-preferences'
+import { getCalendarConnection } from '@/actions/calendar/get-connection'
+import { listGoogleCalendars } from '@/actions/calendar/list-calendars'
+import { disconnectCalendar } from '@/actions/calendar/disconnect'
+import { updateVenueCalendarMapping } from '@/actions/calendar/update-venue-mapping'
+import type { ExternalCalendar } from '@/lib/calendar/types'
 
 interface Profile {
   full_name: string | null
@@ -38,6 +43,18 @@ export default function SettingsPage() {
   })
   const [isSavingPrefs, setIsSavingPrefs] = useState(false)
   const [prefsMessage, setPrefsMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Calendar integration state
+  const [calendarConnected, setCalendarConnected] = useState(false)
+  const [calendarEmail, setCalendarEmail] = useState<string | null>(null)
+  const [calendars, setCalendars] = useState<ExternalCalendar[]>([])
+  const [selectedCalendarId, setSelectedCalendarId] = useState<string>('')
+  const [syncEnabled, setSyncEnabled] = useState(true)
+  const [venueId, setVenueId] = useState<string | null>(null)
+  const [calendarLoading, setCalendarLoading] = useState(true)
+  const [calendarMessage, setCalendarMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [isDisconnecting, setIsDisconnecting] = useState(false)
+  const [isSavingCalendar, setIsSavingCalendar] = useState(false)
 
   useEffect(() => {
     async function loadProfile() {
@@ -79,6 +96,67 @@ export default function SettingsPage() {
     }
 
     loadPreferences()
+  }, [])
+
+  useEffect(() => {
+    async function loadCalendarState() {
+      const supabase = createClient()
+
+      // Check URL params for OAuth callback results
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('calendar_connected') === 'true') {
+        setCalendarMessage({ type: 'success', text: 'Google Kalender kopplad!' })
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+      if (params.get('calendar_error')) {
+        setCalendarMessage({ type: 'error', text: 'Kunde inte koppla Google Kalender. Försök igen.' })
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+
+      // Load connection status
+      const connection = await getCalendarConnection()
+      setCalendarConnected(connection.connected)
+      setCalendarEmail(connection.providerEmail || null)
+
+      // Load venue for this owner
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: venue } = await supabase
+          .from('venues')
+          .select('id')
+          .eq('owner_id', user.id)
+          .single()
+
+        if (venue) {
+          setVenueId(venue.id)
+
+          // Load existing mapping
+          const { data: mapping } = await supabase
+            .from('venue_calendar_mappings')
+            .select('external_calendar_id, sync_enabled')
+            .eq('venue_id', venue.id)
+            .single()
+
+          if (mapping) {
+            setSelectedCalendarId(mapping.external_calendar_id)
+            setSyncEnabled(mapping.sync_enabled)
+          }
+        }
+      }
+
+      // Load available calendars if connected
+      if (connection.connected) {
+        const result = await listGoogleCalendars()
+        if (result.success && result.calendars) {
+          setCalendars(result.calendars)
+        }
+      }
+
+      setCalendarLoading(false)
+    }
+
+    loadCalendarState()
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -144,6 +222,34 @@ export default function SettingsPage() {
       ...prev,
       [key]: !prev[key],
     }))
+  }
+
+  const handleDisconnect = async () => {
+    if (!confirm('Är du säker? Alla synkade kalenderhändelser kommer att finnas kvar i Google Kalender men nya händelser synkas inte längre.')) return
+    setIsDisconnecting(true)
+    const result = await disconnectCalendar()
+    if (result.success) {
+      setCalendarConnected(false)
+      setCalendarEmail(null)
+      setCalendars([])
+      setSelectedCalendarId('')
+      setCalendarMessage({ type: 'success', text: 'Google Kalender bortkopplad' })
+    } else {
+      setCalendarMessage({ type: 'error', text: result.error || 'Något gick fel' })
+    }
+    setIsDisconnecting(false)
+  }
+
+  const handleSaveCalendarMapping = async () => {
+    if (!venueId || !selectedCalendarId) return
+    setIsSavingCalendar(true)
+    const result = await updateVenueCalendarMapping(venueId, selectedCalendarId, syncEnabled)
+    if (result.success) {
+      setCalendarMessage({ type: 'success', text: 'Kalenderinställningar sparade' })
+    } else {
+      setCalendarMessage({ type: 'error', text: result.error || 'Något gick fel' })
+    }
+    setIsSavingCalendar(false)
   }
 
   if (isLoading) {
@@ -272,7 +378,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Notification preferences */}
-      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6">
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Aviseringar</h2>
         <p className="text-sm text-[#78716c] mb-6">
           Välj vilka e-postaviseringar du vill ta emot
@@ -337,6 +443,144 @@ export default function SettingsPage() {
             Spara aviseringsinställningar
           </Button>
         </div>
+      </div>
+
+      {/* Calendar integration */}
+      <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-1">Integrationer</h2>
+        <p className="text-[#78716c] text-sm mb-4">
+          Koppla externa tjänster till ditt konto
+        </p>
+
+        {calendarMessage && (
+          <div
+            className={`mb-4 p-3 rounded-lg text-sm flex items-start gap-2 ${
+              calendarMessage.type === 'success'
+                ? 'bg-green-50 text-green-700 border border-green-200'
+                : 'bg-red-50 text-red-700 border border-red-200'
+            }`}
+          >
+            <span className="flex-1">{calendarMessage.text}</span>
+            <button
+              onClick={() => setCalendarMessage(null)}
+              className={`flex-shrink-0 p-1 rounded ${calendarMessage.type === 'success' ? 'hover:bg-green-100' : 'hover:bg-red-100'}`}
+              aria-label="Stäng"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-[#f5f3f0] flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5 text-[#57534e]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium text-[#1a1a1a]">Google Kalender</h3>
+            {calendarLoading ? (
+              <p className="text-sm text-[#78716c] mt-1">Laddar...</p>
+            ) : calendarConnected ? (
+              <div className="mt-2 space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-[#78716c]">
+                    Kopplad som <span className="font-medium text-[#1a1a1a]">{calendarEmail}</span>
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDisconnect}
+                    loading={isDisconnecting}
+                    className="border-red-300 text-red-600 hover:bg-red-50"
+                  >
+                    Koppla bort
+                  </Button>
+                </div>
+
+                {venueId && (
+                  <>
+                    <div>
+                      <label htmlFor="calendar-select" className="block text-sm font-medium text-[#57534e] mb-1">
+                        Synka till kalender
+                      </label>
+                      <select
+                        id="calendar-select"
+                        value={selectedCalendarId}
+                        onChange={(e) => setSelectedCalendarId(e.target.value)}
+                        className="w-full px-3 py-2 border border-[#e7e5e4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
+                      >
+                        <option value="">Välj kalender...</option>
+                        {calendars.map((cal) => (
+                          <option key={cal.id} value={cal.id}>
+                            {cal.name}{cal.primary ? ' (primär)' : ''}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={syncEnabled}
+                        onChange={(e) => setSyncEnabled(e.target.checked)}
+                        className="rounded border-[#e7e5e4] text-[#c45a3b] focus:ring-[#c45a3b]"
+                      />
+                      <span className="text-sm text-[#57534e]">Synkronisering aktiverad</span>
+                    </label>
+
+                    <Button
+                      onClick={handleSaveCalendarMapping}
+                      loading={isSavingCalendar}
+                      disabled={!selectedCalendarId}
+                    >
+                      Spara kalenderinställningar
+                    </Button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="mt-2">
+                <p className="text-sm text-[#78716c] mb-3">
+                  Synka blockerade datum och bokningar till din Google Kalender automatiskt.
+                </p>
+                <Button
+                  variant="secondary"
+                  onClick={() => { window.location.href = '/api/auth/google-calendar' }}
+                >
+                  Koppla Google Kalender
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Danger zone */}
+      <div className="bg-white border border-red-200 rounded-xl p-6">
+        <h2 className="text-lg font-semibold text-red-600 mb-2">Farozonen</h2>
+        <p className="text-[#78716c] text-sm mb-4">
+          Dessa åtgärder är permanenta och kan inte ångras.
+        </p>
+        <Button
+          variant="outline"
+          className="border-red-300 text-red-600 hover:bg-red-50"
+          onClick={() => {
+            if (confirm('Är du säker på att du vill logga ut?')) {
+              const supabase = createClient()
+              supabase.auth.signOut().then(() => {
+                window.location.href = '/'
+              })
+            }
+          }}
+        >
+          Logga ut
+        </Button>
       </div>
     </div>
   )

@@ -95,6 +95,9 @@ export default function CalendarPage() {
       const result = await unblockDate(venueId, day.dateStr)
       if (result.success) {
         showSuccessMessage('Datum avblockerat')
+        if (result.calendarSyncFailed) {
+          setTimeout(() => showErrorMessage('Kunde inte synka till Google Kalender'), 100)
+        }
         await fetchData()
       } else {
         showErrorMessage(result.error || 'Kunde inte avblockera datum')
@@ -104,6 +107,9 @@ export default function CalendarPage() {
       const result = await blockDate(venueId, day.dateStr)
       if (result.success) {
         showSuccessMessage('Datum blockerat')
+        if (result.calendarSyncFailed) {
+          setTimeout(() => showErrorMessage('Kunde inte synka till Google Kalender'), 100)
+        }
         await fetchData()
       } else {
         showErrorMessage(result.error || 'Kunde inte blockera datum')
@@ -133,6 +139,9 @@ export default function CalendarPage() {
         message += `. ${result.failedDates.length} dagar kunde inte blockeras (har bokningar)`
       }
       showSuccessMessage(message)
+      if (result.calendarSyncFailed) {
+        setTimeout(() => showErrorMessage('Kunde inte synka till Google Kalender'), 100)
+      }
       await fetchData()
       setShowBlockModal(false)
       setRangeStartDate('')

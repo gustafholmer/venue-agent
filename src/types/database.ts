@@ -663,6 +663,96 @@ export interface Database {
           expires_at?: string
         }
       }
+      calendar_connections: {
+        Row: {
+          id: string
+          user_id: string
+          provider: string
+          encrypted_access_token: string
+          encrypted_refresh_token: string
+          token_expires_at: string
+          provider_email: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          provider: string
+          encrypted_access_token: string
+          encrypted_refresh_token: string
+          token_expires_at: string
+          provider_email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          provider?: string
+          encrypted_access_token?: string
+          encrypted_refresh_token?: string
+          token_expires_at?: string
+          provider_email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      venue_calendar_mappings: {
+        Row: {
+          id: string
+          venue_id: string
+          connection_id: string
+          external_calendar_id: string
+          sync_enabled: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          venue_id: string
+          connection_id: string
+          external_calendar_id: string
+          sync_enabled?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          venue_id?: string
+          connection_id?: string
+          external_calendar_id?: string
+          sync_enabled?: boolean
+          created_at?: string
+        }
+      }
+      calendar_sync_events: {
+        Row: {
+          id: string
+          venue_calendar_mapping_id: string
+          entity_type: string
+          entity_id: string
+          external_event_id: string
+          last_synced_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          venue_calendar_mapping_id: string
+          entity_type: string
+          entity_id: string
+          external_event_id: string
+          last_synced_at?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          venue_calendar_mapping_id?: string
+          entity_type?: string
+          entity_id?: string
+          external_event_id?: string
+          last_synced_at?: string
+          created_at?: string
+        }
+      }
     }
     Functions: {
       match_venues: {
@@ -738,6 +828,9 @@ export type NotificationPreference = Tables<'notification_preferences'>
 export type SavedVenue = Tables<'saved_venues'>
 export type SharedList = Tables<'shared_lists'>
 export type AgentSession = Tables<'agent_sessions'>
+export type CalendarConnection = Tables<'calendar_connections'>
+export type VenueCalendarMapping = Tables<'venue_calendar_mappings'>
+export type CalendarSyncEvent = Tables<'calendar_sync_events'>
 
 export function hasRole(profile: { roles: string[] }, role: string): boolean {
   return profile.roles.includes(role)

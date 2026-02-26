@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
+import { syncToCalendar } from '@/lib/calendar/sync'
 
 // UUID format validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -9,6 +10,7 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 export interface AcceptBookingResult {
   success: boolean
   error?: string
+  calendarSyncFailed?: boolean
 }
 
 export async function acceptBooking(bookingId: string): Promise<AcceptBookingResult> {
@@ -120,6 +122,24 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
       console.error('Error blocking date after accepting booking:', blockError)
     }
 
+    // Sync to external calendar
+    const syncResult = await syncToCalendar(booking.venue_id, {
+      entityType: 'booking',
+      entityId: booking.id,
+      action: 'create',
+      event: {
+        title: `Bokning: ${booking.customer_name}${booking.event_type ? ' – ' + booking.event_type : ''}`,
+        description: [
+          booking.event_type && `Typ: ${booking.event_type}`,
+          booking.guest_count && `Antal gäster: ${booking.guest_count}`,
+          booking.start_time && `Tid: ${booking.start_time}${booking.end_time ? '–' + booking.end_time : ''}`,
+          booking.event_description,
+        ].filter(Boolean).join('\n'),
+        date: booking.event_date,
+        status: 'confirmed',
+      },
+    })
+
     // Create notification for customer (if they have an account)
     if (booking.customer_id) {
       await dispatchNotification({
@@ -136,7 +156,7 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
       })
     }
 
-    return { success: true }
+    return { success: true, calendarSyncFailed: syncResult.calendarSyncFailed }
   } catch (error) {
     console.error('Unexpected error accepting booking:', error)
     return {
