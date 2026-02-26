@@ -302,7 +302,7 @@ function PayoutsPageContent() {
 
         {/* Stats row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          {isLoadingPayouts ? (
+          {!summary && !payoutError ? (
             <>
               {[1, 2, 3].map((i) => (
                 <div key={i} className="bg-white border border-[#e7e5e4] rounded-xl p-5 animate-pulse">
