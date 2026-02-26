@@ -1,4 +1,4 @@
-import { geminiModel } from './client'
+import { getGeminiModel } from './client'
 import { withRetry } from './retry'
 import { ParsedFiltersSchema, type ParsedPreferences } from '@/types/preferences'
 
@@ -44,11 +44,10 @@ Stockholmsområden inkluderar: Södermalm, Vasastan, Östermalm, Kungsholmen, No
 Användarens text:`
 
 export async function parsePreferences(input: string): Promise<ParsedPreferences> {
-  if (!geminiModel) {
+  const model = getGeminiModel()
+  if (!model) {
     throw new Error('Gemini API key not configured')
   }
-
-  const model = geminiModel
   const result = await withRetry(() => model.generateContent(PARSE_PROMPT + '\n\n' + input))
   const response = result.response.text()
 

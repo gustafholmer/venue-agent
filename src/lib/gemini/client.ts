@@ -1,16 +1,39 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { GoogleGenerativeAI, type GenerativeModel } from '@google/generative-ai'
 import { serverEnv } from '@/lib/env'
 
-const apiKey = serverEnv.GEMINI_API_KEY
+let _genAI: GoogleGenerativeAI | null = null
+let _initialized = false
+
+function getApiKey(): string {
+  return serverEnv.GEMINI_API_KEY
+}
 
 // Check if Gemini is properly configured
 export function isGeminiConfigured(): boolean {
-  return Boolean(apiKey && apiKey !== 'your_gemini_api_key')
+  const key = getApiKey()
+  return Boolean(key && key !== 'your_gemini_api_key')
 }
 
-const genAI = isGeminiConfigured() ? new GoogleGenerativeAI(apiKey) : null
+function ensureInitialized(): GoogleGenerativeAI | null {
+  if (!_initialized) {
+    _initialized = true
+    if (isGeminiConfigured()) {
+      _genAI = new GoogleGenerativeAI(getApiKey())
+    }
+  }
+  return _genAI
+}
 
-export const geminiModel = genAI?.getGenerativeModel({ model: 'gemini-1.5-flash' }) || null
-export const embeddingModel = genAI?.getGenerativeModel({ model: 'text-embedding-004' }) || null
+export function getGenAI(): GoogleGenerativeAI | null {
+  return ensureInitialized()
+}
 
-export { genAI }
+export function getGeminiModel(): GenerativeModel | null {
+  const ai = ensureInitialized()
+  return ai?.getGenerativeModel({ model: 'gemini-1.5-flash' }) ?? null
+}
+
+export function getEmbeddingModel(): GenerativeModel | null {
+  const ai = ensureInitialized()
+  return ai?.getGenerativeModel({ model: 'text-embedding-004' }) ?? null
+}

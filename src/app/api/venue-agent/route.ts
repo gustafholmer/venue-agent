@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { genAI, isGeminiConfigured } from '@/lib/gemini/client'
+import { getGenAI, isGeminiConfigured } from '@/lib/gemini/client'
 import { withRetry } from '@/lib/gemini/retry'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { buildAgentSystemPrompt } from '@/lib/agent/build-system-prompt'
@@ -144,6 +144,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check Gemini is configured
+    const genAI = getGenAI()
     if (!isGeminiConfigured() || !genAI) {
       console.error('[venue-agent] Gemini is not configured')
       return NextResponse.json(

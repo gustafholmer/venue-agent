@@ -1,4 +1,4 @@
-import { geminiModel } from './client'
+import { getGeminiModel } from './client'
 import { withRetry } from './retry'
 import type { Venue } from '@/types/database'
 import type { ParsedFilters } from '@/types/preferences'
@@ -38,12 +38,11 @@ export async function generateExplanationsBatch(
   const result = new Map<string, string>()
   const fallback = 'Matchar dina sökkriterier.'
 
-  if (!geminiModel || input.venues.length === 0) {
+  const model = getGeminiModel()
+  if (!model || input.venues.length === 0) {
     input.venues.forEach((v) => result.set(v.id, fallback))
     return result
   }
-
-  const model = geminiModel
   const { venues, filters, vibe_description } = input
 
   const venuesJson = JSON.stringify(

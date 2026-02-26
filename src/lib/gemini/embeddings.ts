@@ -1,4 +1,4 @@
-import { embeddingModel } from './client'
+import { getEmbeddingModel } from './client'
 import { withRetry } from './retry'
 
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
@@ -20,7 +20,8 @@ if (typeof setInterval !== 'undefined') {
 }
 
 export async function generateEmbedding(text: string): Promise<number[]> {
-  if (!embeddingModel) {
+  const model = getEmbeddingModel()
+  if (!model) {
     throw new Error('Gemini embedding model is not configured')
   }
 
@@ -29,8 +30,6 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
     return cached.embedding
   }
-
-  const model = embeddingModel
   const result = await withRetry(() => model.embedContent(text))
   const embedding = result.embedding.values
 
