@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getCalendarData, type CalendarData } from '@/actions/venues/get-calendar-data'
 import { blockDate, blockDateRange } from '@/actions/venues/block-date'
@@ -24,6 +25,8 @@ interface DayData {
 }
 
 export default function CalendarPage() {
+  const { id: venueId } = useParams<{ id: string }>()
+
   const [currentDate, setCurrentDate] = useState(() => new Date())
   const [calendarData, setCalendarData] = useState<CalendarData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -42,14 +45,14 @@ export default function CalendarPage() {
 
   const fetchData = useCallback(async () => {
     setIsLoading(true)
-    const result = await getCalendarData(year, month)
+    const result = await getCalendarData(venueId, year, month)
     if (result.success && result.data) {
       setCalendarData(result.data)
     } else {
       setError(result.error || 'Kunde inte ladda kalenderdata')
     }
     setIsLoading(false)
-  }, [year, month])
+  }, [venueId, year, month])
 
   useEffect(() => {
     fetchData()
@@ -89,7 +92,7 @@ export default function CalendarPage() {
 
     if (day.isBlocked) {
       // Unblock
-      const result = await unblockDate(day.dateStr)
+      const result = await unblockDate(venueId, day.dateStr)
       if (result.success) {
         showSuccessMessage('Datum avblockerat')
         await fetchData()
@@ -98,7 +101,7 @@ export default function CalendarPage() {
       }
     } else {
       // Block
-      const result = await blockDate(day.dateStr)
+      const result = await blockDate(venueId, day.dateStr)
       if (result.success) {
         showSuccessMessage('Datum blockerat')
         await fetchData()
@@ -122,7 +125,7 @@ export default function CalendarPage() {
     }
 
     setIsUpdating(true)
-    const result = await blockDateRange(rangeStartDate, rangeEndDate, blockReason || undefined)
+    const result = await blockDateRange(venueId, rangeStartDate, rangeEndDate, blockReason || undefined)
 
     if (result.success) {
       let message = `${result.blockedCount || 0} dagar blockerade`
@@ -277,7 +280,7 @@ export default function CalendarPage() {
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-start gap-2">
           <span className="flex-1">{error}</span>
-          <button onClick={() => setError(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stäng">
+          <button onClick={() => setError(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stang">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -285,7 +288,7 @@ export default function CalendarPage() {
       {successMessage && (
         <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 flex items-start gap-2">
           <span className="flex-1">{successMessage}</span>
-          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stäng">
+          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stang">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -317,7 +320,7 @@ export default function CalendarPage() {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-yellow-100 border border-yellow-300"></div>
-            <span className="text-sm text-[#57534e]">Väntande bokningar</span>
+            <span className="text-sm text-[#57534e]">Vantande bokningar</span>
           </div>
         </div>
       </div>
