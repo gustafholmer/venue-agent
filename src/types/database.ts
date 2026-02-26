@@ -753,6 +753,62 @@ export interface Database {
           created_at?: string
         }
       }
+      venue_contacts: {
+        Row: {
+          id: string
+          venue_id: string
+          customer_id: string | null
+          customer_name: string
+          customer_email: string
+          customer_phone: string | null
+          company_name: string | null
+          total_bookings: number
+          completed_bookings: number
+          total_inquiries: number
+          total_spend: number
+          first_interaction_at: string
+          last_interaction_at: string
+          event_types: string[]
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          venue_id: string
+          customer_id?: string | null
+          customer_name: string
+          customer_email: string
+          customer_phone?: string | null
+          company_name?: string | null
+          total_bookings?: number
+          completed_bookings?: number
+          total_inquiries?: number
+          total_spend?: number
+          first_interaction_at?: string
+          last_interaction_at?: string
+          event_types?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          venue_id?: string
+          customer_id?: string | null
+          customer_name?: string
+          customer_email?: string
+          customer_phone?: string | null
+          company_name?: string | null
+          total_bookings?: number
+          completed_bookings?: number
+          total_inquiries?: number
+          total_spend?: number
+          first_interaction_at?: string
+          last_interaction_at?: string
+          event_types?: string[]
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Functions: {
       match_venues: {
@@ -831,6 +887,7 @@ export type AgentSession = Tables<'agent_sessions'>
 export type CalendarConnection = Tables<'calendar_connections'>
 export type VenueCalendarMapping = Tables<'venue_calendar_mappings'>
 export type CalendarSyncEvent = Tables<'calendar_sync_events'>
+export type VenueContact = Tables<'venue_contacts'>
 
 export function hasRole(profile: { roles: string[] }, role: string): boolean {
   return profile.roles.includes(role)

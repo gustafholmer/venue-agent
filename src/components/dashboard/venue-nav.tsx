@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { path: '', label: 'Lokal' },
   { path: '/bookings', label: 'Bokningar' },
   { path: '/inquiries', label: 'Förfrågningar' },
+  { path: '/contacts', label: 'Kontakter' },
   { path: '/calendar', label: 'Kalender' },
 ]
 

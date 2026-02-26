@@ -9,6 +9,7 @@ import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
 import { convertInquiry } from '@/actions/inquiries/convert-inquiry'
+import { upsertContact } from '@/actions/contacts/upsert-contact'
 
 export interface CreateBookingInput {
   venueId: string
@@ -217,6 +218,18 @@ export async function createBookingRequest(
       }
       return { success: false, error: 'Kunde inte skapa bokningsförfrågan' }
     }
+
+    // Upsert venue contact
+    await upsertContact({
+      venueId: input.venueId,
+      customerEmail: input.customerEmail,
+      customerName: input.customerName,
+      customerId: user.id,
+      customerPhone: input.customerPhone,
+      companyName: input.companyName,
+      eventType: input.eventType,
+      source: 'booking',
+    })
 
     // Create notification for venue owner
     await dispatchNotification({

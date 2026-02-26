@@ -5,6 +5,7 @@ import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
 import { trackEvent } from '@/lib/analytics'
+import { upsertContact } from '@/actions/contacts/upsert-contact'
 
 export interface CreateInquiryInput {
   venueId: string
@@ -155,6 +156,26 @@ export async function createInquiry(
     if (insertError || !inquiry) {
       console.error('Error creating inquiry:', insertError)
       return { success: false, error: 'Kunde inte skapa förfrågan' }
+    }
+
+    // Fetch user profile for contact data
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('full_name, email, phone, company_name')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      await upsertContact({
+        venueId: input.venueId,
+        customerEmail: profile.email,
+        customerName: profile.full_name || profile.email,
+        customerId: user.id,
+        customerPhone: profile.phone,
+        companyName: profile.company_name,
+        eventType: input.eventType,
+        source: 'inquiry',
+      })
     }
 
     // Create notification for venue owner
