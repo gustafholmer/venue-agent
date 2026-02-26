@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { redirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { parseVenueFormData, venueFormSchema, uuidSchema } from '@/lib/validation/schemas'
@@ -56,7 +58,7 @@ export async function updateVenue(venueId: string, formData: FormData) {
         const embeddingText = `${data.name}\n${data.description}\n${data.venue_types.join(', ')}\n${data.vibes.join(', ')}\n${data.amenities.join(', ')}`
         descriptionEmbedding = await generateEmbedding(embeddingText)
       } catch (error) {
-        console.error('Error generating embedding:', error)
+        logger.error('Error generating embedding', { error })
         // Continue without updating embedding
       }
     }
@@ -98,14 +100,14 @@ export async function updateVenue(venueId: string, formData: FormData) {
       .eq('id', existingVenue.id)
 
     if (error) {
-      console.error('Error updating venue:', error)
+      logger.error('Error updating venue', { error })
       return redirect(`/dashboard/venue/${venueId}?error=update_failed`)
     }
 
     return redirect(`/dashboard/venue/${venueId}?success=venue_updated`)
   } catch (error) {
     if (isRedirectError(error)) throw error
-    console.error('Error updating venue:', error)
+    logger.error('Error updating venue', { error })
     return redirect(`/dashboard/venue/${venueId}?error=update_failed`)
   }
 }

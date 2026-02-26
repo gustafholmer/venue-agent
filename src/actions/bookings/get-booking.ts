@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { BookingRequest, VenuePhoto } from '@/types/database'
 
@@ -82,7 +84,7 @@ export async function getBooking(bookingId: string, token?: string): Promise<{
       },
     }
   } catch (error) {
-    console.error('Error fetching booking:', error)
+    logger.error('Error fetching booking', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

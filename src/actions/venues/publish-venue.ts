@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { trackEvent } from '@/lib/analytics'
@@ -115,7 +117,7 @@ export async function publishVenue(venueId: string): Promise<PublishVenueResult>
       .eq('id', venue.id)
 
     if (error) {
-      console.error('Error publishing venue:', error)
+      logger.error('Error publishing venue', { error })
       return {
         success: false,
         errors: [{ field: 'server', message: 'Kunde inte publicera lokalen' }],
@@ -126,7 +128,7 @@ export async function publishVenue(venueId: string): Promise<PublishVenueResult>
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error in publishVenue:', error)
+    logger.error('Unexpected error in publishVenue', { error })
     return {
       success: false,
       errors: [{ field: 'server', message: 'Ett oväntat fel uppstod' }],
@@ -216,7 +218,7 @@ export async function getPublishValidation(venueId: string): Promise<PublishVali
 
     return errors
   } catch (error) {
-    console.error('Unexpected error in getPublishValidation:', error)
+    logger.error('Unexpected error in getPublishValidation', { error })
     return [{ field: 'server', message: 'Ett oväntat fel uppstod' }]
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { revalidatePath } from 'next/cache'
@@ -85,7 +87,7 @@ export async function declineModification(
       .eq('id', modificationId)
 
     if (updateError) {
-      console.error('Error declining modification:', updateError)
+      logger.error('Error declining modification', { updateError })
       return { success: false, error: 'Kunde inte neka ändringsförslaget' }
     }
 
@@ -109,7 +111,7 @@ export async function declineModification(
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error declining modification:', error)
+    logger.error('Unexpected error declining modification', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

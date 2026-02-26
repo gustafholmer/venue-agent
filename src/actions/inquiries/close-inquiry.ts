@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 
@@ -67,7 +69,7 @@ export async function closeInquiry(inquiryId: string): Promise<{ success: boolea
       .eq('id', inquiryId)
 
     if (updateError) {
-      console.error('Error closing inquiry:', updateError)
+      logger.error('Error closing inquiry', { updateError })
       return { success: false, error: 'Kunde inte stänga förfrågan' }
     }
 
@@ -87,7 +89,7 @@ export async function closeInquiry(inquiryId: string): Promise<{ success: boolea
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error closing inquiry:', error)
+    logger.error('Unexpected error closing inquiry', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

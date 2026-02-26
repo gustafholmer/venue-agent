@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { Notification } from '@/types/database'
 
@@ -29,7 +31,7 @@ export async function getNotifications(limit: number = 20): Promise<GetNotificat
       .limit(limit)
 
     if (notificationsError) {
-      console.error('Error fetching notifications:', notificationsError)
+      logger.error('Error fetching notifications', { notificationsError })
       return { success: false, error: 'Kunde inte hämta notifieringar' }
     }
 
@@ -41,7 +43,7 @@ export async function getNotifications(limit: number = 20): Promise<GetNotificat
       .eq('is_read', false)
 
     if (countError) {
-      console.error('Error counting unread notifications:', countError)
+      logger.error('Error counting unread notifications', { countError })
       // Don't fail the whole request, just log and continue
     }
 
@@ -51,7 +53,7 @@ export async function getNotifications(limit: number = 20): Promise<GetNotificat
       unreadCount: unreadCount ?? 0,
     }
   } catch (error) {
-    console.error('Unexpected error fetching notifications:', error)
+    logger.error('Unexpected error fetching notifications', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

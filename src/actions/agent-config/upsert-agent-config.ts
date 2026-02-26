@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type {
   PricingRules, BookingParams, EventTypeConfig,
@@ -52,7 +54,7 @@ export async function upsertAgentConfig(input: UpsertConfigInput): Promise<Upser
     .upsert(record, { onConflict: 'venue_id' })
 
   if (error) {
-    console.error('Failed to upsert agent config:', error)
+    logger.error('Failed to upsert agent config', { error })
     return { success: false, error: 'Kunde inte spara konfiguration' }
   }
 

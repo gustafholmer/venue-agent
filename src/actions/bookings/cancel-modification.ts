@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
@@ -56,7 +58,7 @@ export async function cancelModification(
       .eq('id', modificationId)
 
     if (deleteError) {
-      console.error('Error cancelling modification:', deleteError)
+      logger.error('Error cancelling modification', { deleteError })
       return { success: false, error: 'Kunde inte dra tillbaka ändringsförslaget' }
     }
 
@@ -67,7 +69,7 @@ export async function cancelModification(
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error cancelling modification:', error)
+    logger.error('Unexpected error cancelling modification', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

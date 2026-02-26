@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
@@ -60,7 +62,7 @@ export async function createInquiry(
       .maybeSingle()
 
     if (existingError) {
-      console.error('Error checking existing inquiry:', existingError)
+      logger.error('Error checking existing inquiry', { existingError })
       return { success: false, error: 'Kunde inte kontrollera befintliga förfrågningar' }
     }
 
@@ -119,7 +121,7 @@ export async function createInquiry(
       .single()
 
     if (insertError || !inquiry) {
-      console.error('Error creating inquiry:', insertError)
+      logger.error('Error creating inquiry', { insertError })
       return { success: false, error: 'Kunde inte skapa förfrågan' }
     }
 
@@ -169,7 +171,7 @@ export async function createInquiry(
       inquiryId: inquiry.id,
     }
   } catch (error) {
-    console.error('Unexpected error creating inquiry:', error)
+    logger.error('Unexpected error creating inquiry', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

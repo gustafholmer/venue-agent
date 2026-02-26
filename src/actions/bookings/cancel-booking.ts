@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
@@ -66,7 +68,7 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
       .eq('id', bookingId)
 
     if (updateError) {
-      console.error('Error cancelling booking:', updateError)
+      logger.error('Error cancelling booking', { updateError })
       return { success: false, error: 'Kunde inte avboka bokningen' }
     }
 
@@ -123,7 +125,7 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
 
     return { success: true, calendarSyncFailed }
   } catch (error) {
-    console.error('Unexpected error cancelling booking:', error)
+    logger.error('Unexpected error cancelling booking', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

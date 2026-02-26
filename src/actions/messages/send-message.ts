@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { trackEvent } from '@/lib/analytics'
@@ -58,7 +60,7 @@ export async function sendMessage(
 
     return await sendBookingMessage(supabase, threadId, trimmedContent, user.id, senderName)
   } catch (error) {
-    console.error('Unexpected error sending message:', error)
+    logger.error('Unexpected error sending message', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',
@@ -117,7 +119,7 @@ async function sendBookingMessage(
     .single()
 
   if (insertError || !message) {
-    console.error('Error creating message:', insertError)
+    logger.error('Error creating message', { insertError })
     return { success: false, error: 'Kunde inte skicka meddelandet' }
   }
 
@@ -202,7 +204,7 @@ async function sendInquiryMessage(
     .single()
 
   if (insertError || !message) {
-    console.error('Error creating message:', insertError)
+    logger.error('Error creating message', { insertError })
     return { success: false, error: 'Kunde inte skicka meddelandet' }
   }
 

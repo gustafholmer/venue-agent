@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { VenueContact } from '@/types/database'
 
@@ -62,7 +64,7 @@ export async function getVenueContacts(
     const { data: contacts, error } = await query
 
     if (error) {
-      console.error('Error fetching venue contacts:', error)
+      logger.error('Error fetching venue contacts', { error })
       return { success: false, error: 'Kunde inte hämta kontakter' }
     }
 
@@ -71,7 +73,7 @@ export async function getVenueContacts(
       contacts: (contacts || []).map(c => ({ ...c, venue_name: venue.name })),
     }
   } catch (error) {
-    console.error('Unexpected error fetching venue contacts:', error)
+    logger.error('Unexpected error fetching venue contacts', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }
@@ -126,7 +128,7 @@ export async function getAllContacts(
     const { data: contacts, error } = await query
 
     if (error) {
-      console.error('Error fetching all contacts:', error)
+      logger.error('Error fetching all contacts', { error })
       return { success: false, error: 'Kunde inte hämta kontakter' }
     }
 
@@ -138,7 +140,7 @@ export async function getAllContacts(
       })),
     }
   } catch (error) {
-    console.error('Unexpected error fetching all contacts:', error)
+    logger.error('Unexpected error fetching all contacts', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

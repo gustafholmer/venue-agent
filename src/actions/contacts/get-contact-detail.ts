@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { VenueContact } from '@/types/database'
 
@@ -127,7 +129,7 @@ export async function getContactDetail(
       },
     }
   } catch (error) {
-    console.error('Unexpected error fetching contact detail:', error)
+    logger.error('Unexpected error fetching contact detail', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

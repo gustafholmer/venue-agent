@@ -1,4 +1,6 @@
 'use server'
+
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 import { getCalendarProvider } from '@/lib/calendar'
 import { getValidAccessToken } from '@/lib/calendar/token-manager'
@@ -30,7 +32,7 @@ export async function listGoogleCalendars(): Promise<{
     const calendars = await provider.listCalendars(tokenResult.accessToken)
     return { success: true, calendars }
   } catch (error) {
-    console.error('Failed to list calendars:', error)
+    logger.error('Failed to list calendars', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

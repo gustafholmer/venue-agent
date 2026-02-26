@@ -1,6 +1,9 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
+import { uuidSchema } from '@/lib/validation/schemas'
 import { createBookingRequest } from '@/actions/bookings/create-booking-request'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import type { BookingApprovalSummary } from '@/types/agent-booking'
@@ -13,6 +16,12 @@ interface ApproveResult {
 
 export async function approveAction(actionId: string): Promise<ApproveResult> {
   try {
+    // Validate actionId
+    const parsed = uuidSchema.safeParse(actionId)
+    if (!parsed.success) {
+      return { success: false, error: 'Ogiltigt åtgärds-ID' }
+    }
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -89,7 +98,7 @@ export async function approveAction(actionId: string): Promise<ApproveResult> {
       .eq('id', actionId)
 
     if (updateError) {
-      console.error('Failed to update action:', updateError)
+      logger.error('Failed to update action', { updateError })
       return { success: false, error: 'Kunde inte uppdatera åtgärden' }
     }
 
@@ -127,7 +136,7 @@ export async function approveAction(actionId: string): Promise<ApproveResult> {
 
     return { success: true, bookingId: bookingResult.bookingId }
   } catch (error) {
-    console.error('Error approving action:', error)
+    logger.error('Error approving action', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

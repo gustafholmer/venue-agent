@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 
@@ -50,7 +52,7 @@ export async function unpublishVenue(venueId: string): Promise<UnpublishVenueRes
       .eq('id', venue.id)
 
     if (error) {
-      console.error('Error pausing venue:', error)
+      logger.error('Error pausing venue', { error })
       return {
         success: false,
         error: 'Kunde inte pausa lokalen',
@@ -59,7 +61,7 @@ export async function unpublishVenue(venueId: string): Promise<UnpublishVenueRes
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error in unpublishVenue:', error)
+    logger.error('Unexpected error in unpublishVenue', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

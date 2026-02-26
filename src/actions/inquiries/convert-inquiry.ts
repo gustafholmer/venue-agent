@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 // UUID format validation regex
@@ -65,13 +67,13 @@ export async function convertInquiry(
       .eq('id', inquiryId)
 
     if (updateError) {
-      console.error('Error converting inquiry:', updateError)
+      logger.error('Error converting inquiry', { updateError })
       return { success: false, error: 'Kunde inte konvertera förfrågan' }
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error converting inquiry:', error)
+    logger.error('Unexpected error converting inquiry', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

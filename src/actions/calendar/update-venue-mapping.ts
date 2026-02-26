@@ -1,4 +1,6 @@
 'use server'
+
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 
 export async function updateVenueCalendarMapping(
@@ -45,12 +47,12 @@ export async function updateVenueCalendarMapping(
       )
 
     if (error) {
-      console.error('Failed to update venue calendar mapping:', error)
+      logger.error('Failed to update venue calendar mapping', { error })
       return { success: false, error: 'Kunde inte uppdatera kalenderkopplingen' }
     }
     return { success: true }
   } catch (error) {
-    console.error('Failed to update venue calendar mapping:', error)
+    logger.error('Failed to update venue calendar mapping', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

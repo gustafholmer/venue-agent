@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { Message, Profile } from '@/types/database'
 
@@ -44,7 +46,7 @@ export async function getMessages(
 
     return await getBookingMessages(supabase, threadId, user.id)
   } catch (error) {
-    console.error('Unexpected error fetching messages:', error)
+    logger.error('Unexpected error fetching messages', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',
@@ -98,7 +100,7 @@ async function getBookingMessages(
     .order('created_at', { ascending: true })
 
   if (messagesError) {
-    console.error('Error fetching messages:', messagesError)
+    logger.error('Error fetching messages', { messagesError })
     return { success: false, error: 'Kunde inte hämta meddelanden' }
   }
 
@@ -163,7 +165,7 @@ async function getInquiryMessages(
     .order('created_at', { ascending: true })
 
   if (messagesError) {
-    console.error('Error fetching messages:', messagesError)
+    logger.error('Error fetching messages', { messagesError })
     return { success: false, error: 'Kunde inte hämta meddelanden' }
   }
 
@@ -204,7 +206,7 @@ async function markFetchedMessagesAsRead(
 
     if (updateError) {
       // Log but don't fail - messages are still readable
-      console.error('Error marking messages as read:', updateError)
+      logger.error('Error marking messages as read', { updateError })
     }
   }
 }

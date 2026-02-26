@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export interface InboxItem {
@@ -177,7 +179,7 @@ export async function getInboxItems(
 
     return { success: true, items }
   } catch (error) {
-    console.error('Unexpected error fetching inbox items:', error)
+    logger.error('Unexpected error fetching inbox items', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

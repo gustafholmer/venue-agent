@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import crypto from 'crypto'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
@@ -204,7 +206,7 @@ export async function createBookingRequest(
       })
 
     if (rpcError) {
-      console.error('Booking RPC error:', rpcError)
+      logger.error('Booking RPC error', { rpcError })
       return { success: false, error: 'Kunde inte skapa bokningsförfrågan' }
     }
 
@@ -258,10 +260,10 @@ export async function createBookingRequest(
       try {
         const conversionResult = await convertInquiry(input.inquiryId, row.booking_id)
         if (!conversionResult.success) {
-          console.error('Failed to convert inquiry:', conversionResult.error)
+          logger.error('Failed to convert inquiry', { error: conversionResult.error })
         }
       } catch (conversionError) {
-        console.error('Error converting inquiry after booking creation:', conversionError)
+        logger.error('Error converting inquiry after booking creation', { conversionError })
       }
     }
 
@@ -271,7 +273,7 @@ export async function createBookingRequest(
       verificationToken,
     }
   } catch (error) {
-    console.error('Unexpected error creating booking:', error)
+    logger.error('Unexpected error creating booking', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

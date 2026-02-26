@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 /**
@@ -44,7 +46,7 @@ export async function hasExistingThread(venueId: string): Promise<boolean> {
 
     return false
   } catch (error) {
-    console.error('Error checking existing thread:', error)
+    logger.error('Error checking existing thread', { error })
     return false
   }
 }

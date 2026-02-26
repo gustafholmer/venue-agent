@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { syncToCalendar } from '@/lib/calendar/sync'
@@ -105,7 +107,7 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
       .eq('id', bookingId)
 
     if (updateError) {
-      console.error('Error accepting booking:', updateError)
+      logger.error('Error accepting booking', { updateError })
       return { success: false, error: 'Kunde inte godkänna bokningen' }
     }
 
@@ -127,7 +129,7 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
 
     if (blockError) {
       // Log but don't fail - the booking is already accepted
-      console.error('Error blocking date after accepting booking:', blockError)
+      logger.error('Error blocking date after accepting booking', { blockError })
     }
 
     // Sync to external calendar
@@ -166,7 +168,7 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
 
     return { success: true, calendarSyncFailed: syncResult.calendarSyncFailed }
   } catch (error) {
-    console.error('Unexpected error accepting booking:', error)
+    logger.error('Unexpected error accepting booking', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

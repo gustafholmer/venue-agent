@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { parsePreferences } from '@/lib/gemini/parse-preferences'
 import { searchVenues } from '@/actions/venues/search-venues'
@@ -140,7 +142,7 @@ export async function processAgentMessage(
     try {
       parsedPreferences = await parsePreferences(userMessage)
     } catch (parseError) {
-      console.error('Failed to parse preferences:', parseError)
+      logger.error('Failed to parse preferences', { parseError })
 
       // Return a helpful error message
       const errorMsg: AgentMessage = {
@@ -249,7 +251,7 @@ export async function processAgentMessage(
       .eq('id', sessionId)
 
     if (updateError) {
-      console.error('Failed to update session:', updateError)
+      logger.error('Failed to update session', { updateError })
       return { success: false, error: 'Kunde inte uppdatera session' }
     }
 
@@ -263,7 +265,7 @@ export async function processAgentMessage(
       },
     }
   } catch (error) {
-    console.error('Error processing agent message:', error)
+    logger.error('Error processing agent message', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }
@@ -302,7 +304,7 @@ export async function getSessionMessages(
       state: session.state as AgentState,
     }
   } catch (error) {
-    console.error('Error fetching session messages:', error)
+    logger.error('Error fetching session messages', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

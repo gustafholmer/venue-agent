@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { BookingRequest } from '@/types/database'
 
@@ -62,7 +64,7 @@ export async function getVenueBookings(
     const { data: bookings, error: bookingsError } = await query
 
     if (bookingsError) {
-      console.error('Error fetching bookings:', bookingsError)
+      logger.error('Error fetching bookings', { bookingsError })
       return { success: false, error: 'Kunde inte hämta bokningar' }
     }
 
@@ -71,7 +73,7 @@ export async function getVenueBookings(
       bookings: (bookings || []) as VenueBooking[],
     }
   } catch (error) {
-    console.error('Unexpected error fetching venue bookings:', error)
+    logger.error('Unexpected error fetching venue bookings', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

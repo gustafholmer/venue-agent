@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export interface ExportContactsResult {
@@ -76,7 +78,7 @@ export async function exportContacts(
 
     return { success: true, csv }
   } catch (error) {
-    console.error('Unexpected error exporting contacts:', error)
+    logger.error('Unexpected error exporting contacts', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { sendMessage } from '@/actions/messages/send-message'
@@ -7,6 +9,7 @@ import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { upsertContact } from '@/actions/contacts/upsert-contact'
 import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
 import { uuidSchema } from '@/lib/validation/schemas'
+import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
 
 export interface CreateOutboundInquiryInput {
   contactId: string
@@ -26,6 +29,11 @@ export async function createOutboundInquiry(
   input: CreateOutboundInquiryInput
 ): Promise<CreateOutboundInquiryResult> {
   try {
+    const rateLimitResult = await rateLimit('create-outbound-inquiry', RATE_LIMITS.createOutboundInquiry)
+    if (!rateLimitResult.success) {
+      return { success: false, error: RATE_LIMIT_ERROR }
+    }
+
     const contactIdResult = uuidSchema.safeParse(input.contactId)
     if (!contactIdResult.success) {
       return { success: false, error: 'Ogiltigt kontakt-ID' }
@@ -121,7 +129,7 @@ export async function createOutboundInquiry(
       .single()
 
     if (insertError || !inquiry) {
-      console.error('Error creating outbound inquiry:', insertError)
+      logger.error('Error creating outbound inquiry', { insertError })
       return { success: false, error: 'Kunde inte skapa förfrågan' }
     }
 
@@ -154,7 +162,7 @@ export async function createOutboundInquiry(
 
     return { success: true, inquiryId: inquiry.id }
   } catch (error) {
-    console.error('Unexpected error creating outbound inquiry:', error)
+    logger.error('Unexpected error creating outbound inquiry', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

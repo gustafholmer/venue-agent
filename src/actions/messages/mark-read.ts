@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export interface MarkMessagesReadResult {
@@ -39,7 +41,7 @@ export async function markMessagesAsRead(
 
     return await markBookingMessagesAsRead(supabase, threadId, user.id, beforeTimestamp)
   } catch (error) {
-    console.error('Unexpected error marking messages as read:', error)
+    logger.error('Unexpected error marking messages as read', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }
@@ -93,7 +95,7 @@ async function markBookingMessagesAsRead(
   const { data: updated, error: updateError } = await query.select('id')
 
   if (updateError) {
-    console.error('Error marking messages as read:', updateError)
+    logger.error('Error marking messages as read', { updateError })
     return { success: false, error: 'Kunde inte markera meddelanden som lästa' }
   }
 
@@ -152,7 +154,7 @@ async function markInquiryMessagesAsRead(
   const { data: updated, error: updateError } = await query.select('id')
 
   if (updateError) {
-    console.error('Error marking messages as read:', updateError)
+    logger.error('Error marking messages as read', { updateError })
     return { success: false, error: 'Kunde inte markera meddelanden som lästa' }
   }
 
@@ -193,13 +195,13 @@ export async function getUnreadCount(
       .neq('sender_id', user.id)
 
     if (error) {
-      console.error('Error getting unread count:', error)
+      logger.error('Error getting unread count', { error })
       return 0
     }
 
     return count || 0
   } catch (error) {
-    console.error('Unexpected error getting unread count:', error)
+    logger.error('Unexpected error getting unread count', { error })
     return 0
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { VenueBlockedDate, BookingRequest } from '@/types/database'
 
@@ -58,7 +60,7 @@ export async function getCalendarData(venueId: string, year: number, month: numb
       .lte('blocked_date', endDateStr)
 
     if (blockedError) {
-      console.error('Error fetching blocked dates:', blockedError)
+      logger.error('Error fetching blocked dates', { blockedError })
       return { success: false, error: 'Kunde inte hamta blockerade datum' }
     }
 
@@ -72,7 +74,7 @@ export async function getCalendarData(venueId: string, year: number, month: numb
       .lte('event_date', endDateStr)
 
     if (bookingsError) {
-      console.error('Error fetching bookings:', bookingsError)
+      logger.error('Error fetching bookings', { bookingsError })
       return { success: false, error: 'Kunde inte hamta bokningar' }
     }
 
@@ -85,7 +87,7 @@ export async function getCalendarData(venueId: string, year: number, month: numb
       },
     }
   } catch (error) {
-    console.error('Unexpected error in getCalendarData:', error)
+    logger.error('Unexpected error in getCalendarData', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

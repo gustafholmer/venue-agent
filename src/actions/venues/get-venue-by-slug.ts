@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { getMockVenueBySlug, getMockPhotosForVenue } from '@/lib/mock-data'
@@ -88,7 +90,7 @@ export async function getVenueBySlug(slugOrId: string): Promise<GetVenueResult> 
       },
     }
   } catch (error) {
-    console.error('Error fetching venue:', error)
+    logger.error('Error fetching venue', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

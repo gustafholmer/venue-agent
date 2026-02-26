@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { parsePreferences } from '@/lib/gemini/parse-preferences'
@@ -40,14 +42,14 @@ export async function savePreferences(rawInput: string) {
       })
 
     if (error) {
-      console.error('Error saving preferences:', error)
+      logger.error('Error saving preferences', { error })
       return { error: 'Failed to save preferences' }
     }
 
     revalidatePath('/results')
     return { success: true, parsed }
   } catch (err) {
-    console.error('Error in savePreferences:', err)
+    logger.error('Error in savePreferences', { err })
     return { error: 'Failed to process preferences' }
   }
 }

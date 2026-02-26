@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { BookingModification } from '@/types/database'
 
@@ -54,7 +56,7 @@ export async function getBookingModification(bookingId: string): Promise<{
       modification: modification || undefined,
     }
   } catch (error) {
-    console.error('Error fetching modification:', error)
+    logger.error('Error fetching modification', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

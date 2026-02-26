@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { revalidatePath } from 'next/cache'
@@ -153,7 +155,7 @@ export async function acceptModification(
       .eq('id', booking.id)
 
     if (updateError) {
-      console.error('Error updating booking:', updateError)
+      logger.error('Error updating booking', { updateError })
       return { success: false, error: 'Kunde inte uppdatera bokningen' }
     }
 
@@ -168,7 +170,7 @@ export async function acceptModification(
       .eq('id', modificationId)
 
     if (modUpdateError) {
-      console.error('Error updating modification status:', modUpdateError)
+      logger.error('Error updating modification status', { modUpdateError })
     }
 
     // Notify the proposer
@@ -192,7 +194,7 @@ export async function acceptModification(
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error accepting modification:', error)
+    logger.error('Unexpected error accepting modification', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

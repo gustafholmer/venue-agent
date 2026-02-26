@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 
@@ -38,7 +40,7 @@ export async function getVenue(venueId: string): Promise<{
 
     return { success: true, venue }
   } catch (error) {
-    console.error('Error fetching venue:', error)
+    logger.error('Error fetching venue', { error })
     return { success: false, error: 'Ett ovantat fel uppstod' }
   }
 }

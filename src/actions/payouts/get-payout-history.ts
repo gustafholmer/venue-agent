@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export type PayoutStatusFilter = 'all' | 'paid_out' | 'pending'
@@ -40,7 +42,7 @@ export async function getPayoutHistory(
       .eq('owner_id', user.id)
 
     if (venuesError) {
-      console.error('Error fetching venues for payout history:', venuesError)
+      logger.error('Error fetching venues for payout history', { venuesError })
       return null
     }
 
@@ -83,7 +85,7 @@ export async function getPayoutHistory(
       .range(offset, offset + fetchCount - 1)
 
     if (bookingsError) {
-      console.error('Error fetching payout history:', bookingsError)
+      logger.error('Error fetching payout history', { bookingsError })
       return null
     }
 
@@ -108,7 +110,7 @@ export async function getPayoutHistory(
 
     return { items, hasMore }
   } catch (error) {
-    console.error('Unexpected error in getPayoutHistory:', error)
+    logger.error('Unexpected error in getPayoutHistory', { error })
     return null
   }
 }

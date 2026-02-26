@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
@@ -32,7 +34,7 @@ export async function unsaveVenue(venueId: string): Promise<{
       .eq('venue_id', venueId)
 
     if (deleteError) {
-      console.error('Error unsaving venue:', deleteError)
+      logger.error('Error unsaving venue', { deleteError })
       return { success: false, error: 'Kunde inte ta bort lokalen fran sparade' }
     }
 
@@ -41,7 +43,7 @@ export async function unsaveVenue(venueId: string): Promise<{
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error unsaving venue:', error)
+    logger.error('Unexpected error unsaving venue', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

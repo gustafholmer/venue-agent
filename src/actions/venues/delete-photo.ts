@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
@@ -53,7 +55,7 @@ export async function deletePhoto(venueId: string, photoId: string) {
         .remove([storagePath])
 
       if (storageError) {
-        console.error('Storage delete error:', storageError)
+        logger.error('Storage delete error', { storageError })
         // Continue to delete from database even if storage fails
       }
     }
@@ -65,7 +67,7 @@ export async function deletePhoto(venueId: string, photoId: string) {
       .eq('id', photoId)
 
     if (dbError) {
-      console.error('Database delete error:', dbError)
+      logger.error('Database delete error', { dbError })
       return { success: false, error: 'Kunde inte ta bort bilden' }
     }
 
@@ -89,7 +91,7 @@ export async function deletePhoto(venueId: string, photoId: string) {
     revalidatePath(`/dashboard/venue/${venueId}`)
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error in deletePhoto:', error)
+    logger.error('Unexpected error in deletePhoto', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { syncToCalendar } from '@/lib/calendar/sync'
 
@@ -70,7 +72,7 @@ export async function blockDate(
       .single()
 
     if (insertError || !insertedBlock) {
-      console.error('Error blocking date:', insertError)
+      logger.error('Error blocking date', { insertError })
       return { success: false, error: 'Kunde inte blockera datum' }
     }
 
@@ -88,7 +90,7 @@ export async function blockDate(
 
     return { success: true, calendarSyncFailed: syncResult.calendarSyncFailed }
   } catch (error) {
-    console.error('Unexpected error in blockDate:', error)
+    logger.error('Unexpected error in blockDate', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }
@@ -176,7 +178,7 @@ export async function blockDateRange(
       .select('id, blocked_date')
 
     if (insertError) {
-      console.error('Error blocking dates:', insertError)
+      logger.error('Error blocking dates', { insertError })
       return { success: false, error: 'Kunde inte blockera datum' }
     }
 
@@ -205,7 +207,7 @@ export async function blockDateRange(
       calendarSyncFailed: calendarSyncFailed || undefined,
     }
   } catch (error) {
-    console.error('Unexpected error in blockDateRange:', error)
+    logger.error('Unexpected error in blockDateRange', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

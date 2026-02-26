@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { VenueInquiry, VenuePhoto } from '@/types/database'
 
@@ -94,7 +96,7 @@ export async function getInquiry(inquiryId: string): Promise<{
       },
     }
   } catch (error) {
-    console.error('Error fetching inquiry:', error)
+    logger.error('Error fetching inquiry', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

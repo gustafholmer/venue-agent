@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { Json } from '@/types/database'
 
@@ -80,13 +82,13 @@ export async function getAgentActions(options: {
     const { data, error } = await query
 
     if (error) {
-      console.error('Failed to fetch agent actions:', error)
+      logger.error('Failed to fetch agent actions', { error })
       return { success: false, error: 'Kunde inte hämta åtgärder' }
     }
 
     return { success: true, actions: (data ?? []) as unknown as AgentActionRow[] }
   } catch (error) {
-    console.error('Error fetching agent actions:', error)
+    logger.error('Error fetching agent actions', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

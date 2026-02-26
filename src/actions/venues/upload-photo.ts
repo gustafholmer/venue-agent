@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
@@ -64,7 +66,7 @@ export async function uploadPhoto(venueId: string, formData: FormData) {
       })
 
     if (uploadError) {
-      console.error('Storage upload error:', uploadError)
+      logger.error('Storage upload error', { uploadError })
       return { success: false, error: 'Kunde inte ladda upp filen' }
     }
 
@@ -105,7 +107,7 @@ export async function uploadPhoto(venueId: string, formData: FormData) {
       })
 
     if (dbError) {
-      console.error('Database insert error:', dbError)
+      logger.error('Database insert error', { dbError })
       // Try to clean up uploaded file
       await supabase.storage.from('venue-photos').remove([storagePath])
       return { success: false, error: 'Kunde inte spara bildinformation' }
@@ -115,7 +117,7 @@ export async function uploadPhoto(venueId: string, formData: FormData) {
     trackEvent('venue_photo_uploaded', { venue_id: venue.id }, user.id)
     return { success: true, photoId }
   } catch (error) {
-    console.error('Unexpected error in uploadPhoto:', error)
+    logger.error('Unexpected error in uploadPhoto', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

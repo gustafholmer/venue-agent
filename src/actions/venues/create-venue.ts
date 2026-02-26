@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { trackEvent } from '@/lib/analytics'
 import { parseVenueFormData, venueFormSchema } from '@/lib/validation/schemas'
 
@@ -47,7 +49,7 @@ export async function createVenue(formData: FormData): Promise<{ success: boolea
         const embeddingText = `${data.name}\n${data.description}\n${data.venue_types.join(', ')}\n${data.vibes.join(', ')}\n${data.amenities.join(', ')}`
         descriptionEmbedding = await generateEmbedding(embeddingText)
       } catch (error) {
-        console.error('Error generating embedding:', error)
+        logger.error('Error generating embedding', { error })
         // Continue without embedding
       }
     }
@@ -84,7 +86,7 @@ export async function createVenue(formData: FormData): Promise<{ success: boolea
       .single()
 
     if (error) {
-      console.error('Error creating venue:', error)
+      logger.error('Error creating venue', { error })
       return { success: false, error: 'Kunde inte skapa lokalen' }
     }
 
@@ -92,7 +94,7 @@ export async function createVenue(formData: FormData): Promise<{ success: boolea
 
     return { success: true, venueId: newVenue.id }
   } catch (error) {
-    console.error('Error creating venue:', error)
+    logger.error('Error creating venue', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { updateProfileSchema } from '@/lib/validation/schemas'
 import { revalidatePath } from 'next/cache'
@@ -41,7 +43,7 @@ export async function updateProfile(data: UpdateProfileData): Promise<{
       .eq('id', user.id)
 
     if (updateError) {
-      console.error('Error updating profile:', updateError)
+      logger.error('Error updating profile', { updateError })
       return { success: false, error: 'Kunde inte uppdatera profilen' }
     }
 
@@ -50,7 +52,7 @@ export async function updateProfile(data: UpdateProfileData): Promise<{
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error updating profile:', error)
+    logger.error('Unexpected error updating profile', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
@@ -49,7 +51,7 @@ export async function setPrimaryPhoto(venueId: string, photoId: string) {
       .eq('venue_id', venue.id)
 
     if (resetError) {
-      console.error('Error resetting primary photos:', resetError)
+      logger.error('Error resetting primary photos', { resetError })
       return { success: false, error: 'Kunde inte uppdatera bilder' }
     }
 
@@ -60,14 +62,14 @@ export async function setPrimaryPhoto(venueId: string, photoId: string) {
       .eq('id', photoId)
 
     if (updateError) {
-      console.error('Error setting primary photo:', updateError)
+      logger.error('Error setting primary photo', { updateError })
       return { success: false, error: 'Kunde inte satta primarbild' }
     }
 
     revalidatePath(`/dashboard/venue/${venueId}`)
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error in setPrimaryPhoto:', error)
+    logger.error('Unexpected error in setPrimaryPhoto', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

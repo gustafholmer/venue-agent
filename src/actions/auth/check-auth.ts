@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export async function checkAuth(): Promise<{
@@ -22,7 +24,7 @@ export async function checkAuth(): Promise<{
       email: user.email,
     }
   } catch (error) {
-    console.error('Check auth error:', error)
+    logger.error('Check auth error', { error })
     return { isAuthenticated: false }
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { headers } from 'next/headers'
@@ -110,14 +112,14 @@ export async function signUp(
         .upsert({ id: authData.user.id, email, ...profileData }, { onConflict: 'id' })
 
       if (profileError) {
-        console.error('Profile update error:', profileError)
+        logger.error('Profile update error', { profileError })
       }
     }
 
     redirect('/auth/confirm')
   } catch (error) {
     if (isRedirectError(error)) throw error
-    console.error('Sign up error:', error)
+    logger.error('Sign up error', { error })
     return { fieldErrors: {}, formError: 'Ett oväntat fel uppstod' }
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import Stripe from 'stripe'
 import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
@@ -154,14 +156,14 @@ export async function createConnectAccount(
     if (updateError) {
       // Rollback: delete the Stripe account if DB update fails
       await stripe.accounts.del(account.id).catch((deleteError) => {
-        console.error('Failed to rollback Stripe account:', deleteError)
+        logger.error('Failed to rollback Stripe account', { deleteError })
       })
       return { success: false, error: 'Kunde inte spara kontoinformation' }
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Error creating Connect account:', error)
+    logger.error('Error creating Connect account', { error })
 
     if (error instanceof Stripe.errors.StripeError) {
       return { success: false, error: error.message }

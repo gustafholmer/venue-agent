@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
@@ -42,7 +44,7 @@ export async function updateNotificationPreferences(data: NotificationPreference
         .eq('user_id', user.id)
 
       if (updateError) {
-        console.error('Error updating notification preferences:', updateError)
+        logger.error('Error updating notification preferences', { updateError })
         return { success: false, error: 'Kunde inte uppdatera aviseringsinställningar' }
       }
     } else {
@@ -55,7 +57,7 @@ export async function updateNotificationPreferences(data: NotificationPreference
         })
 
       if (insertError) {
-        console.error('Error inserting notification preferences:', insertError)
+        logger.error('Error inserting notification preferences', { insertError })
         return { success: false, error: 'Kunde inte spara aviseringsinställningar' }
       }
     }
@@ -64,7 +66,7 @@ export async function updateNotificationPreferences(data: NotificationPreference
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error updating notification preferences:', error)
+    logger.error('Unexpected error updating notification preferences', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',
@@ -92,7 +94,7 @@ export async function getNotificationPreferences(): Promise<{
       .single()
 
     if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-      console.error('Error fetching notification preferences:', error)
+      logger.error('Error fetching notification preferences', { error })
       return { success: false, error: 'Kunde inte hämta aviseringsinställningar' }
     }
 
@@ -110,7 +112,7 @@ export async function getNotificationPreferences(): Promise<{
       preferences: preferences || defaultPreferences,
     }
   } catch (error) {
-    console.error('Unexpected error fetching notification preferences:', error)
+    logger.error('Unexpected error fetching notification preferences', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

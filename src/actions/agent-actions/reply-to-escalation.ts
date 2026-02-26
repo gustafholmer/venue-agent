@@ -1,5 +1,8 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import type { Json } from '@/types/database'
 import type { AgentConversationMessage } from '@/types/agent-booking'
@@ -21,8 +24,9 @@ export async function replyToEscalation(
       return { success: false, error: 'Ej inloggad' }
     }
 
-    if (!response.trim()) {
-      return { success: false, error: 'Svar krävs' }
+    const parsed = z.string().min(1, 'Svar krävs').max(2000, 'Meddelandet är för långt').safeParse(response)
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.issues[0].message }
     }
 
     // Load action — RLS enforces venue ownership
@@ -63,7 +67,7 @@ export async function replyToEscalation(
       .eq('id', actionId)
 
     if (updateError) {
-      console.error('Failed to update escalation:', updateError)
+      logger.error('Failed to update escalation', { updateError })
       return { success: false, error: 'Kunde inte uppdatera åtgärden' }
     }
 
@@ -75,7 +79,7 @@ export async function replyToEscalation(
       .single()
 
     if (convError || !conversation) {
-      console.error('Failed to load conversation:', convError)
+      logger.error('Failed to load conversation', { convError })
       return { success: false, error: 'Konversationen hittades inte' }
     }
 
@@ -114,7 +118,7 @@ export async function replyToEscalation(
 
     return { success: true }
   } catch (error) {
-    console.error('Error replying to escalation:', error)
+    logger.error('Error replying to escalation', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

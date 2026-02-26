@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { MOCK_VENUES, filterMockVenues } from '@/lib/mock-data'
@@ -189,7 +191,7 @@ export async function searchVenues(
     try {
       embedding = await generateEmbedding(searchQuery)
     } catch (error) {
-      console.error('Error generating embedding:', error)
+      logger.error('Error generating embedding', { error })
       // Fall back to mock data if embedding fails
       return {
         success: true,
@@ -209,7 +211,7 @@ export async function searchVenues(
     )
 
     if (matchError) {
-      console.error('Error matching venues:', matchError)
+      logger.error('Error matching venues', { matchError })
       return {
         success: false,
         error: 'Kunde inte soka efter lokaler.',
@@ -336,7 +338,7 @@ export async function searchVenues(
       hasMore,
     }
   } catch (error) {
-    console.error('Error in searchVenues:', error)
+    logger.error('Error in searchVenues', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod vid sokning.',

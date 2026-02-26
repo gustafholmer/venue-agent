@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
@@ -44,7 +46,7 @@ export async function signIn(
     redirect(validReturnUrl || '/')
   } catch (error) {
     if (isRedirectError(error)) throw error
-    console.error('Sign in error:', error)
+    logger.error('Sign in error', { error })
     return { error: 'Ett oväntat fel uppstod' }
   }
 }

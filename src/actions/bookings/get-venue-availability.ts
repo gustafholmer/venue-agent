@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export interface VenueAvailability {
@@ -40,12 +42,12 @@ export async function getVenueAvailability(
     ])
 
     if (blockedResult.error) {
-      console.error('Error fetching blocked dates:', blockedResult.error)
+      logger.error('Error fetching blocked dates', { error: blockedResult.error })
       return { success: false, error: 'Kunde inte hämta tillgänglighet' }
     }
 
     if (bookingsResult.error) {
-      console.error('Error fetching bookings:', bookingsResult.error)
+      logger.error('Error fetching bookings', { error: bookingsResult.error })
       return { success: false, error: 'Kunde inte hämta bokningar' }
     }
 
@@ -57,7 +59,7 @@ export async function getVenueAvailability(
       },
     }
   } catch (error) {
-    console.error('Unexpected error fetching availability:', error)
+    logger.error('Unexpected error fetching availability', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

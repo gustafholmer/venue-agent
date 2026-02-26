@@ -1,6 +1,9 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
+import { uuidSchema } from '@/lib/validation/schemas'
 import type { AgentState } from '@/types/agent'
 
 interface CreateSessionResult {
@@ -30,13 +33,13 @@ export async function createAgentSession(): Promise<CreateSessionResult> {
       .single()
 
     if (error) {
-      console.error('Failed to create agent session:', error)
+      logger.error('Failed to create agent session', { error })
       return { success: false, error: 'Kunde inte skapa session' }
     }
 
     return { success: true, sessionId: data.id }
   } catch (error) {
-    console.error('Error creating agent session:', error)
+    logger.error('Error creating agent session', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }
@@ -45,8 +48,13 @@ export async function getOrCreateSession(sessionId?: string): Promise<CreateSess
   try {
     const supabase = await createClient()
 
-    // If sessionId provided, try to fetch existing session
+    // If sessionId provided, validate and try to fetch existing session
     if (sessionId) {
+      const parsed = uuidSchema.safeParse(sessionId)
+      if (!parsed.success) {
+        return { success: false, error: 'Ogiltigt sessions-ID' }
+      }
+
       const { data: existingSession, error: fetchError } = await supabase
         .from('agent_sessions')
         .select('id')
@@ -62,7 +70,7 @@ export async function getOrCreateSession(sessionId?: string): Promise<CreateSess
     // Create new session if none exists or expired
     return createAgentSession()
   } catch (error) {
-    console.error('Error in getOrCreateSession:', error)
+    logger.error('Error in getOrCreateSession', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 // UUID format validation regex
@@ -47,13 +49,13 @@ export async function markNotificationsRead(
       .eq('user_id', user.id)
 
     if (error) {
-      console.error('Error marking notifications as read:', error)
+      logger.error('Error marking notifications as read', { error })
       return { success: false, error: 'Kunde inte markera notifieringar som lästa' }
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error marking notifications as read:', error)
+    logger.error('Unexpected error marking notifications as read', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',
@@ -85,13 +87,13 @@ export async function markAllNotificationsRead(): Promise<MarkNotificationsReadR
       .eq('is_read', false)
 
     if (error) {
-      console.error('Error marking all notifications as read:', error)
+      logger.error('Error marking all notifications as read', { error })
       return { success: false, error: 'Kunde inte markera notifieringar som lästa' }
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error marking all notifications as read:', error)
+    logger.error('Unexpected error marking all notifications as read', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger'
 import { createServiceClient } from '@/lib/supabase/service'
 import { uuidSchema, emailSchema } from '@/lib/validation/schemas'
 
@@ -84,7 +85,7 @@ export async function upsertContact(
     }
   } catch (error) {
     // Log but don't throw — contact upsert should never block the primary action
-    console.error('Error upserting contact:', error)
+    logger.error('Error upserting contact', { error })
   }
 }
 
@@ -115,6 +116,6 @@ export async function updateContactBookingCompleted(
         .eq('id', contact.id)
     }
   } catch (error) {
-    console.error('Error updating contact booking completed:', error)
+    logger.error('Error updating contact booking completed', { error })
   }
 }

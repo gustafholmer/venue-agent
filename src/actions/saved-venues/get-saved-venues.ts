@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { VenuePhoto } from '@/types/database'
 
@@ -63,7 +65,7 @@ export async function getSavedVenues(): Promise<{
       .order('created_at', { ascending: false })
 
     if (fetchError) {
-      console.error('Error fetching saved venues:', fetchError)
+      logger.error('Error fetching saved venues', { fetchError })
       return { success: false, error: 'Kunde inte hamta sparade lokaler' }
     }
 
@@ -116,7 +118,7 @@ export async function getSavedVenues(): Promise<{
       venues: venuesWithPhotos,
     }
   } catch (error) {
-    console.error('Unexpected error fetching saved venues:', error)
+    logger.error('Unexpected error fetching saved venues', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',
@@ -139,7 +141,7 @@ export async function getSavedVenueIds(): Promise<string[]> {
       .eq('customer_id', user.id)
 
     if (error) {
-      console.error('Error fetching saved venue IDs:', error)
+      logger.error('Error fetching saved venue IDs', { error })
       return []
     }
 

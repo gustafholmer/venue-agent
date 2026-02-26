@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 
 export interface PayoutSummary {
@@ -24,7 +26,7 @@ export async function getPayoutSummary(): Promise<PayoutSummary | null> {
       .eq('owner_id', user.id)
 
     if (venuesError) {
-      console.error('Error fetching venues for payout summary:', venuesError)
+      logger.error('Error fetching venues for payout summary', { venuesError })
       return { totalEarned: 0, pendingPayout: 0, lastPayoutAmount: null, lastPayoutDate: null }
     }
 
@@ -43,7 +45,7 @@ export async function getPayoutSummary(): Promise<PayoutSummary | null> {
       .is('refunded_at', null)
 
     if (bookingsError) {
-      console.error('Error fetching payout bookings:', bookingsError)
+      logger.error('Error fetching payout bookings', { bookingsError })
       return { totalEarned: 0, pendingPayout: 0, lastPayoutAmount: null, lastPayoutDate: null }
     }
 
@@ -74,7 +76,7 @@ export async function getPayoutSummary(): Promise<PayoutSummary | null> {
 
     return { totalEarned, pendingPayout, lastPayoutAmount, lastPayoutDate }
   } catch (error) {
-    console.error('Unexpected error in getPayoutSummary:', error)
+    logger.error('Unexpected error in getPayoutSummary', { error })
     return null
   }
 }

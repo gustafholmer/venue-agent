@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { BookingRequest, VenuePhoto } from '@/types/database'
 
@@ -58,7 +60,7 @@ export async function getCustomerBookings(
     const { data: bookings, error: bookingsError } = await query
 
     if (bookingsError) {
-      console.error('Error fetching customer bookings:', bookingsError)
+      logger.error('Error fetching customer bookings', { bookingsError })
       return { success: false, error: 'Kunde inte hamta bokningar' }
     }
 
@@ -91,7 +93,7 @@ export async function getCustomerBookings(
       bookings: bookingsWithPhotos,
     }
   } catch (error) {
-    console.error('Unexpected error fetching customer bookings:', error)
+    logger.error('Unexpected error fetching customer bookings', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',
@@ -125,7 +127,7 @@ export async function getCustomerBookingStats(): Promise<{
       .eq('customer_id', user.id)
 
     if (error) {
-      console.error('Error fetching booking stats:', error)
+      logger.error('Error fetching booking stats', { error })
       return { success: false, error: 'Kunde inte hamta bokningsstatistik' }
     }
 
@@ -138,7 +140,7 @@ export async function getCustomerBookingStats(): Promise<{
 
     return { success: true, stats }
   } catch (error) {
-    console.error('Unexpected error fetching booking stats:', error)
+    logger.error('Unexpected error fetching booking stats', { error })
     return { success: false, error: 'Ett ovantat fel uppstod' }
   }
 }

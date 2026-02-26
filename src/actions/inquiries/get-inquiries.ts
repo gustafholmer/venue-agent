@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import type { VenueInquiry, VenuePhoto } from '@/types/database'
 
@@ -58,7 +60,7 @@ export async function getCustomerInquiries(
     const { data: inquiries, error: inquiriesError } = await query
 
     if (inquiriesError) {
-      console.error('Error fetching customer inquiries:', inquiriesError)
+      logger.error('Error fetching customer inquiries', { inquiriesError })
       return { success: false, error: 'Kunde inte hämta förfrågningar' }
     }
 
@@ -93,7 +95,7 @@ export async function getCustomerInquiries(
       inquiries: inquiriesWithPhotos,
     }
   } catch (error) {
-    console.error('Unexpected error fetching customer inquiries:', error)
+    logger.error('Unexpected error fetching customer inquiries', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',
@@ -165,7 +167,7 @@ export async function getVenueInquiries(
     const { data: inquiries, error: inquiriesError } = await query
 
     if (inquiriesError) {
-      console.error('Error fetching venue inquiries:', inquiriesError)
+      logger.error('Error fetching venue inquiries', { inquiriesError })
       return { success: false, error: 'Kunde inte hämta förfrågningar' }
     }
 
@@ -174,7 +176,7 @@ export async function getVenueInquiries(
       inquiries: (inquiries || []) as VenueInquiryWithProfile[],
     }
   } catch (error) {
-    console.error('Unexpected error fetching venue inquiries:', error)
+    logger.error('Unexpected error fetching venue inquiries', { error })
     return {
       success: false,
       error: 'Ett oväntat fel uppstod',

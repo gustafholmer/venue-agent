@@ -1,4 +1,6 @@
 'use server'
+
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 
 export async function getCalendarConnection(): Promise<{
@@ -21,7 +23,7 @@ export async function getCalendarConnection(): Promise<{
     if (!connection) return { connected: false }
     return { connected: true, providerEmail: connection.provider_email, connectionId: connection.id }
   } catch (error) {
-    console.error('Failed to get calendar connection:', error)
+    logger.error('Failed to get calendar connection', { error })
     return { connected: false }
   }
 }

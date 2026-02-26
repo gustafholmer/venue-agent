@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import { createServiceClient } from '@/lib/supabase/service'
 import { isDemoMode } from '@/lib/demo-mode'
+import { logger } from '@/lib/logger'
 
 // ---------------------------------------------------------------------------
 // In-memory fallback (used in demo mode or when DB is unavailable)
@@ -132,7 +133,7 @@ async function supabaseRateLimit(
 
   if (error || !data || (Array.isArray(data) && data.length === 0)) {
     // Fall back to in-memory on any DB error
-    console.warn('[rate-limit] Supabase RPC failed, falling back to in-memory:', error?.message)
+    logger.warn('Supabase RPC failed, falling back to in-memory', { error: error?.message })
     return inMemoryRateLimit(identifier, config)
   }
 
@@ -195,6 +196,9 @@ export const RATE_LIMITS = {
 
   /** Stripe Connect account creation - 3 per hour */
   createConnectAccount: { limit: 3, windowMs: 60 * 60 * 1000 },
+
+  /** Outbound inquiry creation - 10 per minute */
+  createOutboundInquiry: { limit: 10, windowMs: 60 * 1000 },
 } as const
 
 /** Standard Swedish error message for rate limiting */

@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { calculatePricing } from '@/lib/pricing'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
@@ -191,7 +193,7 @@ export async function proposeModification(
       if (insertError.code === '23505') {
         return { success: false, error: 'Det finns redan ett pågående ändringsförslag' }
       }
-      console.error('Error creating modification:', insertError)
+      logger.error('Error creating modification', { insertError })
       return { success: false, error: 'Kunde inte skapa ändringsförslaget' }
     }
 
@@ -221,7 +223,7 @@ export async function proposeModification(
 
     return { success: true, modificationId: modification.id }
   } catch (error) {
-    console.error('Unexpected error proposing modification:', error)
+    logger.error('Unexpected error proposing modification', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

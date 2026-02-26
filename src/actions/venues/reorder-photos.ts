@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { revalidatePath } from 'next/cache'
@@ -63,14 +65,14 @@ export async function reorderPhotos(venueId: string, photoOrders: PhotoOrder[]) 
     const hasError = results.some(result => result.error)
 
     if (hasError) {
-      console.error('Error updating photo orders:', results)
+      logger.error('Error updating photo orders', { results })
       return { success: false, error: 'Kunde inte uppdatera ordningen' }
     }
 
     revalidatePath(`/dashboard/venue/${venueId}`)
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error in reorderPhotos:', error)
+    logger.error('Unexpected error in reorderPhotos', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

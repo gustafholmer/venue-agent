@@ -1,7 +1,11 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
+import { dateSchema, timeSchema } from '@/lib/validation/schemas'
 import type { BookingApprovalSummary } from '@/types/agent-booking'
 import type { Json } from '@/types/database'
 
@@ -22,6 +26,27 @@ interface ModifyResult {
 
 export async function modifyAction(input: ModifyInput): Promise<ModifyResult> {
   try {
+    // Validate optional fields
+    const modifyInputSchema = z.object({
+      adjustedPrice: z.number().positive('Priset måste vara positivt').optional(),
+      note: z.string().max(2000, 'Meddelandet är för långt').optional(),
+      suggestedDate: dateSchema.optional(),
+      suggestedStartTime: timeSchema.optional(),
+      suggestedEndTime: timeSchema.optional(),
+    })
+
+    const parsed = modifyInputSchema.safeParse({
+      adjustedPrice: input.adjustedPrice,
+      note: input.note,
+      suggestedDate: input.suggestedDate,
+      suggestedStartTime: input.suggestedStartTime,
+      suggestedEndTime: input.suggestedEndTime,
+    })
+
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.issues[0].message }
+    }
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -77,7 +102,7 @@ export async function modifyAction(input: ModifyInput): Promise<ModifyResult> {
       .eq('id', input.actionId)
 
     if (updateError) {
-      console.error('Failed to modify action:', updateError)
+      logger.error('Failed to modify action', { updateError })
       return { success: false, error: 'Kunde inte uppdatera åtgärden' }
     }
 
@@ -109,7 +134,7 @@ export async function modifyAction(input: ModifyInput): Promise<ModifyResult> {
       .single()
 
     if (insertError || !counterOffer) {
-      console.error('Failed to create counter-offer:', insertError)
+      logger.error('Failed to create counter-offer', { insertError })
       return { success: false, error: 'Kunde inte skapa motförslag' }
     }
 
@@ -157,7 +182,7 @@ export async function modifyAction(input: ModifyInput): Promise<ModifyResult> {
 
     return { success: true, counterOfferId: counterOffer.id }
   } catch (error) {
-    console.error('Error modifying action:', error)
+    logger.error('Error modifying action', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

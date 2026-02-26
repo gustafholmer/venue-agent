@@ -1,5 +1,8 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 
 interface DeclineResult {
@@ -12,6 +15,14 @@ export async function declineAction(
   reason?: string
 ): Promise<DeclineResult> {
   try {
+    // Validate reason if provided
+    if (reason !== undefined) {
+      const parsed = z.string().max(2000, 'Meddelandet är för långt').safeParse(reason)
+      if (!parsed.success) {
+        return { success: false, error: parsed.error.issues[0].message }
+      }
+    }
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -53,7 +64,7 @@ export async function declineAction(
       .eq('id', actionId)
 
     if (updateError) {
-      console.error('Failed to decline action:', updateError)
+      logger.error('Failed to decline action', { updateError })
       return { success: false, error: 'Kunde inte avvisa åtgärden' }
     }
 
@@ -74,7 +85,7 @@ export async function declineAction(
 
     return { success: true }
   } catch (error) {
-    console.error('Error declining action:', error)
+    logger.error('Error declining action', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

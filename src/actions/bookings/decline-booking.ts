@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 
@@ -89,7 +91,7 @@ export async function declineBooking(
       .eq('id', bookingId)
 
     if (updateError) {
-      console.error('Error declining booking:', updateError)
+      logger.error('Error declining booking', { updateError })
       return { success: false, error: 'Kunde inte neka bokningen' }
     }
 
@@ -119,7 +121,7 @@ export async function declineBooking(
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error declining booking:', error)
+    logger.error('Unexpected error declining booking', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

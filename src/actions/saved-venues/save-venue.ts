@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { trackEvent } from '@/lib/analytics'
@@ -46,7 +48,7 @@ export async function saveVenue(venueId: string): Promise<{
       })
 
     if (insertError) {
-      console.error('Error saving venue:', insertError)
+      logger.error('Error saving venue', { insertError })
       return { success: false, error: 'Kunde inte spara lokalen' }
     }
 
@@ -57,7 +59,7 @@ export async function saveVenue(venueId: string): Promise<{
 
     return { success: true }
   } catch (error) {
-    console.error('Unexpected error saving venue:', error)
+    logger.error('Unexpected error saving venue', { error })
     return {
       success: false,
       error: 'Ett ovantat fel uppstod',

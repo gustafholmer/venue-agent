@@ -1,5 +1,7 @@
 'use server'
 
+import { logger } from '@/lib/logger'
+
 import { createClient } from '@/lib/supabase/server'
 import { syncToCalendar } from '@/lib/calendar/sync'
 
@@ -44,7 +46,7 @@ export async function unblockDate(
       .eq('blocked_date', date)
 
     if (deleteError) {
-      console.error('Error unblocking date:', deleteError)
+      logger.error('Error unblocking date', { deleteError })
       return { success: false, error: 'Kunde inte avblockera datum' }
     }
 
@@ -60,7 +62,7 @@ export async function unblockDate(
 
     return { success: true, calendarSyncFailed }
   } catch (error) {
-    console.error('Unexpected error in unblockDate:', error)
+    logger.error('Unexpected error in unblockDate', { error })
     return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }
