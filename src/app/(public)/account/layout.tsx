@@ -1,6 +1,11 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AccountNav } from '@/components/account-nav'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 export default async function AccountLayout({
   children,

@@ -13,48 +13,53 @@ export async function unpublishVenue(venueId: string): Promise<UnpublishVenueRes
     return { success: true }
   }
 
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
 
-  // Get current user
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return {
-      success: false,
-      error: 'Du maste vara inloggad',
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return {
+        success: false,
+        error: 'Du maste vara inloggad',
+      }
     }
-  }
 
-  // Get venue
-  const { data: venue } = await supabase
-    .from('venues')
-    .select('id')
-    .eq('id', venueId)
-    .eq('owner_id', user.id)
-    .single()
+    // Get venue
+    const { data: venue } = await supabase
+      .from('venues')
+      .select('id')
+      .eq('id', venueId)
+      .eq('owner_id', user.id)
+      .single()
 
-  if (!venue) {
-    return {
-      success: false,
-      error: 'Ingen lokal hittades',
+    if (!venue) {
+      return {
+        success: false,
+        error: 'Ingen lokal hittades',
+      }
     }
-  }
 
-  // Set status to paused
-  const { error } = await supabase
-    .from('venues')
-    .update({
-      status: 'paused',
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', venue.id)
+    // Set status to paused
+    const { error } = await supabase
+      .from('venues')
+      .update({
+        status: 'paused',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', venue.id)
 
-  if (error) {
-    console.error('Error pausing venue:', error)
-    return {
-      success: false,
-      error: 'Kunde inte pausa lokalen',
+    if (error) {
+      console.error('Error pausing venue:', error)
+      return {
+        success: false,
+        error: 'Kunde inte pausa lokalen',
+      }
     }
-  }
 
-  return { success: true }
+    return { success: true }
+  } catch (error) {
+    console.error('Unexpected error in unpublishVenue:', error)
+    return { success: false, error: 'Ett oväntat fel uppstod' }
+  }
 }

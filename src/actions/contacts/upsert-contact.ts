@@ -1,4 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { uuidSchema, emailSchema } from '@/lib/validation/schemas'
 
 interface UpsertContactInput {
   venueId: string
@@ -15,6 +16,10 @@ export async function upsertContact(
   input: UpsertContactInput
 ): Promise<void> {
   try {
+    // Validate inputs silently
+    if (!uuidSchema.safeParse(input.venueId).success) return
+    if (!emailSchema.safeParse(input.customerEmail).success) return
+
     const supabase = createServiceClient()
     const email = input.customerEmail.trim().toLowerCase()
     const now = new Date().toISOString()

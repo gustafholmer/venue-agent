@@ -132,10 +132,11 @@ export function InquiryModal({
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Event Date */}
           <div>
-            <label className="block text-sm font-medium text-[#57534e] mb-2">
+            <label htmlFor="inquiry-event-date" className="block text-sm font-medium text-[#57534e] mb-2">
               Eventdatum <span className="text-red-500">*</span>
             </label>
             <input
+              id="inquiry-event-date"
               type="date"
               value={eventDate}
               onChange={(e) => setEventDate(e.target.value)}
@@ -147,10 +148,11 @@ export function InquiryModal({
 
           {/* Event Type */}
           <div>
-            <label className="block text-sm font-medium text-[#57534e] mb-2">
+            <label htmlFor="inquiry-event-type" className="block text-sm font-medium text-[#57534e] mb-2">
               Typ av event <span className="text-red-500">*</span>
             </label>
             <select
+              id="inquiry-event-type"
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
               className="w-full h-10 px-3 rounded-lg border border-[#e5e5e5] bg-white text-[#1a1a1a] focus:outline-none focus:border-[#c45a3b] focus:ring-1 focus:ring-[#c45a3b]"
@@ -167,10 +169,11 @@ export function InquiryModal({
 
           {/* Guest Count */}
           <div>
-            <label className="block text-sm font-medium text-[#57534e] mb-2">
+            <label htmlFor="inquiry-guest-count" className="block text-sm font-medium text-[#57534e] mb-2">
               Antal gäster <span className="text-red-500">*</span>
             </label>
             <Input
+              id="inquiry-guest-count"
               type="number"
               min={minCapacity || 1}
               max={maxCapacity || undefined}
@@ -188,10 +191,11 @@ export function InquiryModal({
 
           {/* Message */}
           <div>
-            <label className="block text-sm font-medium text-[#57534e] mb-2">
+            <label htmlFor="inquiry-message" className="block text-sm font-medium text-[#57534e] mb-2">
               Meddelande <span className="text-red-500">*</span>
             </label>
             <Textarea
+              id="inquiry-message"
               rows={4}
               value={message}
               onChange={(e) => setMessage(e.target.value)}

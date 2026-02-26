@@ -2,9 +2,16 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
 
 export async function signOut() {
-  const supabase = await createClient()
-  await supabase.auth.signOut()
-  redirect('/')
+  try {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    redirect('/')
+  } catch (error) {
+    if (isRedirectError(error)) throw error
+    console.error('Sign out error:', error)
+    throw error
+  }
 }

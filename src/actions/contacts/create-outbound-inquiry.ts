@@ -6,6 +6,7 @@ import { sendMessage } from '@/actions/messages/send-message'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { upsertContact } from '@/actions/contacts/upsert-contact'
 import { ALLOWED_EVENT_TYPE_VALUES } from '@/lib/constants'
+import { uuidSchema } from '@/lib/validation/schemas'
 
 export interface CreateOutboundInquiryInput {
   contactId: string
@@ -25,6 +26,11 @@ export async function createOutboundInquiry(
   input: CreateOutboundInquiryInput
 ): Promise<CreateOutboundInquiryResult> {
   try {
+    const contactIdResult = uuidSchema.safeParse(input.contactId)
+    if (!contactIdResult.success) {
+      return { success: false, error: 'Ogiltigt kontakt-ID' }
+    }
+
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()

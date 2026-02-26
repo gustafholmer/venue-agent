@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStripe } from '@/lib/stripe'
 import { createServiceClient } from '@/lib/supabase/service'
+import { serverEnv } from '@/lib/env'
 
 export async function POST(request: NextRequest) {
   const stripe = getStripe()
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
     event = stripe.webhooks.constructEvent(
       body,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      serverEnv.STRIPE_WEBHOOK_SECRET
     )
   } catch (err) {
     console.error('Webhook signature verification failed:', err)

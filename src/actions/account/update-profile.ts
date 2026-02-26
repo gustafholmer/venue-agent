@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { updateProfileSchema } from '@/lib/validation/schemas'
 import { revalidatePath } from 'next/cache'
 
 interface UpdateProfileData {
@@ -22,16 +23,19 @@ export async function updateProfile(data: UpdateProfileData): Promise<{
     }
 
     // Validate data
-    if (data.full_name !== undefined && data.full_name.trim().length === 0) {
-      return { success: false, error: 'Namn kan inte vara tomt' }
+    const parsed = updateProfileSchema.safeParse(data)
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || 'Ogiltiga uppgifter'
+      return { success: false, error: firstError }
     }
+    const validData = parsed.data
 
     // Update profile
     const { error: updateError } = await supabase
       .from('profiles')
       .update({
-        full_name: data.full_name?.trim(),
-        phone: data.phone?.trim() || null,
+        full_name: validData.full_name?.trim(),
+        phone: validData.phone?.trim() || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', user.id)

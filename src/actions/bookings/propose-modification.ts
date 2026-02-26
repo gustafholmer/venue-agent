@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { calculatePricing } from '@/lib/pricing'
 import { dispatchNotification } from '@/lib/notifications/create-notification'
 import { revalidatePath } from 'next/cache'
+import { timeSchema } from '@/lib/validation/schemas'
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -31,6 +32,23 @@ export async function proposeModification(
 
     if (!UUID_REGEX.test(input.bookingId)) {
       return { success: false, error: 'Ogiltigt boknings-ID' }
+    }
+
+    if (input.proposedStartTime) {
+      const startResult = timeSchema.safeParse(input.proposedStartTime)
+      if (!startResult.success) {
+        return { success: false, error: 'Ogiltigt tidsformat för starttid' }
+      }
+    }
+    if (input.proposedEndTime) {
+      const endResult = timeSchema.safeParse(input.proposedEndTime)
+      if (!endResult.success) {
+        return { success: false, error: 'Ogiltigt tidsformat för sluttid' }
+      }
+    }
+    // Check start < end when both provided
+    if (input.proposedStartTime && input.proposedEndTime && input.proposedStartTime >= input.proposedEndTime) {
+      return { success: false, error: 'Starttid måste vara före sluttid' }
     }
 
     const { data: { user } } = await supabase.auth.getUser()

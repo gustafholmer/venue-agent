@@ -1,139 +1,111 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { parseVenueFormData, venueFormSchema, uuidSchema } from '@/lib/validation/schemas'
 
 export async function updateVenue(venueId: string, formData: FormData) {
-  const { createClient } = await import('@/lib/supabase/server')
-  const { isDemoMode } = await import('@/lib/demo-mode')
-
-  if (isDemoMode()) {
-    return redirect(`/dashboard/venue/${venueId}?success=demo`)
-  }
-
-  const supabase = await createClient()
-
-  // Get current user
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return redirect('/auth/sign-in')
-  }
-
-  // Verify user owns the venue
-  const { data: existingVenue } = await supabase
-    .from('venues')
-    .select('id, description')
-    .eq('id', venueId)
-    .eq('owner_id', user.id)
-    .single()
-
-  if (!existingVenue) {
-    return redirect('/dashboard?error=no_venue')
-  }
-
-  // Parse form data
-  const name = formData.get('name') as string
-  const description = formData.get('description') as string || null
-  const address = formData.get('address') as string
-  const city = formData.get('city') as string || 'Stockholm'
-  const area = formData.get('area') as string || null
-
-  // Parse venue types (checkboxes)
-  const venueTypes = formData.getAll('venue_types') as string[]
-
-  // Parse vibes (checkboxes)
-  const vibes = formData.getAll('vibes') as string[]
-
-  // Parse capacity
-  const capacityStanding = formData.get('capacity_standing')
-    ? parseInt(formData.get('capacity_standing') as string)
-    : null
-  const capacitySeated = formData.get('capacity_seated')
-    ? parseInt(formData.get('capacity_seated') as string)
-    : null
-  const capacityConference = formData.get('capacity_conference')
-    ? parseInt(formData.get('capacity_conference') as string)
-    : null
-  const minGuests = formData.get('min_guests')
-    ? parseInt(formData.get('min_guests') as string)
-    : 1
-
-  // Parse pricing
-  const pricePerHour = formData.get('price_per_hour')
-    ? parseInt(formData.get('price_per_hour') as string)
-    : null
-  const priceHalfDay = formData.get('price_half_day')
-    ? parseInt(formData.get('price_half_day') as string)
-    : null
-  const priceFullDay = formData.get('price_full_day')
-    ? parseInt(formData.get('price_full_day') as string)
-    : null
-  const priceEvening = formData.get('price_evening')
-    ? parseInt(formData.get('price_evening') as string)
-    : null
-  const priceNotes = formData.get('price_notes') as string || null
-
-  // Parse amenities (checkboxes)
-  const amenities = formData.getAll('amenities') as string[]
-
-  // Parse contact info
-  const contactEmail = formData.get('contact_email') as string || null
-  const contactPhone = formData.get('contact_phone') as string || null
-  const website = formData.get('website') as string || null
-
-  // Re-generate embedding if description changed
-  let descriptionEmbedding: number[] | null = null
-  const descriptionChanged = description !== existingVenue.description
-  if (description && descriptionChanged) {
-    try {
-      const { generateEmbedding } = await import('@/lib/gemini/embeddings')
-      const embeddingText = `${name}\n${description}\n${venueTypes.join(', ')}\n${vibes.join(', ')}\n${amenities.join(', ')}`
-      descriptionEmbedding = await generateEmbedding(embeddingText)
-    } catch (error) {
-      console.error('Error generating embedding:', error)
-      // Continue without updating embedding
+  try {
+    // Validate venueId
+    const idResult = uuidSchema.safeParse(venueId)
+    if (!idResult.success) {
+      return redirect('/dashboard?error=invalid_id')
     }
-  }
 
-  // Build update object
-  const updateData: Record<string, unknown> = {
-    name,
-    description,
-    address,
-    city,
-    area,
-    venue_types: venueTypes,
-    vibes,
-    capacity_standing: capacityStanding,
-    capacity_seated: capacitySeated,
-    capacity_conference: capacityConference,
-    min_guests: minGuests,
-    price_per_hour: pricePerHour,
-    price_half_day: priceHalfDay,
-    price_full_day: priceFullDay,
-    price_evening: priceEvening,
-    price_notes: priceNotes,
-    amenities,
-    contact_email: contactEmail,
-    contact_phone: contactPhone,
-    website,
-    updated_at: new Date().toISOString(),
-  }
+    const { createClient } = await import('@/lib/supabase/server')
+    const { isDemoMode } = await import('@/lib/demo-mode')
 
-  // Only update embedding if it was regenerated
-  if (descriptionEmbedding) {
-    updateData.description_embedding = descriptionEmbedding
-  }
+    if (isDemoMode()) {
+      return redirect(`/dashboard/venue/${venueId}?success=demo`)
+    }
 
-  // Update venue
-  const { error } = await supabase
-    .from('venues')
-    .update(updateData)
-    .eq('id', existingVenue.id)
+    const supabase = await createClient()
 
-  if (error) {
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return redirect('/auth/sign-in')
+    }
+
+    // Verify user owns the venue
+    const { data: existingVenue } = await supabase
+      .from('venues')
+      .select('id, description')
+      .eq('id', venueId)
+      .eq('owner_id', user.id)
+      .single()
+
+    if (!existingVenue) {
+      return redirect('/dashboard?error=no_venue')
+    }
+
+    // Parse and validate form data
+    const rawData = parseVenueFormData(formData)
+    const parsed = venueFormSchema.safeParse(rawData)
+    if (!parsed.success) {
+      return redirect(`/dashboard/venue/${venueId}?error=invalid_data`)
+    }
+    const data = parsed.data
+
+    // Re-generate embedding if description changed
+    let descriptionEmbedding: number[] | null = null
+    const descriptionChanged = data.description !== existingVenue.description
+    if (data.description && descriptionChanged) {
+      try {
+        const { generateEmbedding } = await import('@/lib/gemini/embeddings')
+        const embeddingText = `${data.name}\n${data.description}\n${data.venue_types.join(', ')}\n${data.vibes.join(', ')}\n${data.amenities.join(', ')}`
+        descriptionEmbedding = await generateEmbedding(embeddingText)
+      } catch (error) {
+        console.error('Error generating embedding:', error)
+        // Continue without updating embedding
+      }
+    }
+
+    // Build update object
+    const updateData: Record<string, unknown> = {
+      name: data.name,
+      description: data.description,
+      address: data.address,
+      city: data.city,
+      area: data.area,
+      venue_types: data.venue_types,
+      vibes: data.vibes,
+      capacity_standing: data.capacity_standing,
+      capacity_seated: data.capacity_seated,
+      capacity_conference: data.capacity_conference,
+      min_guests: data.min_guests,
+      price_per_hour: data.price_per_hour,
+      price_half_day: data.price_half_day,
+      price_full_day: data.price_full_day,
+      price_evening: data.price_evening,
+      price_notes: data.price_notes,
+      amenities: data.amenities,
+      contact_email: data.contact_email,
+      contact_phone: data.contact_phone,
+      website: data.website,
+      updated_at: new Date().toISOString(),
+    }
+
+    // Only update embedding if it was regenerated
+    if (descriptionEmbedding) {
+      updateData.description_embedding = descriptionEmbedding
+    }
+
+    // Update venue
+    const { error } = await supabase
+      .from('venues')
+      .update(updateData)
+      .eq('id', existingVenue.id)
+
+    if (error) {
+      console.error('Error updating venue:', error)
+      return redirect(`/dashboard/venue/${venueId}?error=update_failed`)
+    }
+
+    return redirect(`/dashboard/venue/${venueId}?success=venue_updated`)
+  } catch (error) {
+    if (isRedirectError(error)) throw error
     console.error('Error updating venue:', error)
     return redirect(`/dashboard/venue/${venueId}?error=update_failed`)
   }
-
-  return redirect(`/dashboard/venue/${venueId}?success=venue_updated`)
 }

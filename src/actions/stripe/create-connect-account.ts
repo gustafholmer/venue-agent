@@ -4,6 +4,8 @@ import Stripe from 'stripe'
 import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { getStripe } from '@/lib/stripe'
+import { rateLimit, RATE_LIMITS, RATE_LIMIT_ERROR } from '@/lib/rate-limit'
+import { connectAccountSchema } from '@/lib/validation/schemas'
 
 export interface CreateConnectAccountInput {
   companyName: string
@@ -29,6 +31,19 @@ export async function createConnectAccount(
   input: CreateConnectAccountInput
 ): Promise<Result> {
   try {
+    // Check rate limit
+    const rateLimitResult = await rateLimit('create-connect-account', RATE_LIMITS.createConnectAccount)
+    if (!rateLimitResult.success) {
+      return { success: false, error: RATE_LIMIT_ERROR }
+    }
+
+    // Validate input
+    const parsed = connectAccountSchema.safeParse(input)
+    if (!parsed.success) {
+      return { success: false, error: 'Ogiltiga uppgifter' }
+    }
+    const validInput = parsed.data
+
     const supabase = await createClient()
     const {
       data: { user },
@@ -66,13 +81,13 @@ export async function createConnectAccount(
       email: user.email,
       business_type: 'company',
       company: {
-        name: input.companyName,
-        tax_id: input.orgNumber,
-        phone: input.phone,
+        name: validInput.companyName,
+        tax_id: validInput.orgNumber,
+        phone: validInput.phone,
         address: {
-          line1: input.addressLine1,
-          city: input.city,
-          postal_code: input.postalCode,
+          line1: validInput.addressLine1,
+          city: validInput.city,
+          postal_code: validInput.postalCode,
           country: 'SE',
         },
         owners_provided: true,
@@ -83,9 +98,9 @@ export async function createConnectAccount(
         object: 'bank_account',
         country: 'SE',
         currency: 'sek',
-        account_holder_name: input.accountHolderName,
+        account_holder_name: validInput.accountHolderName,
         account_holder_type: 'company',
-        account_number: input.iban,
+        account_number: validInput.iban,
       },
       capabilities: {
         card_payments: { requested: true },
@@ -102,19 +117,19 @@ export async function createConnectAccount(
 
     // Add representative
     await stripe.accounts.createPerson(account.id, {
-      first_name: input.repFirstName,
-      last_name: input.repLastName,
+      first_name: validInput.repFirstName,
+      last_name: validInput.repLastName,
       email: user.email,
-      phone: input.phone,
+      phone: validInput.phone,
       dob: {
-        day: input.repDobDay,
-        month: input.repDobMonth,
-        year: input.repDobYear,
+        day: validInput.repDobDay,
+        month: validInput.repDobMonth,
+        year: validInput.repDobYear,
       },
       address: {
-        line1: input.addressLine1,
-        city: input.city,
-        postal_code: input.postalCode,
+        line1: validInput.addressLine1,
+        city: validInput.city,
+        postal_code: validInput.postalCode,
         country: 'SE',
       },
       relationship: {

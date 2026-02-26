@@ -83,13 +83,14 @@ export function ModificationForm({
   const minDate = tomorrow.toISOString().split('T')[0]
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-label="Föreslå ändring">
       <div className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Föreslå ändring</h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
+            aria-label="Stäng"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -103,8 +104,9 @@ export function ModificationForm({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Datum</label>
+            <label htmlFor="mod-event-date" className="block text-sm font-medium text-gray-700 mb-1">Datum</label>
             <input
+              id="mod-event-date"
               type="date"
               value={eventDate}
               min={minDate}
@@ -115,8 +117,9 @@ export function ModificationForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Starttid</label>
+              <label htmlFor="mod-start-time" className="block text-sm font-medium text-gray-700 mb-1">Starttid</label>
               <select
+                id="mod-start-time"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
@@ -128,8 +131,9 @@ export function ModificationForm({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sluttid</label>
+              <label htmlFor="mod-end-time" className="block text-sm font-medium text-gray-700 mb-1">Sluttid</label>
               <select
+                id="mod-end-time"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-[#c45a3b] focus:border-transparent"
@@ -143,8 +147,9 @@ export function ModificationForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Antal gäster</label>
+            <label htmlFor="mod-guest-count" className="block text-sm font-medium text-gray-700 mb-1">Antal gäster</label>
             <input
+              id="mod-guest-count"
               type="number"
               value={guestCount}
               min={1}
@@ -155,8 +160,9 @@ export function ModificationForm({
 
           {canEditPrice ? (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Pris (kr)</label>
+              <label htmlFor="mod-base-price" className="block text-sm font-medium text-gray-700 mb-1">Pris (kr)</label>
               <input
+                id="mod-base-price"
                 type="number"
                 value={basePrice}
                 min={1}
@@ -174,8 +180,9 @@ export function ModificationForm({
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Anledning (valfritt)</label>
+            <label htmlFor="mod-reason" className="block text-sm font-medium text-gray-700 mb-1">Anledning (valfritt)</label>
             <textarea
+              id="mod-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Beskriv varför du vill ändra bokningen..."
