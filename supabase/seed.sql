@@ -15,7 +15,7 @@ DELETE FROM auth.users;
 
 -- ============================================================================
 -- Test Users
--- Password for all test users: "test"
+-- Password for all test users: "Test1234"
 -- ============================================================================
 
 -- Venue Owner 1
@@ -35,7 +35,7 @@ INSERT INTO auth.users (
   '11111111-1111-1111-1111-111111111111',
   '00000000-0000-0000-0000-000000000000',
   'owner@test.com',
-  crypt('test', gen_salt('bf')),
+  crypt('Test1234', gen_salt('bf')),
   now(),
   now(),
   now(),
@@ -62,7 +62,7 @@ INSERT INTO auth.users (
   '22222222-2222-2222-2222-222222222222',
   '00000000-0000-0000-0000-000000000000',
   'owner2@test.com',
-  crypt('test', gen_salt('bf')),
+  crypt('Test1234', gen_salt('bf')),
   now(),
   now(),
   now(),
@@ -89,7 +89,7 @@ INSERT INTO auth.users (
   '33333333-3333-3333-3333-333333333333',
   '00000000-0000-0000-0000-000000000000',
   'customer@test.com',
-  crypt('test', gen_salt('bf')),
+  crypt('Test1234', gen_salt('bf')),
   now(),
   now(),
   now(),
@@ -116,7 +116,7 @@ INSERT INTO auth.users (
   '44444444-4444-4444-4444-444444444444',
   '00000000-0000-0000-0000-000000000000',
   'customer2@test.com',
-  crypt('test', gen_salt('bf')),
+  crypt('Test1234', gen_salt('bf')),
   now(),
   now(),
   now(),
