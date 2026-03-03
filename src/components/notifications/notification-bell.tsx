@@ -106,7 +106,7 @@ export function NotificationBell({ viewAllHref }: NotificationBellProps) {
       {/* Bell button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-[#57534e] hover:text-[#1a1a1a] hover:bg-[#f3f4f6] rounded-full transition-colors"
+        className="relative p-2 text-[#5a4a42] hover:text-[#c45a3b] hover:bg-[#c45a3b]/10 rounded-full transition-all"
         aria-label={`Notifieringar${unreadCount > 0 ? ` (${unreadCount} olasta)` : ''}`}
       >
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
