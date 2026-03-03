@@ -30,7 +30,12 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   is_super_admin,
-  role
+  role,
+  aud,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change
 ) VALUES (
   '11111111-1111-1111-1111-111111111111',
   '00000000-0000-0000-0000-000000000000',
@@ -42,8 +47,15 @@ INSERT INTO auth.users (
   '{"provider":"email","providers":["email"]}',
   '{}',
   false,
-  'authenticated'
+  'authenticated',
+  'authenticated',
+  '',
+  '',
+  '',
+  ''
 );
+INSERT INTO auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+VALUES ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111', 'email', '{"sub":"11111111-1111-1111-1111-111111111111","email":"owner@test.com"}', now(), now(), now());
 
 -- Venue Owner 2
 INSERT INTO auth.users (
@@ -57,7 +69,12 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   is_super_admin,
-  role
+  role,
+  aud,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change
 ) VALUES (
   '22222222-2222-2222-2222-222222222222',
   '00000000-0000-0000-0000-000000000000',
@@ -69,8 +86,15 @@ INSERT INTO auth.users (
   '{"provider":"email","providers":["email"]}',
   '{}',
   false,
-  'authenticated'
+  'authenticated',
+  'authenticated',
+  '',
+  '',
+  '',
+  ''
 );
+INSERT INTO auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+VALUES ('22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-222222222222', 'email', '{"sub":"22222222-2222-2222-2222-222222222222","email":"owner2@test.com"}', now(), now(), now());
 
 -- Customer 1
 INSERT INTO auth.users (
@@ -84,7 +108,12 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   is_super_admin,
-  role
+  role,
+  aud,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change
 ) VALUES (
   '33333333-3333-3333-3333-333333333333',
   '00000000-0000-0000-0000-000000000000',
@@ -96,8 +125,15 @@ INSERT INTO auth.users (
   '{"provider":"email","providers":["email"]}',
   '{}',
   false,
-  'authenticated'
+  'authenticated',
+  'authenticated',
+  '',
+  '',
+  '',
+  ''
 );
+INSERT INTO auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+VALUES ('33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-333333333333', 'email', '{"sub":"33333333-3333-3333-3333-333333333333","email":"customer@test.com"}', now(), now(), now());
 
 -- Customer 2
 INSERT INTO auth.users (
@@ -111,7 +147,12 @@ INSERT INTO auth.users (
   raw_app_meta_data,
   raw_user_meta_data,
   is_super_admin,
-  role
+  role,
+  aud,
+  confirmation_token,
+  recovery_token,
+  email_change_token_new,
+  email_change
 ) VALUES (
   '44444444-4444-4444-4444-444444444444',
   '00000000-0000-0000-0000-000000000000',
@@ -123,8 +164,15 @@ INSERT INTO auth.users (
   '{"provider":"email","providers":["email"]}',
   '{}',
   false,
-  'authenticated'
+  'authenticated',
+  'authenticated',
+  '',
+  '',
+  '',
+  ''
 );
+INSERT INTO auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+VALUES ('44444444-4444-4444-4444-444444444444', '44444444-4444-4444-4444-444444444444', '44444444-4444-4444-4444-444444444444', 'email', '{"sub":"44444444-4444-4444-4444-444444444444","email":"customer2@test.com"}', now(), now(), now());
 
 -- ============================================================================
 -- Profiles (auto-created by trigger, but we override with more details)
