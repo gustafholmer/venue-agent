@@ -6,6 +6,7 @@ import { UserMenu } from '@/components/user-menu'
 import { WorkspaceSwitcher } from '@/components/workspace-switcher'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
+import { Toaster } from 'sonner'
 
 export default async function PublicLayout({
   children,
@@ -107,6 +108,20 @@ export default async function PublicLayout({
         </div>
       </header>
 
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#f0ddd6',
+            color: '#1a1a1a',
+            border: '1px solid #d4bfb6',
+          },
+          classNames: {
+            success: '!bg-[#f0faf0] !text-[#2d5a2d] !border-[#c3dfc3]',
+            error: '!bg-[#faf0f0] !text-[#5a2d2d] !border-[#dfc3c3]',
+          },
+        }}
+      />
       <main className="flex-1">
         <SavedVenuesProvider>
           {children}

@@ -3,7 +3,6 @@
 import { logger } from '@/lib/logger'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
 
 // UUID format validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -37,9 +36,6 @@ export async function unsaveVenue(venueId: string): Promise<{
       logger.error('Error unsaving venue', { deleteError })
       return { success: false, error: 'Kunde inte ta bort lokalen från sparade' }
     }
-
-    revalidatePath('/account/saved')
-    revalidatePath(`/venues/${venueId}`)
 
     return { success: true }
   } catch (error) {

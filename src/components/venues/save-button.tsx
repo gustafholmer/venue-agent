@@ -1,5 +1,6 @@
 'use client'
 
+import { toast } from 'sonner'
 import { useSavedVenues } from '@/contexts/saved-venues-context'
 
 interface SaveButtonProps {
@@ -15,7 +16,9 @@ export function SaveButton({ venueId, className = '', size = 'sm' }: SaveButtonP
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    const wasSaved = saved
     toggleSave(venueId)
+    toast.success(wasSaved ? 'Borttagen från sparade' : 'Sparad!')
   }
 
   const iconSize = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'
@@ -25,18 +28,18 @@ export function SaveButton({ venueId, className = '', size = 'sm' }: SaveButtonP
     <button
       onClick={handleClick}
       disabled={isLoading}
-      className={`${buttonSize} bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-all duration-200 disabled:opacity-50 ${className}`}
+      className={`${buttonSize} bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:bg-white transition-colors duration-200 disabled:opacity-50 ${className}`}
       title={saved ? 'Ta bort från sparade' : 'Spara lokal'}
       aria-label={saved ? 'Ta bort från sparade' : 'Spara lokal'}
     >
       <svg
-        className={`${iconSize} transition-all duration-200 ${
-          saved ? 'text-red-500 scale-110' : 'text-[#78716c] hover:text-red-400'
+        className={`${iconSize} transition-colors duration-200 ${
+          saved ? 'text-red-500' : 'text-[#78716c] hover:text-red-400'
         }`}
         fill={saved ? 'currentColor' : 'none'}
         viewBox="0 0 24 24"
         stroke="currentColor"
-        strokeWidth={saved ? 0 : 1.5}
+        strokeWidth={1.5}
       >
         <path
           strokeLinecap="round"

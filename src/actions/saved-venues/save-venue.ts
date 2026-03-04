@@ -3,7 +3,6 @@
 import { logger } from '@/lib/logger'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
 import { trackEvent } from '@/lib/analytics'
 
 // UUID format validation regex
@@ -51,9 +50,6 @@ export async function saveVenue(venueId: string): Promise<{
       logger.error('Error saving venue', { insertError })
       return { success: false, error: 'Kunde inte spara lokalen' }
     }
-
-    revalidatePath('/account/saved')
-    revalidatePath(`/venues/${venueId}`)
 
     trackEvent('venue_saved', { venue_id: venueId }, user.id)
 
