@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getBooking } from '@/actions/bookings/get-booking'
+import { createClient } from '@/lib/supabase/server'
 import { formatPrice } from '@/lib/pricing'
 import { Button } from '@/components/ui/button'
 
@@ -52,7 +53,8 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
     redirect('/')
   }
 
-  const result = await getBooking(id, token)
+  const [result, supabase] = await Promise.all([getBooking(id, token), createClient()])
+  const { data: { user } } = await supabase.auth.getUser()
 
   if (!result.success || !result.booking) {
     notFound()
@@ -210,11 +212,19 @@ async function ConfirmationContent({ searchParams }: { searchParams: Promise<{ i
               Utforska fler lokaler
             </Button>
           </Link>
-          <Link href="/auth/sign-up" className="flex-1">
-            <Button variant="primary" size="lg" className="w-full">
-              Skapa konto för att följa bokningen
-            </Button>
-          </Link>
+          {user ? (
+            <Link href="/dashboard/bookings" className="flex-1">
+              <Button variant="primary" size="lg" className="w-full">
+                Gå till mina bokningar
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/auth/sign-up" className="flex-1">
+              <Button variant="primary" size="lg" className="w-full">
+                Skapa konto för att följa bokningen
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </div>
