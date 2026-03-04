@@ -124,7 +124,7 @@ export async function declineBooking(
     logger.error('Unexpected error declining booking', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

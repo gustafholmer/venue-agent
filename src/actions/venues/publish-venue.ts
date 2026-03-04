@@ -29,7 +29,7 @@ export async function publishVenue(venueId: string): Promise<PublishVenueResult>
     if (!user) {
       return {
         success: false,
-        errors: [{ field: 'auth', message: 'Du maste vara inloggad' }],
+        errors: [{ field: 'auth', message: 'Du måste vara inloggad' }],
       }
     }
 
@@ -69,11 +69,11 @@ export async function publishVenue(venueId: string): Promise<PublishVenueResult>
     const errors: PublishValidationError[] = []
 
     if (!venue.name || venue.name.trim() === '') {
-      errors.push({ field: 'name', message: 'Namn kravs' })
+      errors.push({ field: 'name', message: 'Namn krävs' })
     }
 
     if (!venue.address || venue.address.trim() === '') {
-      errors.push({ field: 'address', message: 'Adress kravs' })
+      errors.push({ field: 'address', message: 'Adress krävs' })
     }
 
     // At least one capacity field must be filled
@@ -83,7 +83,7 @@ export async function publishVenue(venueId: string): Promise<PublishVenueResult>
       (venue.capacity_conference && venue.capacity_conference > 0)
 
     if (!hasCapacity) {
-      errors.push({ field: 'capacity', message: 'Minst en kapacitet maste anges' })
+      errors.push({ field: 'capacity', message: 'Minst en kapacitet måste anges' })
     }
 
     // At least one price must be filled
@@ -94,12 +94,12 @@ export async function publishVenue(venueId: string): Promise<PublishVenueResult>
       (venue.price_evening && venue.price_evening > 0)
 
     if (!hasPrice) {
-      errors.push({ field: 'price', message: 'Minst ett pris maste anges' })
+      errors.push({ field: 'price', message: 'Minst ett pris måste anges' })
     }
 
     // At least one photo required
     if (!photoCount || photoCount === 0) {
-      errors.push({ field: 'photos', message: 'Minst en bild kravs' })
+      errors.push({ field: 'photos', message: 'Minst en bild krävs' })
     }
 
     // Return errors if any
@@ -147,7 +147,7 @@ export async function getPublishValidation(venueId: string): Promise<PublishVali
     // Get current user
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return [{ field: 'auth', message: 'Du maste vara inloggad' }]
+      return [{ field: 'auth', message: 'Du måste vara inloggad' }]
     }
 
     // Get venue
@@ -183,11 +183,11 @@ export async function getPublishValidation(venueId: string): Promise<PublishVali
     const errors: PublishValidationError[] = []
 
     if (!venue.name || venue.name.trim() === '') {
-      errors.push({ field: 'name', message: 'Namn kravs' })
+      errors.push({ field: 'name', message: 'Namn krävs' })
     }
 
     if (!venue.address || venue.address.trim() === '') {
-      errors.push({ field: 'address', message: 'Adress kravs' })
+      errors.push({ field: 'address', message: 'Adress krävs' })
     }
 
     // At least one capacity field must be filled
@@ -197,7 +197,7 @@ export async function getPublishValidation(venueId: string): Promise<PublishVali
       (venue.capacity_conference && venue.capacity_conference > 0)
 
     if (!hasCapacity) {
-      errors.push({ field: 'capacity', message: 'Minst en kapacitet maste anges' })
+      errors.push({ field: 'capacity', message: 'Minst en kapacitet måste anges' })
     }
 
     // At least one price must be filled
@@ -208,12 +208,12 @@ export async function getPublishValidation(venueId: string): Promise<PublishVali
       (venue.price_evening && venue.price_evening > 0)
 
     if (!hasPrice) {
-      errors.push({ field: 'price', message: 'Minst ett pris maste anges' })
+      errors.push({ field: 'price', message: 'Minst ett pris måste anges' })
     }
 
     // At least one photo required
     if (!photoCount || photoCount === 0) {
-      errors.push({ field: 'photos', message: 'Minst en bild kravs' })
+      errors.push({ field: 'photos', message: 'Minst en bild krävs' })
     }
 
     return errors

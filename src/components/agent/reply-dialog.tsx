@@ -33,7 +33,7 @@ export function ReplyDialog({ actionId, onClose, onComplete }: ReplyDialogProps)
         onComplete()
       }
     } catch {
-      setError('Ett ovantat fel uppstod')
+      setError('Ett oväntat fel uppstod')
     } finally {
       setIsSubmitting(false)
     }
@@ -50,7 +50,7 @@ export function ReplyDialog({ actionId, onClose, onComplete }: ReplyDialogProps)
         value={response}
         onChange={(e) => setResponse(e.target.value)}
         rows={4}
-        placeholder="Skriv ditt svar har..."
+        placeholder="Skriv ditt svar här..."
         className="w-full px-3 py-2 text-sm border border-[#e7e5e4] rounded-lg resize-none focus:outline-none focus:border-[#c45a3b]"
       />
 

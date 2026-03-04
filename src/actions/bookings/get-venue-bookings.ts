@@ -76,7 +76,7 @@ export async function getVenueBookings(
     logger.error('Unexpected error fetching venue bookings', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

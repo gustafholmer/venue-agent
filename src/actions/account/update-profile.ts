@@ -55,7 +55,7 @@ export async function updateProfile(data: UpdateProfileData): Promise<{
     logger.error('Unexpected error updating profile', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

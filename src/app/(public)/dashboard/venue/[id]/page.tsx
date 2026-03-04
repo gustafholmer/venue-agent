@@ -187,7 +187,7 @@ export default function VenueEditPage() {
     } else if (success === 'venue_created') {
       setSuccessMessage('Lokalen har skapats')
     } else if (success === 'demo') {
-      setSuccessMessage('Demo-lage: Ingen data sparades')
+      setSuccessMessage('Demo-läge: Ingen data sparades')
     }
 
     if (error === 'update_failed') {
@@ -254,7 +254,7 @@ export default function VenueEditPage() {
     if (result.success) {
       setVenue(prev => prev ? { ...prev, status: 'published' } : prev)
       setPublishErrors([])
-      setSuccessMessage('Lokalen ar nu publicerad')
+      setSuccessMessage('Lokalen är nu publicerad')
     } else {
       setPublishErrors(result.errors || [])
       setErrorMessage('Lokalen kunde inte publiceras')
@@ -272,7 +272,7 @@ export default function VenueEditPage() {
 
     if (result.success) {
       setVenue(prev => prev ? { ...prev, status: 'paused' } : prev)
-      setSuccessMessage('Lokalen ar nu pausad')
+      setSuccessMessage('Lokalen är nu pausad')
     } else {
       setErrorMessage(result.error || 'Kunde inte pausa lokalen')
     }
@@ -343,7 +343,7 @@ export default function VenueEditPage() {
       {publishErrors.length > 0 && (
         <div className="mb-6 p-4 bg-[#fef3c7] border border-[#f59e0b] rounded-lg">
           <p className="font-medium text-[#92400e] mb-2">
-            Foljande kravs for att publicera:
+            Följande krävs för att publicera:
           </p>
           <ul className="list-disc list-inside text-sm text-[#92400e]">
             {publishErrors.map((error, index) => (
@@ -364,17 +364,17 @@ export default function VenueEditPage() {
         <div className="space-y-8">
           {/* Basic Info */}
           <section>
-            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Grundlaggande information</h2>
+            <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Grundläggande information</h2>
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Namn pa lokalen *
+                  Namn på lokalen *
                 </label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={e => updateField('name', e.target.value)}
-                  placeholder="T.ex. Festlokalen Sodermalm"
+                  placeholder="T.ex. Festlokalen Södermalm"
                   required
                 />
               </div>
@@ -387,7 +387,7 @@ export default function VenueEditPage() {
                   id="description"
                   value={formData.description}
                   onChange={e => updateField('description', e.target.value)}
-                  placeholder="Beskriv din lokal, vad som gor den unik och passar for..."
+                  placeholder="Beskriv din lokal, vad som gör den unik och passar för..."
                   rows={4}
                 />
               </div>
@@ -466,7 +466,7 @@ export default function VenueEditPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="area" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                    Omrade
+                    Område
                   </label>
                   <select
                     id="area"
@@ -504,7 +504,7 @@ export default function VenueEditPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="capacity_standing" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Staende kapacitet
+                  Stående kapacitet
                 </label>
                 <Input
                   id="capacity_standing"
@@ -546,7 +546,7 @@ export default function VenueEditPage() {
 
               <div>
                 <label htmlFor="min_guests" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Minsta antal gaster
+                  Minsta antal gäster
                 </label>
                 <Input
                   id="min_guests"
@@ -608,7 +608,7 @@ export default function VenueEditPage() {
 
               <div>
                 <label htmlFor="price_evening" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Pris kvall (SEK)
+                  Pris kväll (SEK)
                 </label>
                 <Input
                   id="price_evening"
@@ -733,7 +733,7 @@ export default function VenueEditPage() {
             onClick={handleSubmit}
             loading={isSubmitting}
           >
-            Spara andringar
+            Spara ändringar
           </Button>
         </div>
       </div>

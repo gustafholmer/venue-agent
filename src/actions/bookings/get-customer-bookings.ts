@@ -61,7 +61,7 @@ export async function getCustomerBookings(
 
     if (bookingsError) {
       logger.error('Error fetching customer bookings', { bookingsError })
-      return { success: false, error: 'Kunde inte hamta bokningar' }
+      return { success: false, error: 'Kunde inte hämta bokningar' }
     }
 
     // Get primary photos for all venues
@@ -96,7 +96,7 @@ export async function getCustomerBookings(
     logger.error('Unexpected error fetching customer bookings', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }
@@ -128,7 +128,7 @@ export async function getCustomerBookingStats(): Promise<{
 
     if (error) {
       logger.error('Error fetching booking stats', { error })
-      return { success: false, error: 'Kunde inte hamta bokningsstatistik' }
+      return { success: false, error: 'Kunde inte hämta bokningsstatistik' }
     }
 
     const stats: BookingStats = {
@@ -141,6 +141,6 @@ export async function getCustomerBookingStats(): Promise<{
     return { success: true, stats }
   } catch (error) {
     logger.error('Unexpected error fetching booking stats', { error })
-    return { success: false, error: 'Ett ovantat fel uppstod' }
+    return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

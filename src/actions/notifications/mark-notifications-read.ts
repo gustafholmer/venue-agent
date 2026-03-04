@@ -58,7 +58,7 @@ export async function markNotificationsRead(
     logger.error('Unexpected error marking notifications as read', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }
@@ -96,7 +96,7 @@ export async function markAllNotificationsRead(): Promise<MarkNotificationsReadR
     logger.error('Unexpected error marking all notifications as read', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

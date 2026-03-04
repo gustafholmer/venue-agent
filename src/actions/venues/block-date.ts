@@ -158,7 +158,7 @@ export async function blockDateRange(
       if (failedDates.length > 0) {
         return {
           success: false,
-          error: 'Alla datum har antingen bokningar eller ar redan blockerade',
+          error: 'Alla datum har antingen bokningar eller är redan blockerade',
           failedDates,
         }
       }

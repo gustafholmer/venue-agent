@@ -116,9 +116,9 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
         ...p,
         is_primary: p.id === photoId,
       })))
-      showSuccess('Primarbild uppdaterad')
+      showSuccess('Primärbild uppdaterad')
     } else {
-      showError(result.error || 'Kunde inte uppdatera primarbild')
+      showError(result.error || 'Kunde inte uppdatera primärbild')
     }
   }
 
@@ -140,7 +140,7 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
 
     const result = await reorderPhotos(venueId, photoOrders)
     if (!result.success) {
-      showError(result.error || 'Kunde inte andra ordningen')
+      showError(result.error || 'Kunde inte ändra ordningen')
       await fetchPhotos() // Revert on error
     }
   }
@@ -163,7 +163,7 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
 
     const result = await reorderPhotos(venueId, photoOrders)
     if (!result.success) {
-      showError(result.error || 'Kunde inte andra ordningen')
+      showError(result.error || 'Kunde inte ändra ordningen')
       await fetchPhotos() // Revert on error
     }
   }
@@ -265,9 +265,9 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-[#78716c] mt-4 text-lg">Inga bilder annu</p>
+          <p className="text-[#78716c] mt-4 text-lg">Inga bilder ännu</p>
           <p className="text-[#a8a29e] mt-1">
-            Ladda upp bilder for att visa din lokal for potentiella kunder.
+            Ladda upp bilder för att visa din lokal för potentiella kunder.
           </p>
         </div>
       ) : (
@@ -355,7 +355,7 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
                       type="button"
                       onClick={() => handleSetPrimary(photo.id)}
                       className="p-2 bg-white rounded-lg hover:bg-gray-100"
-                      title="Satt som huvudbild"
+                      title="Sätt som huvudbild"
                     >
                       <svg
                         className="w-5 h-5 text-[#f59e0b]"
@@ -409,9 +409,9 @@ export function VenuePhotoManager({ venueId }: VenuePhotoManagerProps) {
       {photos.length > 0 && (
         <div className="mt-6 p-4 bg-[#faf9f7] rounded-lg">
           <p className="text-sm text-[#78716c]">
-            <strong>Tips:</strong> Hover over en bild for att se alternativ.
-            Anvand pilarna for att andra ordningen, stjarnan for att satta huvudbild,
-            eller papperskorgen for att ta bort.
+            <strong>Tips:</strong> Hovra över en bild för att se alternativ.
+            Använd pilarna för att ändra ordningen, stjärnan för att sätta huvudbild,
+            eller papperskorgen för att ta bort.
           </p>
         </div>
       )}

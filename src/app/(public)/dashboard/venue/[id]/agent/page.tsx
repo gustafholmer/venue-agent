@@ -325,7 +325,7 @@ export default function VenueAgentPage() {
       {/* Header */}
       <div className="mb-8">
         <p className="text-[#78716c]">
-          Lar din agent hur den ska hantera bokningsforfragan
+          Lär din agent hur den ska hantera bokningsförfrågan
         </p>
       </div>
 
@@ -333,7 +333,7 @@ export default function VenueAgentPage() {
       {successMessage && (
         <div className="mb-6 p-4 bg-[#d1fae5] border border-[#10b981] rounded-lg text-[#065f46] flex items-start gap-2">
           <span className="flex-1">{successMessage}</span>
-          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stang">
+          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stäng">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -341,7 +341,7 @@ export default function VenueAgentPage() {
       {errorMessage && (
         <div className="mb-6 p-4 bg-[#fee2e2] border border-[#ef4444] rounded-lg text-[#991b1b] flex items-start gap-2">
           <span className="flex-1">{errorMessage}</span>
-          <button onClick={() => setErrorMessage(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stang">
+          <button onClick={() => setErrorMessage(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stäng">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -354,8 +354,8 @@ export default function VenueAgentPage() {
             <h2 className="text-lg font-semibold text-[#1a1a1a]">Aktivera agent</h2>
             <p className="text-sm text-[#78716c] mt-0.5">
               {agentEnabled
-                ? 'Agenten ar aktiv och svarar pa forfragan automatiskt'
-                : 'Agenten ar avslagen — aktivera for att bota automatiskt'}
+                ? 'Agenten är aktiv och svarar på förfrågan automatiskt'
+                : 'Agenten är avstängd — aktivera för att boka automatiskt'}
             </p>
           </div>
           <button
@@ -534,7 +534,7 @@ export default function VenueAgentPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="minGuests" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Min antal gaster
+                  Min antal gäster
                 </label>
                 <Input
                   id="minGuests"
@@ -547,7 +547,7 @@ export default function VenueAgentPage() {
               </div>
               <div>
                 <label htmlFor="maxGuests" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Max antal gaster
+                  Max antal gäster
                 </label>
                 <Input
                   id="maxGuests"
@@ -660,7 +660,7 @@ export default function VenueAgentPage() {
                     {(['welcome', 'declined', 'ask_owner'] as const).map(status => {
                       const labels = {
                         welcome: 'Valkomna',
-                        declined: 'Avbojs',
+                        declined: 'Avböjs',
                         ask_owner: 'Fraga mig',
                       }
                       const isActive = et.status === status

@@ -42,7 +42,7 @@ export async function getVenues(): Promise<{
 
     if (venuesError) {
       logger.error('Error fetching venues', { venuesError })
-      return { success: false, error: 'Kunde inte hamta lokaler' }
+      return { success: false, error: 'Kunde inte hämta lokaler' }
     }
 
     if (!venues || venues.length === 0) {
@@ -78,6 +78,6 @@ export async function getVenues(): Promise<{
     return { success: true, venues: venueList }
   } catch (error) {
     logger.error('Error fetching venues', { error })
-    return { success: false, error: 'Ett ovantat fel uppstod' }
+    return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

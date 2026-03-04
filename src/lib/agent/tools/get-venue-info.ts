@@ -50,7 +50,7 @@ export function getVenueInfo(
     equipment: () => handleEquipment(venue),
     teknik: () => handleEquipment(venue),
     accessibility: () => handleAccessibility(venue),
-    tillganglighet: () => handleAccessibility(venue),
+    tillgänglighet: () => handleAccessibility(venue),
     location: () => handleLocation(venue),
     plats: () => handleLocation(venue),
     adress: () => handleLocation(venue),

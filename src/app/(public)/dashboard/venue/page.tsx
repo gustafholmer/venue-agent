@@ -20,7 +20,7 @@ function StatusBadge({ status }: { status: string }) {
 function formatCapacity(venue: VenueListItem): string | null {
   const parts: string[] = []
   if (venue.capacity_seated) parts.push(`${venue.capacity_seated} sittande`)
-  if (venue.capacity_standing) parts.push(`${venue.capacity_standing} staende`)
+  if (venue.capacity_standing) parts.push(`${venue.capacity_standing} stående`)
   return parts.length > 0 ? parts.join(' / ') : null
 }
 

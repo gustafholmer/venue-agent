@@ -40,7 +40,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'pending', label: 'Att gora' },
   { key: 'all', label: 'Alla' },
   { key: 'approved', label: 'Godkanda' },
-  { key: 'declined', label: 'Avbojda' },
+  { key: 'declined', label: 'Avböjda' },
 ]
 
 function filterActions(actions: ActionRow[], tab: TabKey): ActionRow[] {

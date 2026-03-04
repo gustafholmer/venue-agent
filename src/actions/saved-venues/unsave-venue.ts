@@ -35,7 +35,7 @@ export async function unsaveVenue(venueId: string): Promise<{
 
     if (deleteError) {
       logger.error('Error unsaving venue', { deleteError })
-      return { success: false, error: 'Kunde inte ta bort lokalen fran sparade' }
+      return { success: false, error: 'Kunde inte ta bort lokalen från sparade' }
     }
 
     revalidatePath('/account/saved')
@@ -46,7 +46,7 @@ export async function unsaveVenue(venueId: string): Promise<{
     logger.error('Unexpected error unsaving venue', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

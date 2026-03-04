@@ -49,7 +49,7 @@ export async function uploadPhoto(venueId: string, formData: FormData) {
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      return { success: false, error: 'Filen ar for stor. Max 5MB.' }
+      return { success: false, error: 'Filen är för stor. Max 5MB.' }
     }
 
     // Generate unique ID for photo

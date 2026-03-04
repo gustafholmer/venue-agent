@@ -38,7 +38,7 @@ function StatusBadge({ status }: { status: string }) {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <span>Avbojd</span>
+          <span>Avböjd</span>
         </div>
       )
     case 'expired':
@@ -74,7 +74,7 @@ export function ActionCardEscalation({ action, onActionComplete }: EscalationCar
         onActionComplete?.()
       }
     } catch {
-      setError('Ett ovantat fel uppstod')
+      setError('Ett oväntat fel uppstod')
     } finally {
       setIsDeclining(false)
     }
@@ -89,7 +89,7 @@ export function ActionCardEscalation({ action, onActionComplete }: EscalationCar
       {/* Heading */}
       <div className="flex items-center gap-2 mb-2">
         <span className="text-base" aria-hidden="true">&#9889;</span>
-        <span className="text-sm font-semibold text-[#1a1a1a]">Behover ditt svar</span>
+        <span className="text-sm font-semibold text-[#1a1a1a]">Behöver ditt svar</span>
       </div>
 
       {/* Customer request */}
@@ -133,7 +133,7 @@ export function ActionCardEscalation({ action, onActionComplete }: EscalationCar
               className="flex-1 h-9 text-sm font-medium text-[#1a1a1a] border border-[#e7e5e4] rounded-lg hover:bg-[#f5f5f4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center justify-center gap-2"
             >
               {isDeclining && <Spinner />}
-              Avboj
+              Avböj
             </button>
           </div>
 

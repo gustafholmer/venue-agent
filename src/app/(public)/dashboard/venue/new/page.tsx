@@ -208,7 +208,7 @@ export default function NewVenuePage() {
               <EditableText
                 value={formData.name}
                 onChange={(v) => updateField('name', v)}
-                placeholder="Namn pa lokalen"
+                placeholder="Namn på lokalen"
                 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a]"
               />
               <div className="flex flex-wrap items-center gap-1 text-[#78716c] mt-2">
@@ -256,7 +256,7 @@ export default function NewVenuePage() {
               <EditableText
                 value={formData.description}
                 onChange={(v) => updateField('description', v)}
-                placeholder="Beskriv din lokal, vad som gor den unik och vad den passar for..."
+                placeholder="Beskriv din lokal, vad som gör den unik och vad den passar för..."
                 className="text-[#57534e] leading-relaxed"
                 multiline
               />
@@ -276,7 +276,7 @@ export default function NewVenuePage() {
                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                       />
                     </svg>
-                    <span className="text-sm">Staende</span>
+                    <span className="text-sm">Stående</span>
                   </div>
                   <EditableNumber
                     value={formData.capacity_standing}
@@ -416,7 +416,7 @@ export default function NewVenuePage() {
                     />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#78716c]">Kvall</span>
+                    <span className="text-[#78716c]">Kväll</span>
                     <EditableNumber
                       value={formData.price_evening}
                       onChange={(v) => updateField('price_evening', v)}
@@ -439,7 +439,7 @@ export default function NewVenuePage() {
 
               {/* CTA Button (disabled preview) */}
               <Button variant="primary" size="lg" className="w-full" disabled>
-                Skicka bokningsforfragan
+                Skicka bokningsförfrågan
               </Button>
 
               {/* Contact Info */}

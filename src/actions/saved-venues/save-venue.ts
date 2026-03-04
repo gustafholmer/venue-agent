@@ -24,7 +24,7 @@ export async function saveVenue(venueId: string): Promise<{
     // Get current user
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return { success: false, error: 'Du maste vara inloggad for att spara lokaler' }
+      return { success: false, error: 'Du måste vara inloggad för att spara lokaler' }
     }
 
     // Check if already saved
@@ -62,7 +62,7 @@ export async function saveVenue(venueId: string): Promise<{
     logger.error('Unexpected error saving venue', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

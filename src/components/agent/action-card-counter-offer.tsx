@@ -59,7 +59,7 @@ function StatusBadge({ status }: { status: string }) {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-          <span>Avbojt av kunden</span>
+          <span>Avböjt av kunden</span>
         </div>
       )
     case 'expired':
@@ -96,7 +96,7 @@ export function ActionCardCounterOffer({ action }: CounterOfferCardProps) {
       {/* Modified booking details */}
       <div className="space-y-1 text-sm text-[#1a1a1a] mb-2">
         <p>
-          {summary.eventTypeLabel} · {summary.guestCount} gaster · {formatSwedishDate(summary.date)} · {summary.startTime}–{summary.endTime}
+          {summary.eventTypeLabel} · {summary.guestCount} gäster · {formatSwedishDate(summary.date)} · {summary.startTime}–{summary.endTime}
         </p>
         <p className="font-semibold">{formatPrice(summary.price)}</p>
       </div>

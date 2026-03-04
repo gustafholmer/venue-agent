@@ -66,7 +66,7 @@ export async function getSavedVenues(): Promise<{
 
     if (fetchError) {
       logger.error('Error fetching saved venues', { fetchError })
-      return { success: false, error: 'Kunde inte hamta sparade lokaler' }
+      return { success: false, error: 'Kunde inte hämta sparade lokaler' }
     }
 
     // Filter out unpublished venues
@@ -121,7 +121,7 @@ export async function getSavedVenues(): Promise<{
     logger.error('Unexpected error fetching saved venues', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

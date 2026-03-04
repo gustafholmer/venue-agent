@@ -128,7 +128,7 @@ export async function cancelBooking(bookingId: string, reason?: string): Promise
     logger.error('Unexpected error cancelling booking', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

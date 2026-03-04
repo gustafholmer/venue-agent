@@ -171,7 +171,7 @@ export async function acceptBooking(bookingId: string): Promise<AcceptBookingRes
     logger.error('Unexpected error accepting booking', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

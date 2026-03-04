@@ -20,7 +20,7 @@ export const VENUE_TYPES = [
   { value: 'aw', label: 'AW' },
   { value: 'workshop', label: 'Workshop' },
   { value: 'fotografering', label: 'Fotografering' },
-  { value: 'mote', label: 'Mote' },
+  { value: 'mote', label: 'Möte' },
   { value: 'middag', label: 'Middag' },
 ] as const
 
@@ -40,7 +40,7 @@ export const AMENITIES = [
   { value: 'whiteboard', label: 'Whiteboard' },
   { value: 'wifi', label: 'WiFi' },
   { value: 'parkering', label: 'Parkering' },
-  { value: 'kok', label: 'Kok' },
+  { value: 'kok', label: 'Kök' },
   { value: 'bar', label: 'Bar' },
   { value: 'utomhus', label: 'Utomhus' },
   { value: 'scen', label: 'Scen' },
@@ -49,15 +49,15 @@ export const AMENITIES = [
 ] as const
 
 export const AREAS = [
-  'Sodermalm',
+  'Södermalm',
   'Vasastan',
-  'Ostermalm',
+  'Östermalm',
   'Kungsholmen',
   'Norrmalm',
   'Gamla Stan',
-  'Djurgarden',
-  'Hammarby Sjostad',
-  'Hagerstrom',
+  'Djurgården',
+  'Hammarby Sjöstad',
+  'Hägersten',
   'Solna',
   'Sundbyberg',
 ] as const

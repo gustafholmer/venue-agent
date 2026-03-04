@@ -56,7 +56,7 @@ export async function getNotifications(limit: number = 20): Promise<GetNotificat
     logger.error('Unexpected error fetching notifications', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

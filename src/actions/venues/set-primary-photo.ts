@@ -63,7 +63,7 @@ export async function setPrimaryPhoto(venueId: string, photoId: string) {
 
     if (updateError) {
       logger.error('Error setting primary photo', { updateError })
-      return { success: false, error: 'Kunde inte satta primarbild' }
+      return { success: false, error: 'Kunde inte sätta primärbild' }
     }
 
     revalidatePath(`/dashboard/venue/${venueId}`)

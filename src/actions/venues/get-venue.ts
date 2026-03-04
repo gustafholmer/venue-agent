@@ -41,6 +41,6 @@ export async function getVenue(venueId: string): Promise<{
     return { success: true, venue }
   } catch (error) {
     logger.error('Error fetching venue', { error })
-    return { success: false, error: 'Ett ovantat fel uppstod' }
+    return { success: false, error: 'Ett oväntat fel uppstod' }
   }
 }

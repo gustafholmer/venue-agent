@@ -84,7 +84,7 @@ export default function CalendarPage() {
 
     // Cannot modify dates with bookings
     if (day.hasAcceptedBooking || day.hasPendingBooking) {
-      showErrorMessage('Kan inte andra datum med bokningar')
+      showErrorMessage('Kan inte ändra datum med bokningar')
       return
     }
 
@@ -277,7 +277,7 @@ export default function CalendarPage() {
         <div>
           <h1 className="font-[family-name:var(--font-heading)] text-2xl font-semibold text-[#1a1a1a]">Kalender</h1>
           <p className="text-[#78716c] mt-1">
-            Hantera tillganglighet och se bokningar
+            Hantera tillgänglighet och se bokningar
           </p>
         </div>
         <Button onClick={() => setShowBlockModal(true)}>
@@ -289,7 +289,7 @@ export default function CalendarPage() {
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-start gap-2">
           <span className="flex-1">{error}</span>
-          <button onClick={() => setError(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stang">
+          <button onClick={() => setError(null)} className="flex-shrink-0 p-1 hover:bg-red-100 rounded" aria-label="Stäng">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -297,7 +297,7 @@ export default function CalendarPage() {
       {successMessage && (
         <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 flex items-start gap-2">
           <span className="flex-1">{successMessage}</span>
-          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stang">
+          <button onClick={() => setSuccessMessage(null)} className="flex-shrink-0 p-1 hover:bg-green-100 rounded" aria-label="Stäng">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -307,7 +307,7 @@ export default function CalendarPage() {
       {!isLoading && !calendarData?.venueId && (
         <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-yellow-800">
-            Du har ingen lokal annu. <a href="/dashboard/venue/new" className="underline font-medium">Skapa en lokal</a> for att kunna hantera kalendern.
+            Du har ingen lokal ännu. <a href="/dashboard/venue/new" className="underline font-medium">Skapa en lokal</a> för att kunna hantera kalendern.
           </p>
         </div>
       )}
@@ -317,7 +317,7 @@ export default function CalendarPage() {
         <div className="flex flex-wrap gap-6">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-white border border-[#e7e5e4]"></div>
-            <span className="text-sm text-[#57534e]">Tillganglig</span>
+            <span className="text-sm text-[#57534e]">Tillgänglig</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-red-100 border border-red-300"></div>
@@ -329,7 +329,7 @@ export default function CalendarPage() {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-yellow-100 border border-yellow-300"></div>
-            <span className="text-sm text-[#57534e]">Vantande bokningar</span>
+            <span className="text-sm text-[#57534e]">Väntande bokningar</span>
           </div>
         </div>
       </div>
@@ -422,7 +422,7 @@ export default function CalendarPage() {
                     )}
                     {day.hasPendingBooking && (
                       <span className="text-xs text-yellow-700 truncate block">
-                        Forfragan
+                        Förfrågan
                       </span>
                     )}
                     {day.isBlocked && !day.hasAcceptedBooking && !day.hasPendingBooking && (
@@ -439,8 +439,8 @@ export default function CalendarPage() {
       {/* Instructions */}
       <div className="mt-6 p-4 bg-[#faf9f7] rounded-lg">
         <p className="text-sm text-[#78716c]">
-          <strong>Tips:</strong> Klicka pa ett datum for att blockera eller avblockera det.
-          Datum med bokningar kan inte andras har. Anvand &ldquo;Blockera flera dagar&rdquo; for att blockera ett datumintervall.
+          <strong>Tips:</strong> Klicka på ett datum för att blockera eller avblockera det.
+          Datum med bokningar kan inte ändras här. Använd ... för att blockera ett datumintervall.
         </p>
       </div>
 

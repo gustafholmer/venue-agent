@@ -23,7 +23,7 @@ export async function unpublishVenue(venueId: string): Promise<UnpublishVenueRes
     if (!user) {
       return {
         success: false,
-        error: 'Du maste vara inloggad',
+        error: 'Du måste vara inloggad',
       }
     }
 

@@ -31,7 +31,7 @@ export default async function VenueActionsPage({ params }: { params: Promise<{ i
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-[#1a1a1a]">Åtgärder</h1>
-        <p className="text-[#78716c] mt-1">Hantera bokningsforfragan och forfragan</p>
+        <p className="text-[#78716c] mt-1">Hantera bokningsförfrågningar och förfrågningar</p>
       </div>
       <ActionFeed venueId={venueId} initialActions={actions ?? []} />
     </div>

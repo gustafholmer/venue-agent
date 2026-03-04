@@ -138,13 +138,13 @@ export function ActionCardBooking({ action, onActionComplete }: BookingApprovalC
       {/* Heading */}
       <div className="flex items-center gap-2 mb-2">
         <span className="w-2 h-2 rounded-full bg-[#c45a3b]" aria-hidden="true" />
-        <span className="text-sm font-semibold text-[#1a1a1a]">Ny bokningsforfragan</span>
+        <span className="text-sm font-semibold text-[#1a1a1a]">Ny bokningsförfrågan</span>
       </div>
 
       {/* Details */}
       <div className="space-y-1 text-sm text-[#1a1a1a] mb-3">
         <p>
-          {summary.eventTypeLabel} · {summary.guestCount} gaster · {formatSwedishDate(summary.date)} · {summary.startTime}–{summary.endTime}
+          {summary.eventTypeLabel} · {summary.guestCount} gäster · {formatSwedishDate(summary.date)} · {summary.startTime}–{summary.endTime}
         </p>
         <p className="font-semibold">{formatPrice(summary.price)}</p>
         <p className="text-[#78716c] text-xs">
@@ -192,7 +192,7 @@ export function ActionCardBooking({ action, onActionComplete }: BookingApprovalC
               className="flex-1 h-9 text-sm font-medium bg-[#c45a3b] text-white rounded-lg hover:bg-[#a84832] disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center justify-center gap-2"
             >
               {isApproving && <Spinner />}
-              Godkann
+              Godkänn
             </button>
             <button
               onClick={handleDecline}
@@ -200,7 +200,7 @@ export function ActionCardBooking({ action, onActionComplete }: BookingApprovalC
               className="flex-1 h-9 text-sm font-medium text-[#1a1a1a] border border-[#e7e5e4] rounded-lg hover:bg-[#f5f5f4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center justify-center gap-2"
             >
               {isDeclining && <Spinner />}
-              Avboj
+              Avböj
             </button>
             <button
               onClick={() => setShowModify(true)}

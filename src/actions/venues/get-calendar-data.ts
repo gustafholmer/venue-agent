@@ -61,7 +61,7 @@ export async function getCalendarData(venueId: string, year: number, month: numb
 
     if (blockedError) {
       logger.error('Error fetching blocked dates', { blockedError })
-      return { success: false, error: 'Kunde inte hamta blockerade datum' }
+      return { success: false, error: 'Kunde inte hämta blockerade datum' }
     }
 
     // Get bookings (accepted and pending) for this month
@@ -75,7 +75,7 @@ export async function getCalendarData(venueId: string, year: number, month: numb
 
     if (bookingsError) {
       logger.error('Error fetching bookings', { bookingsError })
-      return { success: false, error: 'Kunde inte hamta bokningar' }
+      return { success: false, error: 'Kunde inte hämta bokningar' }
     }
 
     return {

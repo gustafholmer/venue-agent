@@ -69,7 +69,7 @@ export async function updateNotificationPreferences(data: NotificationPreference
     logger.error('Unexpected error updating notification preferences', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }
@@ -115,7 +115,7 @@ export async function getNotificationPreferences(): Promise<{
     logger.error('Unexpected error fetching notification preferences', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

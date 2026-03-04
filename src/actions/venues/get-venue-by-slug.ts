@@ -93,7 +93,7 @@ export async function getVenueBySlug(slugOrId: string): Promise<GetVenueResult> 
     logger.error('Error fetching venue', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod',
+      error: 'Ett oväntat fel uppstod',
     }
   }
 }

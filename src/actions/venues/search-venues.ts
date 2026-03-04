@@ -141,24 +141,24 @@ function generateSimpleExplanation(
   const parts: string[] = []
 
   if (filters.event_type && venue.venue_types?.includes(filters.event_type)) {
-    parts.push(`Perfekt for ${filters.event_type.toLowerCase()}`)
+    parts.push(`Perfekt för ${filters.event_type.toLowerCase()}`)
   }
 
   if (filters.guest_count) {
     const capacity = Math.max(venue.capacity_standing || 0, venue.capacity_seated || 0)
-    parts.push(`Kapacitet for ${capacity} gaester`)
+    parts.push(`Kapacitet för ${capacity} gaester`)
   }
 
   if (venue.area) {
-    parts.push(`Belaget i ${venue.area}`)
+    parts.push(`Beläget i ${venue.area}`)
   }
 
   if (venue.vibes && venue.vibes.length > 0) {
-    parts.push(`${venue.vibes.slice(0, 2).join(' och ').toLowerCase()} atmosfar`)
+    parts.push(`${venue.vibes.slice(0, 2).join(' och ').toLowerCase()} atmosfär`)
   }
 
   if (parts.length === 0) {
-    return 'Matchar dina sokkriterier.'
+    return 'Matchar dina sökkriterier.'
   }
 
   return parts.join('. ') + '.'
@@ -341,7 +341,7 @@ export async function searchVenues(
     logger.error('Error in searchVenues', { error })
     return {
       success: false,
-      error: 'Ett ovantat fel uppstod vid sokning.',
+      error: 'Ett oväntat fel uppstod vid sökning.',
     }
   }
 }

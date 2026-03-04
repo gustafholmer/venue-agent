@@ -47,7 +47,7 @@ export function ModifyDialog({ actionId, originalSummary, onClose, onComplete }:
         onComplete()
       }
     } catch {
-      setError('Ett ovantat fel uppstod')
+      setError('Ett oväntat fel uppstod')
     } finally {
       setIsSubmitting(false)
     }
@@ -55,7 +55,7 @@ export function ModifyDialog({ actionId, originalSummary, onClose, onComplete }:
 
   return (
     <form onSubmit={handleSubmit} className="mt-3 pt-3 border-t border-[#e7e5e4] space-y-3">
-      <p className="text-xs font-medium text-[#78716c] uppercase tracking-wide">Andra bokning</p>
+      <p className="text-xs font-medium text-[#78716c] uppercase tracking-wide">Ändra bokning</p>
 
       <div className="grid grid-cols-2 gap-2">
         {/* Price */}
