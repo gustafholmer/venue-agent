@@ -14,8 +14,8 @@ function DashboardSkeleton() {
       </div>
 
       {/* Stats skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {[1, 2, 3, 4].map((i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        {[1, 2, 3].map((i) => (
           <div key={i} className="bg-white border border-[#e7e5e4] rounded-xl p-4">
             <div className="h-4 bg-[#e7e5e4] rounded w-20 mb-2" />
             <div className="h-8 bg-[#e7e5e4] rounded w-24" />
@@ -67,15 +67,6 @@ async function DashboardContent() {
         .in('venue_id', venueIds)
         .eq('status', 'pending')
     : { count: 0 }
-
-    // Get open inquiries count across all venues
-    const { count: openInquiryCount } = venueIds.length > 0
-      ? await supabase
-          .from('venue_inquiries')
-          .select('*', { count: 'exact', head: true })
-          .in('venue_id', venueIds)
-          .eq('status', 'open')
-      : { count: 0 }
 
   // Get upcoming bookings across all venues (include venue name via join)
   const { data: upcomingBookings } = venueIds.length > 0
@@ -138,7 +129,7 @@ async function DashboardContent() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
           <p className="text-sm text-[#78716c]">Lokaler</p>
           <p className="text-2xl font-semibold text-[#1a1a1a]">
@@ -149,12 +140,6 @@ async function DashboardContent() {
           <p className="text-sm text-[#78716c]">Nya bokningar</p>
           <p className="text-2xl font-semibold text-[#c45a3b]">
             {pendingCount || 0}
-          </p>
-        </div>
-        <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">
-          <p className="text-sm text-[#78716c]">Öppna förfrågningar</p>
-          <p className="text-2xl font-semibold text-[#c45a3b]">
-            {openInquiryCount || 0}
           </p>
         </div>
         <div className="bg-white border border-[#e7e5e4] rounded-xl p-4">

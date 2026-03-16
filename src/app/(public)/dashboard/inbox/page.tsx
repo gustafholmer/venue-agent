@@ -8,18 +8,11 @@ import { formatTimestamp } from '@/components/notifications/notification-utils'
 
 const TYPE_FILTERS = [
   { value: 'all', label: 'Alla' },
-  { value: 'inquiry', label: 'Förfrågningar' },
   { value: 'booking', label: 'Bokningar' },
 ] as const
 
 function TypeBadge({ type }: { type: 'inquiry' | 'booking' }) {
-  if (type === 'inquiry') {
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-        Förfrågan
-      </span>
-    )
-  }
+  void type
   return (
     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
       Bokning
@@ -46,9 +39,7 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function InboxCard({ item }: { item: InboxItem }) {
-  const href = item.type === 'inquiry'
-    ? `/dashboard/inquiries/${item.id}`
-    : `/dashboard/venue/${item.venueId}/bookings/${item.id}`
+  const href = `/dashboard/venue/${item.venueId}/bookings/${item.id}`
 
   return (
     <Link
@@ -99,8 +90,8 @@ export default function InboxPage() {
   const initialType = searchParams.get('type')
   const [items, setItems] = useState<InboxItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [typeFilter, setTypeFilter] = useState<'all' | 'inquiry' | 'booking'>(
-    initialType === 'inquiry' || initialType === 'booking' ? initialType : 'all'
+  const [typeFilter, setTypeFilter] = useState<'all' | 'booking'>(
+    initialType === 'booking' ? initialType : 'all'
   )
 
   const fetchItems = useCallback(async () => {
@@ -130,7 +121,7 @@ export default function InboxPage() {
           {TYPE_FILTERS.map(({ value, label }) => (
             <button
               key={value}
-              onClick={() => setTypeFilter(value as typeof typeFilter)}
+              onClick={() => setTypeFilter(value as 'all' | 'booking')}
               className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                 typeFilter === value
                   ? 'bg-white text-[#1a1a1a] shadow-sm'
