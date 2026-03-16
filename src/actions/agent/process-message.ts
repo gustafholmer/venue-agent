@@ -2,7 +2,7 @@
 
 import { logger } from '@/lib/logger'
 
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { parsePreferences } from '@/lib/gemini/parse-preferences'
 import { searchVenues } from '@/actions/venues/search-venues'
 import type { AgentState, AgentMessage, AgentResponse, VenueResult } from '@/types/agent'
@@ -106,7 +106,7 @@ export async function processAgentMessage(
   }
 
   try {
-    const supabase = await createClient()
+    const supabase = createServiceClient()
 
     // Fetch existing session
     const { data: session, error: sessionError } = await supabase
@@ -273,8 +273,12 @@ export async function processAgentMessage(
 export async function getSessionMessages(
   sessionId: string
 ): Promise<{ success: boolean; messages?: AgentMessage[]; state?: AgentState; error?: string }> {
+  if (!uuidRegex.test(sessionId)) {
+    return { success: false, error: 'Ogiltig session' }
+  }
+
   try {
-    const supabase = await createClient()
+    const supabase = createServiceClient()
 
     const { data: session, error } = await supabase
       .from('agent_sessions')

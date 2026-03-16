@@ -3,6 +3,7 @@
 import { logger } from '@/lib/logger'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { uuidSchema } from '@/lib/validation/schemas'
 import type { AgentState } from '@/types/agent'
 
@@ -15,12 +16,14 @@ interface CreateSessionResult {
 export async function createAgentSession(): Promise<CreateSessionResult> {
   try {
     const supabase = await createClient()
+    const serviceClient = createServiceClient()
 
     // Check if user is authenticated (optional - sessions can be anonymous)
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Create new session with default state
-    const { data, error } = await supabase
+    // Use service client to bypass RLS — anonymous users can't pass
+    // the customer_id = auth.uid() policy (NULL = NULL is false in SQL)
+    const { data, error } = await serviceClient
       .from('agent_sessions')
       .insert({
         customer_id: user?.id || null,
@@ -46,7 +49,7 @@ export async function createAgentSession(): Promise<CreateSessionResult> {
 
 export async function getOrCreateSession(sessionId?: string): Promise<CreateSessionResult> {
   try {
-    const supabase = await createClient()
+    const serviceClient = createServiceClient()
 
     // If sessionId provided, validate and try to fetch existing session
     if (sessionId) {
@@ -55,7 +58,7 @@ export async function getOrCreateSession(sessionId?: string): Promise<CreateSess
         return { success: false, error: 'Ogiltigt sessions-ID' }
       }
 
-      const { data: existingSession, error: fetchError } = await supabase
+      const { data: existingSession, error: fetchError } = await serviceClient
         .from('agent_sessions')
         .select('id')
         .eq('id', sessionId)
