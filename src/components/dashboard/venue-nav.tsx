@@ -10,7 +10,7 @@ interface VenueNavProps {
 const NAV_ITEMS = [
   { path: '', label: 'Lokal' },
   { path: '/bookings', label: 'Bokningar' },
-  { path: '/actions', label: 'AI-agent' },
+  { path: '/actions', label: 'Kundkonversationer' },
   { path: '/calendar', label: 'Kalender' },
   { path: '/agent-settings', label: 'Agentinställningar' },
 ]

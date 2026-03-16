@@ -55,7 +55,15 @@ function buildGeminiContents(
   const recent = messages.slice(-MAX_HISTORY_MESSAGES)
 
   for (const msg of recent) {
-    if (msg.role === 'system') continue
+    if (msg.role === 'system') {
+      // Owner replies — inject as user context so the agent sees them
+      contents.push({ role: 'user', parts: [{ text: msg.content }] })
+      contents.push({
+        role: 'model',
+        parts: [{ text: 'Förstått, jag tar hänsyn till lokalägarens svar.' }],
+      })
+      continue
+    }
 
     const role = msg.role === 'user' ? 'user' : 'model'
     contents.push({ role, parts: [{ text: msg.content }] })
