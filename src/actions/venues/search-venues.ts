@@ -146,7 +146,7 @@ function generateSimpleExplanation(
 
   if (filters.guest_count) {
     const capacity = Math.max(venue.capacity_standing || 0, venue.capacity_seated || 0)
-    parts.push(`Kapacitet för ${capacity} gaester`)
+    parts.push(`Kapacitet för ${capacity} gäster`)
   }
 
   if (venue.area) {
@@ -214,7 +214,7 @@ export async function searchVenues(
       logger.error('Error matching venues', { matchError })
       return {
         success: false,
-        error: 'Kunde inte soka efter lokaler.',
+        error: 'Kunde inte söka efter lokaler.',
       }
     }
 

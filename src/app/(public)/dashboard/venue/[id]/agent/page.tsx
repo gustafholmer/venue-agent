@@ -379,7 +379,7 @@ export default function VenueAgentPage() {
       {/* Section 1: Pricing */}
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <SectionHeader
-          title="Prissattning"
+          title="Prissättning"
           subtitle="Ange grundpris och paket"
           open={openSections.pricing}
           onToggle={() => toggleSection('pricing')}
@@ -456,7 +456,7 @@ export default function VenueAgentPage() {
                     onClick={addPackage}
                     className="text-sm text-[#c45a3b] hover:text-[#a04832] font-medium"
                   >
-                    + Lagg till paket
+                    + Lägg till paket
                   </button>
                 )}
               </div>
@@ -586,7 +586,7 @@ export default function VenueAgentPage() {
               </div>
               <div>
                 <label htmlFor="minAdvanceDays" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Min framforhallning (dagar)
+                  Min framförhållning (dagar)
                 </label>
                 <Input
                   id="minAdvanceDays"
@@ -599,7 +599,7 @@ export default function VenueAgentPage() {
               </div>
               <div>
                 <label htmlFor="maxAdvanceMonths" className="block text-sm font-medium text-[#57534e] mb-1.5">
-                  Max framforhallning (manader)
+                  Max framförhållning (månader)
                 </label>
                 <Input
                   id="maxAdvanceMonths"
@@ -646,7 +646,7 @@ export default function VenueAgentPage() {
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <SectionHeader
           title="Eventtyper"
-          subtitle="Valk vilka eventtyper du tar emot"
+          subtitle="Välj vilka eventtyper du tar emot"
           open={openSections.eventTypes}
           onToggle={() => toggleSection('eventTypes')}
         />
@@ -659,9 +659,9 @@ export default function VenueAgentPage() {
                   <div className="flex gap-1">
                     {(['welcome', 'declined', 'ask_owner'] as const).map(status => {
                       const labels = {
-                        welcome: 'Valkomna',
+                        welcome: 'Välkomna',
                         declined: 'Avböjs',
-                        ask_owner: 'Fraga mig',
+                        ask_owner: 'Fråga mig',
                       }
                       const isActive = et.status === status
                       return (
@@ -750,8 +750,8 @@ export default function VenueAgentPage() {
       {/* Section 5: FAQ */}
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
         <SectionHeader
-          title="Vanliga fragor"
-          subtitle="Lagg till fragor och svar som agenten kan anvanda"
+          title="Vanliga frågor"
+          subtitle="Lägg till frågor och svar som agenten kan använda"
           open={openSections.faq}
           onToggle={() => toggleSection('faq')}
         />
@@ -760,7 +760,7 @@ export default function VenueAgentPage() {
             {faqEntries.map((faq, i) => (
               <div key={i} className="border border-[#e7e5e4] rounded-lg p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-[#78716c]">Fraga {i + 1}</span>
+                  <span className="text-sm font-medium text-[#78716c]">Fråga {i + 1}</span>
                   <button
                     type="button"
                     onClick={() => removeFaq(i)}
@@ -772,7 +772,7 @@ export default function VenueAgentPage() {
                 <Input
                   value={faq.question}
                   onChange={e => updateFaq(i, 'question', e.target.value)}
-                  placeholder="Fraga"
+                  placeholder="Fråga"
                 />
                 <Textarea
                   value={faq.answer}
@@ -787,7 +787,7 @@ export default function VenueAgentPage() {
               onClick={addFaq}
               className="text-sm text-[#c45a3b] hover:text-[#a04832] font-medium"
             >
-              + Lagg till fraga
+              + Lägg till fråga
             </button>
           </div>
         )}
@@ -795,11 +795,11 @@ export default function VenueAgentPage() {
 
       {/* Section 6: Agent Settings */}
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
-        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Agentinstallningar</h2>
+        <h2 className="text-lg font-semibold text-[#1a1a1a] mb-4">Agentinställningar</h2>
         <div className="space-y-4">
           <div>
             <label htmlFor="agentLanguage" className="block text-sm font-medium text-[#57534e] mb-1.5">
-              Sprak
+              Språk
             </label>
             <select
               id="agentLanguage"

@@ -37,9 +37,9 @@ interface ActionRow {
 type TabKey = 'pending' | 'all' | 'approved' | 'declined'
 
 const TABS: { key: TabKey; label: string }[] = [
-  { key: 'pending', label: 'Att gora' },
+  { key: 'pending', label: 'Att göra' },
   { key: 'all', label: 'Alla' },
-  { key: 'approved', label: 'Godkanda' },
+  { key: 'approved', label: 'Godkända' },
   { key: 'declined', label: 'Avböjda' },
 ]
 

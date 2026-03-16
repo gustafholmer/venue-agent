@@ -207,7 +207,7 @@ export function ActionCardBooking({ action, onActionComplete }: BookingApprovalC
               disabled={isApproving || isDeclining}
               className="flex-1 h-9 text-sm font-medium text-[#1a1a1a] border border-[#e7e5e4] rounded-lg hover:bg-[#f5f5f4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              Andra
+              Ändra
             </button>
           </div>
 
