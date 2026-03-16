@@ -3,10 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getAgentActions } from '@/actions/agent-actions/get-actions'
 import { createClient } from '@/lib/supabase/client'
-import { ActionCardBooking } from './action-card-booking'
 import { ActionCardEscalation } from './action-card-escalation'
-import { ActionCardCounterOffer } from './action-card-counter-offer'
-import type { BookingApprovalSummary, EscalationSummary } from '@/types/agent-booking'
+import type { EscalationSummary } from '@/types/agent-booking'
 
 interface ActionFeedProps {
   venueId?: string
@@ -34,27 +32,18 @@ interface ActionRow {
   } | null
 }
 
-type TabKey = 'pending' | 'all' | 'approved' | 'declined'
+type TabKey = 'pending' | 'all'
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'pending', label: 'Att göra' },
   { key: 'all', label: 'Alla' },
-  { key: 'approved', label: 'Godkända' },
-  { key: 'declined', label: 'Avböjda' },
 ]
 
 function filterActions(actions: ActionRow[], tab: TabKey): ActionRow[] {
-  switch (tab) {
-    case 'pending':
-      return actions.filter((a) => a.status === 'pending')
-    case 'approved':
-      return actions.filter((a) => a.status === 'approved')
-    case 'declined':
-      return actions.filter((a) => a.status === 'declined')
-    case 'all':
-    default:
-      return actions
+  if (tab === 'pending') {
+    return actions.filter((a) => a.status === 'pending')
   }
+  return actions
 }
 
 export function ActionFeed({ venueId, initialActions }: ActionFeedProps) {
@@ -184,54 +173,19 @@ export function ActionFeed({ venueId, initialActions }: ActionFeedProps) {
       {/* Action cards */}
       {!isLoading && filteredActions.length > 0 && (
         <div className="space-y-3">
-          {filteredActions.map((action) => {
-            switch (action.action_type) {
-              case 'booking_approval':
-                return (
-                  <ActionCardBooking
-                    key={action.id}
-                    action={{
-                      id: action.id,
-                      status: action.status,
-                      summary: action.summary as unknown as BookingApprovalSummary,
-                      created_at: action.created_at,
-                      venue: action.venues ? { name: action.venues.name } : undefined,
-                    }}
-                    onActionComplete={handleActionComplete}
-                  />
-                )
-              case 'escalation':
-                return (
-                  <ActionCardEscalation
-                    key={action.id}
-                    action={{
-                      id: action.id,
-                      status: action.status,
-                      summary: action.summary as unknown as EscalationSummary,
-                      created_at: action.created_at,
-                      venue: action.venues ? { name: action.venues.name } : undefined,
-                    }}
-                    onActionComplete={handleActionComplete}
-                  />
-                )
-              case 'counter_offer':
-                return (
-                  <ActionCardCounterOffer
-                    key={action.id}
-                    action={{
-                      id: action.id,
-                      status: action.status,
-                      summary: action.summary as unknown as BookingApprovalSummary & { originalActionId?: string; ownerNote?: string },
-                      created_at: action.created_at,
-                      venue: action.venues ? { name: action.venues.name } : undefined,
-                    }}
-                    onActionComplete={handleActionComplete}
-                  />
-                )
-              default:
-                return null
-            }
-          })}
+          {filteredActions.map((action) => (
+            <ActionCardEscalation
+              key={action.id}
+              action={{
+                id: action.id,
+                status: action.status,
+                summary: action.summary as unknown as EscalationSummary,
+                created_at: action.created_at,
+                venue: action.venues ? { name: action.venues.name } : undefined,
+              }}
+              onActionComplete={handleActionComplete}
+            />
+          ))}
         </div>
       )}
     </div>

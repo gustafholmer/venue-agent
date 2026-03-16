@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   { path: '/inquiries', label: 'Förfrågningar' },
   { path: '/actions', label: 'AI-agent' },
   { path: '/calendar', label: 'Kalender' },
-  { path: '/agent', label: 'Agent' },
+  { path: '/agent-settings', label: 'Agentinställningar' },
 ]
 
 export function VenueNav({ venueId }: VenueNavProps) {

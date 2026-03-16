@@ -355,7 +355,7 @@ export default function VenueAgentPage() {
             <p className="text-sm text-[#78716c] mt-0.5">
               {agentEnabled
                 ? 'Agenten är aktiv och svarar på förfrågan automatiskt'
-                : 'Agenten är avstängd — aktivera för att boka automatiskt'}
+                : 'Agenten är avstängd — aktivera för att ta emot kundförfrågningar via AI'}
             </p>
           </div>
           <button

@@ -53,7 +53,10 @@ export default function VenueInquiriesPage() {
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h2 className="text-lg font-semibold text-[#1a1a1a]">Förfrågningar</h2>
+        <div>
+          <h2 className="text-lg font-semibold text-[#1a1a1a]">Förfrågningar</h2>
+          <p className="text-[#78716c] text-sm mt-0.5">Meddelanden från kunder som ännu inte bokat</p>
+        </div>
         <div className="flex gap-1 bg-[#f5f5f4] rounded-lg p-1">
           {STATUS_TABS.map(({ value, label }) => (
             <button
