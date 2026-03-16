@@ -6,7 +6,6 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { MOCK_VENUES, filterMockVenues } from '@/lib/mock-data'
 import { generateEmbedding } from '@/lib/gemini/embeddings'
-import { generateExplanationsBatch } from '@/lib/gemini/generate-explanation'
 import { isGeminiConfigured } from '@/lib/gemini/client'
 import type { ParsedFilters } from '@/types/preferences'
 import type { VenueResult } from '@/types/agent'
@@ -19,6 +18,7 @@ type BatchAvailabilityResult = Database['public']['Functions']['check_venues_ava
 export interface SearchVenuesInput {
   filters: ParsedFilters
   vibeDescription: string
+  embedding?: number[]
   limit?: number
   offset?: number
 }
@@ -184,19 +184,22 @@ export async function searchVenues(
 
     const supabase = await createClient()
 
-    // Step 1: Build search query and generate embedding
-    const searchQuery = buildSearchQuery(filters, vibeDescription)
+    // Step 1: Use pre-generated embedding or generate one
     let embedding: number[]
 
-    try {
-      embedding = await generateEmbedding(searchQuery)
-    } catch (error) {
-      logger.error('Error generating embedding', { error })
-      // Fall back to mock data if embedding fails
-      return {
-        success: true,
-        venues: searchMockVenues(input),
-        hasMore: false,
+    if (input.embedding) {
+      embedding = input.embedding
+    } else {
+      const searchQuery = buildSearchQuery(filters, vibeDescription)
+      try {
+        embedding = await generateEmbedding(searchQuery)
+      } catch (error) {
+        logger.error('Error generating embedding', { error })
+        return {
+          success: true,
+          venues: searchMockVenues(input),
+          hasMore: false,
+        }
       }
     }
 
@@ -250,40 +253,42 @@ export async function searchVenues(
       }
     }
 
-    // Step 4: Get venue photos
+    // Step 4 & 5: Fetch photos and check availability in parallel
     const venueIds = filteredVenues.map((v) => v.id)
-    const { data: photos } = await supabase
+
+    const photosPromise = supabase
       .from('venue_photos')
       .select('venue_id, url')
       .in('venue_id', venueIds)
       .eq('is_primary', true)
 
+    const availabilityPromise = filters.preferred_dates && filters.preferred_dates.length > 0
+      ? supabase.rpc('check_venues_availability_batch', {
+          p_venue_ids: venueIds,
+          p_dates: filters.preferred_dates,
+        })
+      : null
+
+    const [photosResult, availabilityResult] = await Promise.all([
+      photosPromise,
+      availabilityPromise,
+    ])
+
     const photoMap = new Map<string, string>()
-    if (photos) {
-      photos.forEach((photo) => {
+    if (photosResult.data) {
+      photosResult.data.forEach((photo) => {
         photoMap.set(photo.venue_id, photo.url)
       })
     }
 
-    // Step 5: Batch check availability for preferred dates
     let availabilityMap = new Map<string, string[]>()
 
-    if (filters.preferred_dates && filters.preferred_dates.length > 0) {
-      const { data: batchAvailability } = await supabase.rpc(
-        'check_venues_availability_batch',
-        {
-          p_venue_ids: venueIds,
-          p_dates: filters.preferred_dates,
-        }
-      )
-
-      if (batchAvailability) {
-        for (const row of batchAvailability as BatchAvailabilityResult[]) {
-          if (row.is_available) {
-            const existing = availabilityMap.get(row.venue_id) || []
-            existing.push(row.check_date)
-            availabilityMap.set(row.venue_id, existing)
-          }
+    if (availabilityResult?.data) {
+      for (const row of availabilityResult.data as BatchAvailabilityResult[]) {
+        if (row.is_available) {
+          const existing = availabilityMap.get(row.venue_id) || []
+          existing.push(row.check_date)
+          availabilityMap.set(row.venue_id, existing)
         }
       }
 
@@ -293,24 +298,6 @@ export async function searchVenues(
         return availableDates && availableDates.length > 0
       })
     }
-
-    // Step 6: Batch generate AI explanations
-    const explanationsMap = await generateExplanationsBatch({
-      venues: filteredVenues.map((venue) => ({
-        id: venue.id,
-        name: venue.name,
-        description: venue.description,
-        area: venue.area,
-        capacity_standing: venue.capacity_standing,
-        capacity_seated: venue.capacity_seated,
-        price_evening: venue.price_evening,
-        amenities: venue.amenities,
-        venue_types: venue.venue_types,
-        vibes: venue.vibes,
-      })),
-      filters,
-      vibe_description: vibeDescription,
-    })
 
     const venueResults: VenueResult[] = filteredVenues.map((venue) => ({
       id: venue.id,
@@ -323,7 +310,7 @@ export async function searchVenues(
         venue.capacity_seated || 0
       ),
       availableDates: availabilityMap.get(venue.id),
-      matchReason: explanationsMap.get(venue.id) || 'Matchar dina sökkriterier.',
+      matchReason: '',
       imageUrl: photoMap.get(venue.id),
     }))
 

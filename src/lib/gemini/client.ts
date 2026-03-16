@@ -30,7 +30,7 @@ export function getGenAI(): GoogleGenerativeAI | null {
 
 export function getGeminiModel(): GenerativeModel | null {
   const ai = ensureInitialized()
-  return ai?.getGenerativeModel({ model: 'gemini-1.5-flash' }) ?? null
+  return ai?.getGenerativeModel({ model: 'gemini-2.5-flash' }) ?? null
 }
 
 export function getEmbeddingModel(): GenerativeModel | null {

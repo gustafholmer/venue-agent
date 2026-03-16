@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger'
 
 import { createServiceClient } from '@/lib/supabase/service'
 import { parsePreferences } from '@/lib/gemini/parse-preferences'
+import { generateEmbedding } from '@/lib/gemini/embeddings'
 import { searchVenues } from '@/actions/venues/search-venues'
 import type { AgentState, AgentMessage, AgentResponse, VenueResult } from '@/types/agent'
 import type { ParsedPreferences } from '@/types/preferences'
@@ -21,67 +22,29 @@ function generateId(): string {
   return `msg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 }
 
-function formatRequirementsMessage(preferences: ParsedPreferences): string {
+function formatSearchSummary(preferences: ParsedPreferences): string {
   const parts: string[] = []
-  const { filters, vibe_description } = preferences
+  const { filters } = preferences
 
-  // Event type
   if (filters.event_type) {
-    parts.push(`${filters.event_type}`)
+    parts.push(filters.event_type.toUpperCase() === filters.event_type
+      ? filters.event_type
+      : filters.event_type.charAt(0).toUpperCase() + filters.event_type.slice(1))
   }
 
-  // Guest count
   if (filters.guest_count) {
     parts.push(`${filters.guest_count} personer`)
   }
 
-  // Areas
   if (filters.areas && filters.areas.length > 0) {
     parts.push(`i ${filters.areas.join(', ')}`)
   }
 
-  // Budget
-  if (filters.budget_min || filters.budget_max) {
-    if (filters.budget_min && filters.budget_max) {
-      parts.push(`budget ${filters.budget_min.toLocaleString('sv-SE')}-${filters.budget_max.toLocaleString('sv-SE')} kr`)
-    } else if (filters.budget_max) {
-      parts.push(`budget max ${filters.budget_max.toLocaleString('sv-SE')} kr`)
-    } else if (filters.budget_min) {
-      parts.push(`budget från ${filters.budget_min.toLocaleString('sv-SE')} kr`)
-    }
+  if (filters.budget_max) {
+    parts.push(`max ${filters.budget_max.toLocaleString('sv-SE')} kr`)
   }
 
-  // Dates
-  if (filters.preferred_dates && filters.preferred_dates.length > 0) {
-    const dateStr = filters.preferred_dates.length === 1
-      ? filters.preferred_dates[0]
-      : `${filters.preferred_dates.length} datum`
-    parts.push(`önskat datum: ${dateStr}`)
-  }
-
-  // Time
-  if (filters.preferred_time) {
-    const timeMap: Record<string, string> = {
-      morning: 'förmiddag',
-      afternoon: 'eftermiddag',
-      evening: 'kväll',
-    }
-    parts.push(timeMap[filters.preferred_time] || filters.preferred_time)
-  }
-
-  // Requirements
-  if (filters.requirements && filters.requirements.length > 0) {
-    parts.push(`med ${filters.requirements.join(', ')}`)
-  }
-
-  // Vibe
-  if (vibe_description) {
-    parts.push(`känsla: "${vibe_description}"`)
-  }
-
-  return parts.length > 0
-    ? `Jag söker efter lokaler för ${parts.join(', ')}.\n\nJag letar efter matchande lokaler...`
-    : 'Jag försöker förstå vad du söker. Kan du berätta mer om ditt event?'
+  return parts.join(', ')
 }
 
 export async function processAgentMessage(
@@ -137,10 +100,18 @@ export async function processAgentMessage(
       })
       .eq('id', sessionId)
 
-    // Parse user preferences using Gemini
+    // Parse preferences and generate embedding in parallel
     let parsedPreferences: ParsedPreferences
+    let embedding: number[] | undefined
     try {
-      parsedPreferences = await parsePreferences(userMessage)
+      const [parseResult, embeddingResult] = await Promise.allSettled([
+        parsePreferences(userMessage),
+        generateEmbedding(userMessage),
+      ])
+
+      if (parseResult.status === 'rejected') throw parseResult.reason
+      parsedPreferences = parseResult.value
+      embedding = embeddingResult.status === 'fulfilled' ? embeddingResult.value : undefined
     } catch (parseError) {
       logger.error('Failed to parse preferences', { parseError })
 
@@ -180,16 +151,7 @@ export async function processAgentMessage(
       flexible_dates: parsedPreferences.flexible_dates,
     }
 
-    // Generate initial response message
-    const searchingContent = formatRequirementsMessage(parsedPreferences)
-
-    // Create searching message
-    const searchingMsg: AgentMessage = {
-      id: generateId(),
-      role: 'agent',
-      content: searchingContent,
-      timestamp: new Date(),
-    }
+    const summary = formatSearchSummary(parsedPreferences)
 
     // Update session to searching state
     await supabase
@@ -197,15 +159,16 @@ export async function processAgentMessage(
       .update({
         state: 'searching' as AgentState,
         requirements: newRequirements,
-        messages: [...(session.messages || []), userMsg, searchingMsg],
+        messages: [...(session.messages || []), userMsg],
         updated_at: new Date().toISOString(),
       })
       .eq('id', sessionId)
 
-    // Perform venue search
+    // Perform venue search (embedding already generated in parallel)
     const searchResult = await searchVenues({
       filters: parsedPreferences.filters,
       vibeDescription: parsedPreferences.vibe_description,
+      embedding,
       limit: 10,
     })
 
@@ -214,18 +177,17 @@ export async function processAgentMessage(
     let finalState: AgentState
 
     if (!searchResult.success) {
-      // Search failed - return error message
-      finalContent = `${searchingContent}\n\nTyvärr uppstod ett fel vid sökningen. Försök igen senare.`
+      finalContent = 'Tyvärr uppstod ett fel vid sökningen. Försök igen senare.'
       finalState = 'idle'
     } else if (!searchResult.venues || searchResult.venues.length === 0) {
-      // No venues found - provide helpful message
-      finalContent = `${searchingContent}\n\nJag hittade tyvärr inga lokaler som matchar dina kriterier just nu. Prova att:\n- Utöka ditt sökområde\n- Justera budgeten\n- Vara mer flexibel med datum\n- Ändra antalet gäster`
+      finalContent = 'Jag hittade tyvärr inga lokaler som matchar just nu. Prova att utöka ditt sökområde, justera budgeten eller ändra antalet gäster.'
       finalState = 'idle'
     } else {
-      // Venues found - format success message
       venues = searchResult.venues
       const venueCount = venues.length
-      finalContent = `${searchingContent}\n\nJag hittade ${venueCount} ${venueCount === 1 ? 'lokal' : 'lokaler'} som matchar dina kriterier:`
+      finalContent = summary
+        ? `Här är ${venueCount} ${venueCount === 1 ? 'lokal' : 'lokaler'} som passar för ${summary}`
+        : `Här är ${venueCount} ${venueCount === 1 ? 'lokal som kan passa' : 'lokaler som kan passa'}`
       finalState = 'presenting'
     }
 
