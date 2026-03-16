@@ -9,7 +9,6 @@ import { NAV_ITEMS as DASHBOARD_LINKS } from '@/components/dashboard/nav-items'
 const ACCOUNT_LINKS = [
   { href: '/account', label: 'Mitt konto' },
   { href: '/account/bookings', label: 'Mina bokningar' },
-  { href: '/account/inquiries', label: 'Mina förfrågningar' },
   { href: '/account/saved', label: 'Sparade lokaler' },
   { href: '/account/settings', label: 'Inställningar' },
 ]

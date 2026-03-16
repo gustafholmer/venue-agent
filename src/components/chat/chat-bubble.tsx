@@ -1,7 +1,22 @@
 'use client'
 
 import { memo } from 'react'
-import type { ChatMessage } from '@/hooks/use-realtime-chat'
+export interface ChatMessage {
+  id: string
+  booking_request_id: string | null
+  venue_inquiry_id: string | null
+  sender_id: string
+  content: string
+  is_read: boolean
+  read_at: string | null
+  created_at: string
+  updated_at: string
+  sender?: {
+    id: string
+    full_name: string | null
+    email: string
+  }
+}
 
 interface ChatBubbleProps {
   message: ChatMessage

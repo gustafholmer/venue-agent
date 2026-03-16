@@ -8,7 +8,6 @@ import { getBooking, type BookingWithVenue } from '@/actions/bookings/get-bookin
 import { cancelBooking } from '@/actions/bookings/cancel-booking'
 import { getBookingModification } from '@/actions/bookings/get-booking-modification'
 import { formatPrice } from '@/lib/pricing'
-import { MessageThread } from '@/components/booking/message-thread'
 import { ModificationBanner } from '@/components/booking/modification-banner'
 import { ModificationForm } from '@/components/booking/modification-form'
 import { createClient } from '@/lib/supabase/client'
@@ -370,15 +369,6 @@ export default function CustomerBookingDetailPage() {
             </div>
           )}
 
-          {/* Message thread */}
-          {currentUserId && (
-            <MessageThread
-              threadId={bookingId}
-              threadType="booking"
-              currentUserId={currentUserId}
-              participantName={booking.venue.name}
-            />
-          )}
         </div>
 
         {/* Sidebar - right column */}

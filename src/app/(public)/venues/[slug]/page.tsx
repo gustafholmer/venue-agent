@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getVenueBySlug } from '@/actions/venues/get-venue-by-slug'
-import { hasExistingThread } from '@/actions/inquiries/has-existing-thread'
 import { isDemoMode } from '@/lib/demo-mode'
 import { isSupabaseConfigured, createClient } from '@/lib/supabase/server'
 import { PhotoGallery } from '@/components/venues/photo-gallery'
@@ -10,7 +9,8 @@ import { VenueDetailMap } from '@/components/maps/venue-detail-map'
 import { VenueAssistant } from '@/components/chat/venue-assistant'
 import { VenueAgentChat } from '@/components/agent/venue-agent-chat'
 import { SaveButton } from '@/components/venues/save-button'
-import { VenueActions } from '@/components/inquiry/venue-actions'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   generateLocalBusinessSchema,
   generateBreadcrumbSchema,
@@ -98,9 +98,6 @@ async function VenueDetailContent({ params }: PageProps) {
   const hasPricing = venue.price_per_hour || venue.price_half_day || venue.price_full_day || venue.price_evening
   const inDemoMode = isDemoMode() || !isSupabaseConfigured()
 
-  // Check if current user has an existing inquiry or booking with this venue
-  const showContactInfo = await hasExistingThread(venue.id)
-
   // Check if this venue has the AI agent enabled
   const supabase = await createClient()
   const { data: agentConfig } = await supabase
@@ -109,13 +106,6 @@ async function VenueDetailContent({ params }: PageProps) {
     .eq('venue_id', venue.id)
     .eq('agent_enabled', true)
     .maybeSingle()
-
-  // Compute max capacity for the inquiry modal
-  const maxCapacity = Math.max(
-    venue.capacity_standing || 0,
-    venue.capacity_seated || 0,
-    venue.capacity_conference || 0
-  ) || undefined
 
   // Generate structured data
   const localBusinessSchema = generateLocalBusinessSchema({
@@ -400,74 +390,12 @@ async function VenueDetailContent({ params }: PageProps) {
                 </div>
               )}
 
-              {/* CTA Buttons */}
-              <VenueActions
-                venueId={venue.id}
-                venueSlug={venue.slug || venue.id}
-                venueName={venue.name}
-                bookingSlug={bookingSlug}
-                minCapacity={venue.min_guests > 1 ? venue.min_guests : undefined}
-                maxCapacity={maxCapacity}
-              />
-
-              {/* Contact Info - only shown when user has an existing inquiry or booking */}
-              {showContactInfo && (venue.contact_email || venue.contact_phone || venue.website) && (
-                <div className="mt-6 pt-6 border-t border-[#e7e5e4]">
-                  <h3 className="text-sm font-semibold text-[#1a1a1a] mb-3">Kontakt</h3>
-                  <div className="space-y-2">
-                    {venue.contact_email && (
-                      <a
-                        href={`mailto:${venue.contact_email}`}
-                        className="flex items-center gap-2 text-sm text-[#78716c] hover:text-[#c45a3b] transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
-                        {venue.contact_email}
-                      </a>
-                    )}
-                    {venue.contact_phone && (
-                      <a
-                        href={`tel:${venue.contact_phone}`}
-                        className="flex items-center gap-2 text-sm text-[#78716c] hover:text-[#c45a3b] transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                          />
-                        </svg>
-                        {venue.contact_phone}
-                      </a>
-                    )}
-                    {venue.website && (
-                      <a
-                        href={venue.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-[#78716c] hover:text-[#c45a3b] transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                          />
-                        </svg>
-                        Webbplats
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
+              {/* CTA Button */}
+              <Link href={`/book/${bookingSlug}`} className="block">
+                <Button variant="primary" size="lg" className="w-full">
+                  Skicka bokningsförfrågan
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

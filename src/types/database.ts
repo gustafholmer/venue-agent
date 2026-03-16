@@ -9,14 +9,13 @@ export type Json =
 export type BookingStatus = 'pending' | 'accepted' | 'declined' | 'cancelled' | 'completed' | 'paid_out'
 export type BookingModificationStatus = 'pending' | 'accepted' | 'declined'
 export type VenueStatus = 'draft' | 'published' | 'paused'
-export type InquiryStatus = 'open' | 'closed' | 'converted'
 export type NotificationType =
   | 'booking_request' | 'booking_accepted' | 'booking_declined' | 'booking_cancelled'
   | 'booking_modification_proposed' | 'booking_modification_accepted' | 'booking_modification_declined'
   | 'new_message' | 'new_match' | 'payment_completed' | 'payout_sent'
   | 'new_inquiry'
   | 'agent_booking_approval' | 'agent_escalation' | 'agent_counter_offer'
-export type EntityType = 'booking' | 'venue' | 'message' | 'search' | 'inquiry' | 'agent_action'
+export type EntityType = 'booking' | 'venue' | 'message' | 'search' | 'agent_action'
 
 export interface Database {
   public: {
@@ -437,7 +436,7 @@ export interface Database {
           event_type: string
           guest_count: number
           message: string
-          status: InquiryStatus
+          status: 'open' | 'closed' | 'converted'
           booking_request_id: string | null
           created_at: string
           updated_at: string
@@ -450,7 +449,7 @@ export interface Database {
           event_type: string
           guest_count: number
           message: string
-          status?: InquiryStatus
+          status?: 'open' | 'closed' | 'converted'
           booking_request_id?: string | null
           created_at?: string
           updated_at?: string
@@ -463,7 +462,7 @@ export interface Database {
           event_type?: string
           guest_count?: number
           message?: string
-          status?: InquiryStatus
+          status?: 'open' | 'closed' | 'converted'
           booking_request_id?: string | null
           created_at?: string
           updated_at?: string
