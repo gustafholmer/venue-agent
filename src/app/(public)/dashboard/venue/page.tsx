@@ -108,7 +108,7 @@ export default async function VenueListPage() {
           </p>
         </div>
         {venues.length > 0 && (
-          <Link href="/dashboard/venue/new">
+          <Link href="/dashboard/venue/new" className="shrink-0">
             <Button variant="outline">Skapa ny lokal</Button>
           </Link>
         )}

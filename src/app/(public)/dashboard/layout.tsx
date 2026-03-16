@@ -31,7 +31,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="bg-[#faf9f7]">
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         <DashboardNav />
 
         {/* Main content */}

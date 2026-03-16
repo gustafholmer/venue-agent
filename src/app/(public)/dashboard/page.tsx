@@ -123,7 +123,7 @@ async function DashboardContent() {
               : `Du har ${venueCount} lokaler`}
           </p>
         </div>
-        <Link href="/dashboard/venue/new">
+        <Link href="/dashboard/venue/new" className="shrink-0">
           <Button variant="outline">Skapa ny lokal</Button>
         </Link>
       </div>
