@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getCalendarData, type CalendarData } from '@/actions/venues/get-calendar-data'
@@ -39,6 +39,13 @@ export default function CalendarPage() {
   const [rangeStartDate, setRangeStartDate] = useState('')
   const [rangeEndDate, setRangeEndDate] = useState('')
   const [blockReason, setBlockReason] = useState('')
+
+  // Drag selection state
+  const [dragStartDate, setDragStartDate] = useState<string | null>(null)
+  const [dragEndDate, setDragEndDate] = useState<string | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [showDragConfirm, setShowDragConfirm] = useState(false)
+  const dragRef = useRef(false)
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth() + 1 // 1-indexed for the action
@@ -154,6 +161,84 @@ export default function CalendarPage() {
     setIsUpdating(false)
   }
 
+  // Drag selection helpers
+  const getDragRange = useCallback((): [string, string] | null => {
+    if (!dragStartDate || !dragEndDate) return null
+    return dragStartDate <= dragEndDate
+      ? [dragStartDate, dragEndDate]
+      : [dragEndDate, dragStartDate]
+  }, [dragStartDate, dragEndDate])
+
+  const isDateInDragRange = useCallback((dateStr: string) => {
+    const range = getDragRange()
+    if (!range) return false
+    return dateStr >= range[0] && dateStr <= range[1]
+  }, [getDragRange])
+
+  const handleDragStart = (day: DayData) => {
+    if (!day.isCurrentMonth || day.hasAcceptedBooking || day.hasPendingBooking) return
+    setDragStartDate(day.dateStr)
+    setDragEndDate(day.dateStr)
+    setIsDragging(true)
+    dragRef.current = true
+    setShowDragConfirm(false)
+  }
+
+  const handleDragEnter = (day: DayData) => {
+    if (!dragRef.current || !day.isCurrentMonth) return
+    setDragEndDate(day.dateStr)
+  }
+
+  const handleDragEnd = useCallback(() => {
+    if (!dragRef.current) return
+    dragRef.current = false
+    setIsDragging(false)
+    if (dragStartDate && dragEndDate && dragStartDate !== dragEndDate) {
+      setShowDragConfirm(true)
+    } else {
+      // Single click — fall through to normal toggle
+      setDragStartDate(null)
+      setDragEndDate(null)
+    }
+  }, [dragStartDate, dragEndDate])
+
+  const handleDragConfirm = async () => {
+    const range = getDragRange()
+    if (!range) return
+    setShowDragConfirm(false)
+    setIsUpdating(true)
+    const result = await blockDateRange(venueId, range[0], range[1])
+    if (result.success) {
+      let message = `${result.blockedCount || 0} dagar blockerade`
+      if (result.failedDates && result.failedDates.length > 0) {
+        message += `. ${result.failedDates.length} dagar kunde inte blockeras (har bokningar)`
+      }
+      showSuccessMessage(message)
+      if (result.calendarSyncFailed) {
+        setTimeout(() => showErrorMessage('Kunde inte synka till Google Kalender'), 100)
+      }
+      await fetchData()
+    } else {
+      showErrorMessage(result.error || 'Kunde inte blockera datum')
+    }
+    setDragStartDate(null)
+    setDragEndDate(null)
+    setIsUpdating(false)
+  }
+
+  const handleDragCancel = () => {
+    setShowDragConfirm(false)
+    setDragStartDate(null)
+    setDragEndDate(null)
+  }
+
+  // End drag on mouseup anywhere
+  useEffect(() => {
+    const onMouseUp = () => handleDragEnd()
+    window.addEventListener('mouseup', onMouseUp)
+    return () => window.removeEventListener('mouseup', onMouseUp)
+  }, [handleDragEnd])
+
   // Generate calendar days
   const generateCalendarDays = (): DayData[] => {
     const days: DayData[] = []
@@ -253,6 +338,11 @@ export default function CalendarPage() {
       return `${baseClasses} bg-[#faf9f7] text-[#a8a29e]`
     }
 
+    // Drag selection highlight
+    if ((isDragging || showDragConfirm) && isDateInDragRange(day.dateStr)) {
+      return `${baseClasses} bg-red-200 border-red-400`
+    }
+
     if (day.hasAcceptedBooking) {
       return `${baseClasses} bg-blue-100 border-blue-300`
     }
@@ -280,9 +370,6 @@ export default function CalendarPage() {
             Hantera tillgänglighet och se bokningar
           </p>
         </div>
-        <Button onClick={() => setShowBlockModal(true)}>
-          Blockera flera dagar
-        </Button>
       </div>
 
       {/* Messages */}
@@ -380,12 +467,17 @@ export default function CalendarPage() {
             <p className="text-[#78716c] mt-2">Laddar kalender...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-7">
+          <div className={`grid grid-cols-7 ${isDragging ? 'select-none' : ''}`}>
             {generateCalendarDays().map((day, index) => (
               <div
                 key={index}
                 className={getDayClasses(day)}
-                onClick={() => day.isCurrentMonth && !day.hasAcceptedBooking && !day.hasPendingBooking && handleDateClick(day)}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  handleDragStart(day)
+                }}
+                onMouseEnter={() => handleDragEnter(day)}
+                onClick={() => !showDragConfirm && day.isCurrentMonth && !day.hasAcceptedBooking && !day.hasPendingBooking && handleDateClick(day)}
                 title={
                   day.isBlocked && day.blockReason
                     ? `Blockerad: ${day.blockReason}`
@@ -436,11 +528,29 @@ export default function CalendarPage() {
         )}
       </div>
 
+      {/* Drag confirmation bar */}
+      {showDragConfirm && getDragRange() && (
+        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between gap-4">
+          <span className="text-sm text-red-800">
+            Blockera {getDragRange()![0]} till {getDragRange()![1]}?
+          </span>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={handleDragCancel}>
+              Avbryt
+            </Button>
+            <Button size="sm" onClick={handleDragConfirm}>
+              Blockera
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Instructions */}
       <div className="mt-6 p-4 bg-[#faf9f7] rounded-lg">
         <p className="text-sm text-[#78716c]">
           <strong>Tips:</strong> Klicka på ett datum för att blockera eller avblockera det.
-          Datum med bokningar kan inte ändras här. Använd ... för att blockera ett datumintervall.
+          Dra över flera datum för att blockera ett intervall.
+          Datum med bokningar kan inte ändras.
         </p>
       </div>
 
