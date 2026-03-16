@@ -22,7 +22,7 @@ export default async function VenueActionsPage({ params }: { params: Promise<{ i
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-[#1a1a1a]">Kundkonversationer</h1>
-        <p className="text-[#78716c] mt-1">Samtal mellan AI-agenten och kunder på denna lokal</p>
+        <p className="text-[#78716c] mt-1">Här ser du vad AI-agenten och kunderna pratar om. Du kan hoppa in när som helst.</p>
       </div>
       <ConversationList venueId={venueId} />
     </div>

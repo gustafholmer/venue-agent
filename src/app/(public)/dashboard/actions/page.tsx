@@ -20,7 +20,7 @@ export default async function DashboardActionsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-[#1a1a1a]">Kundkonversationer</h1>
-        <p className="text-[#78716c] mt-1">Samtal mellan AI-agenten och kunder på dina lokaler</p>
+        <p className="text-[#78716c] mt-1">Här ser du vad AI-agenten och kunderna pratar om. Du kan hoppa in när som helst.</p>
       </div>
       <ConversationList />
     </div>
