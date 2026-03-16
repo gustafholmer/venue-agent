@@ -48,7 +48,7 @@ function MessageBubble({ message }: { message: AgentConversationMessage }) {
     return (
       <div className="flex justify-end">
         <div className="max-w-[80%]">
-          <div className="bg-[#c45a3b] text-white rounded-2xl rounded-tr-md px-3 py-2">
+          <div className="bg-[#c45a3b] text-white rounded-2xl rounded-tr-md px-3 py-2 inverted-selection">
             <p className="text-[10px] font-medium opacity-80 mb-0.5">Du svarade</p>
             <p className="whitespace-pre-wrap text-sm">{displayContent}</p>
           </div>
