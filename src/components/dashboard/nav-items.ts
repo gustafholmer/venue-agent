@@ -3,7 +3,6 @@ export const NAV_ITEMS = [
   { href: '/dashboard/venue', label: 'Mina lokaler' },
   { href: '/dashboard/actions', label: 'Åtgärder' },
   { href: '/dashboard/inbox', label: 'Inkorg' },
-  { href: '/dashboard/contacts', label: 'Kontakter' },
   { href: '/dashboard/payouts', label: 'Utbetalningar' },
   { href: '/dashboard/settings', label: 'Inställningar' },
 ]
