@@ -247,7 +247,7 @@ export default function CalendarPage() {
   }
 
   const getDayClasses = (day: DayData) => {
-    const baseClasses = 'relative h-14 sm:h-24 border border-[#e7e5e4] p-1 transition-colors'
+    const baseClasses = 'relative h-12 sm:h-18 border border-[#e7e5e4] p-1 transition-colors'
 
     if (!day.isCurrentMonth) {
       return `${baseClasses} bg-[#faf9f7] text-[#a8a29e]`
@@ -395,7 +395,7 @@ export default function CalendarPage() {
                 }
               >
                 <span
-                  className={`inline-flex items-center justify-center w-7 h-7 text-sm ${
+                  className={`inline-flex items-center justify-center w-6 h-6 text-xs ${
                     day.dateStr === today
                       ? 'bg-[#c45a3b] text-white rounded-full'
                       : ''
