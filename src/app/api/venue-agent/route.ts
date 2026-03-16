@@ -26,7 +26,7 @@ interface VenueAgentRequest {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const MAX_TOOL_ITERATIONS = 5
+const MAX_TOOL_ITERATIONS = 3
 const MAX_HISTORY_MESSAGES = 50
 
 function generateMessageId(): string {
@@ -246,7 +246,6 @@ export async function POST(request: NextRequest) {
       tools: [{ functionDeclarations: AGENT_TOOL_DECLARATIONS }],
     })
 
-    let bookingSummary: Record<string, unknown> | undefined
     const newMessages: AgentConversationMessage[] = [userMessage]
 
     // 10. Tool call loop (up to MAX_TOOL_ITERATIONS)
@@ -279,15 +278,6 @@ export async function POST(request: NextRequest) {
         venue: venue as unknown as Record<string, unknown>,
         config: agentConfig,
       })
-
-      // Capture booking summary if propose_booking was called
-      if (
-        toolName === 'propose_booking' &&
-        toolResult.success &&
-        toolResult.summary
-      ) {
-        bookingSummary = toolResult.summary as Record<string, unknown>
-      }
 
       // Record tool call/result in messages
       const toolMessage: AgentConversationMessage = {
@@ -355,7 +345,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       conversationId: conversation.id,
       message: agentResponseText,
-      ...(bookingSummary ? { bookingSummary } : {}),
       status: 'ok',
     })
   } catch (error) {

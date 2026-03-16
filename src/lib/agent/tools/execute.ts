@@ -2,10 +2,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type { VenueAgentConfig, PricingRules } from '@/types/agent-booking'
 import { checkAvailability } from './check-availability'
 import { calculatePrice } from './calculate-price'
-import { getVenueInfo } from './get-venue-info'
-import { proposeBooking } from './propose-booking'
 import { escalateToOwner } from './escalate-to-owner'
-import { searchOtherVenues } from './search-other-venues'
 
 export interface ToolContext {
   venueId: string
@@ -61,38 +58,6 @@ export async function executeAgentTool(
         return result as unknown as Record<string, unknown>
       }
 
-      case 'get_venue_info': {
-        const result = getVenueInfo(
-          { topic: args.topic as string },
-          context.venue,
-          context.config
-        )
-        return result as unknown as Record<string, unknown>
-      }
-
-      case 'propose_booking': {
-        const result = await proposeBooking(
-          {
-            date: args.date as string,
-            startTime: args.startTime as string,
-            endTime: args.endTime as string,
-            guestCount: args.guestCount as number,
-            eventType: args.eventType as string,
-            price: args.price as number,
-            extras: args.extras as string[] | undefined,
-            customerNote: args.customerNote as string | undefined,
-          },
-          {
-            venueId: context.venueId,
-            conversationId: context.conversationId,
-            customerId: context.customerId,
-          },
-          context.venue,
-          context.serviceClient
-        )
-        return result as unknown as Record<string, unknown>
-      }
-
       case 'escalate_to_owner': {
         const result = await escalateToOwner(
           {
@@ -107,14 +72,6 @@ export async function executeAgentTool(
           },
           context.venue,
           context.serviceClient
-        )
-        return result as unknown as Record<string, unknown>
-      }
-
-      case 'search_other_venues': {
-        const result = await searchOtherVenues(
-          { requirements: args.requirements as string },
-          context.venueId
         )
         return result as unknown as Record<string, unknown>
       }

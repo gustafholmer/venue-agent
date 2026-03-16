@@ -393,11 +393,15 @@ function buildEscalationSection(lang: string): string {
 
 Use the \`escalate_to_owner\` tool when:
 - The customer asks about something not covered in this prompt
-- The customer requests a special arrangement or exception
+- The customer requests a special arrangement, exception, or discount
+- The customer wants to negotiate pricing or payment terms
 - The event type is marked as "ask owner"
 - The customer expresses dissatisfaction or makes a complaint
-- The booking value is unusually high or the situation is complex
+- The customer wants to proceed with booking — direct them to the booking page and escalate so the owner is aware
+- Any request involving custom catering, special setup, or third-party vendors
 - You are uncertain about any information and cannot find it here
+
+When in doubt, escalate. It is always better to involve the owner than to give incorrect information.
 
 When escalating, provide a clear summary of the customer's request and the reason for escalation.`
   }
@@ -406,11 +410,15 @@ When escalating, provide a clear summary of the customer's request and the reaso
 
 Använd verktyget \`escalate_to_owner\` när:
 - Kunden frågar om något som inte täcks av denna prompt
-- Kunden begär ett specialarrangemang eller undantag
+- Kunden begär ett specialarrangemang, undantag eller rabatt
+- Kunden vill förhandla om pris eller betalningsvillkor
 - Evenemangstypen är markerad som "fråga ägaren"
 - Kunden uttrycker missnöje eller lämnar ett klagomål
-- Bokningsvärdet är ovanligt högt eller situationen är komplex
+- Kunden vill gå vidare med en bokning — hänvisa dem till bokningssidan och eskalera så att ägaren blir medveten
+- Förfrågningar som involverar specialcatering, speciell uppställning eller tredjepartsleverantörer
 - Du är osäker på information och inte hittar den här
+
+Vid tveksamhet, eskalera. Det är alltid bättre att involvera ägaren än att ge felaktig information.
 
 Vid eskalering ska du ge en tydlig sammanfattning av kundens begäran och orsaken till eskaleringen.`
 }

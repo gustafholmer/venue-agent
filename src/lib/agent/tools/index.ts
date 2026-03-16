@@ -29,39 +29,6 @@ export const AGENT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
     },
   },
   {
-    name: 'get_venue_info',
-    description: 'Look up specific information about this venue.',
-    parameters: {
-      type: SchemaType.OBJECT,
-      properties: {
-        topic: { type: SchemaType.STRING, description: 'What to look up' },
-      },
-      required: ['topic'],
-    },
-  },
-  {
-    name: 'propose_booking',
-    description: 'Send a booking proposal to the venue owner for approval. Only call when customer has confirmed.',
-    parameters: {
-      type: SchemaType.OBJECT,
-      properties: {
-        date: { type: SchemaType.STRING, description: 'Event date YYYY-MM-DD' },
-        startTime: { type: SchemaType.STRING, description: 'Start time HH:MM' },
-        endTime: { type: SchemaType.STRING, description: 'End time HH:MM' },
-        guestCount: { type: SchemaType.NUMBER, description: 'Number of guests' },
-        eventType: { type: SchemaType.STRING, description: 'Event type' },
-        price: { type: SchemaType.NUMBER, description: 'Total price including platform fee' },
-        extras: {
-          type: SchemaType.ARRAY,
-          items: { type: SchemaType.STRING },
-          description: 'Additional services',
-        },
-        customerNote: { type: SchemaType.STRING, description: 'Optional customer note' },
-      },
-      required: ['date', 'startTime', 'endTime', 'guestCount', 'eventType', 'price'],
-    },
-  },
-  {
     name: 'escalate_to_owner',
     description: 'Escalate to venue owner when request is outside your authority.',
     parameters: {
@@ -72,17 +39,6 @@ export const AGENT_TOOL_DECLARATIONS: FunctionDeclaration[] = [
         context: { type: SchemaType.OBJECT, description: 'Additional context', properties: {} },
       },
       required: ['reason', 'customerRequest'],
-    },
-  },
-  {
-    name: 'search_other_venues',
-    description: 'Search for alternative venues that match customer needs.',
-    parameters: {
-      type: SchemaType.OBJECT,
-      properties: {
-        requirements: { type: SchemaType.STRING, description: 'What the customer needs' },
-      },
-      required: ['requirements'],
     },
   },
 ]

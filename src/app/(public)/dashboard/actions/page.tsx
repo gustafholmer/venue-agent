@@ -29,8 +29,8 @@ export default async function DashboardActionsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1a1a1a]">Åtgärder</h1>
-        <p className="text-[#78716c] mt-1">Alla Åtgärder för dina lokaler</p>
+        <h1 className="text-2xl font-bold text-[#1a1a1a]">AI-agent</h1>
+        <p className="text-[#78716c] mt-1">Ärenden från AI-agenten för dina lokaler</p>
       </div>
       <ActionFeed initialActions={actions ?? []} />
     </div>

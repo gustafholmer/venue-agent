@@ -9,7 +9,6 @@ import {
   type KeyboardEvent,
 } from 'react'
 import { useAgentChat, type AgentChatMessage } from '@/hooks/use-agent-chat'
-import { BookingSummaryCard } from './booking-summary-card'
 import { AgentStatusIndicator } from './agent-status-indicator'
 
 interface VenueAgentChatProps {
@@ -33,13 +32,7 @@ interface VenueAgentChatProps {
   }
 }
 
-function MessageBubble({
-  message,
-  onConfirmBooking,
-}: {
-  message: AgentChatMessage
-  onConfirmBooking: (messageId: string) => void
-}) {
+function MessageBubble({ message }: { message: AgentChatMessage }) {
   const isUser = message.role === 'user'
 
   if (isUser) {
@@ -58,18 +51,6 @@ function MessageBubble({
         <div className="bg-[#f3f4f6] text-[#1a1a1a] rounded-2xl rounded-tl-md px-3 py-2">
           <p className="whitespace-pre-wrap text-sm">{message.content}</p>
         </div>
-        {message.bookingSummary && (
-          <div className="mt-2">
-            <BookingSummaryCard
-              summary={message.bookingSummary}
-              status={message.status || 'draft'}
-              onConfirm={() => onConfirmBooking(message.id)}
-              onEdit={() => {
-                // Placeholder: will be wired to modification flow later
-              }}
-            />
-          </div>
-        )}
       </div>
     </div>
   )
@@ -84,9 +65,7 @@ export function VenueAgentChat({ venue }: VenueAgentChatProps) {
   const {
     messages,
     sendMessage,
-    confirmBooking,
     isLoading,
-    isWaitingForOwner,
   } = useAgentChat({
     venueId: venue.id,
     venueName: venue.name,
@@ -207,14 +186,10 @@ export function VenueAgentChat({ venue }: VenueAgentChatProps) {
               <MessageBubble
                 key={message.id}
                 message={message}
-                onConfirmBooking={confirmBooking}
               />
             ))}
 
             {isLoading && <AgentStatusIndicator status="typing" />}
-            {!isLoading && isWaitingForOwner && (
-              <AgentStatusIndicator status="waiting_for_owner" />
-            )}
 
             <div ref={messagesEndRef} />
           </div>
