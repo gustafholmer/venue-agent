@@ -1,12 +1,11 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { ActionFeed } from '@/components/agent/action-feed'
+import { ConversationList } from '@/components/agent/conversation-list'
 
 export default async function VenueActionsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: venueId } = await params
   const supabase = await createClient()
 
-  // Auth check
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/sign-in')
 
@@ -19,21 +18,13 @@ export default async function VenueActionsPage({ params }: { params: Promise<{ i
 
   if (!venue || venue.owner_id !== user.id) redirect('/dashboard')
 
-  // Fetch initial actions
-  const { data: actions } = await supabase
-    .from('agent_actions')
-    .select('*')
-    .eq('venue_id', venueId)
-    .order('created_at', { ascending: false })
-    .limit(50)
-
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-[#1a1a1a]">AI-agent</h1>
-        <p className="text-[#78716c] mt-1">Ärenden från AI-agenten för denna lokal</p>
+        <p className="text-[#78716c] mt-1">Konversationer mellan AI-agenten och kunder</p>
       </div>
-      <ActionFeed venueId={venueId} initialActions={actions ?? []} />
+      <ConversationList venueId={venueId} />
     </div>
   )
 }

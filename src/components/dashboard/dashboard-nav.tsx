@@ -4,14 +4,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { NAV_ITEMS } from './nav-items'
-import { getPendingActionCount } from '@/actions/agent-actions/get-pending-count'
+import { getPendingConversationCount } from '@/actions/agent-conversations/get-pending-conversation-count'
 
 export function DashboardNav() {
   const pathname = usePathname()
   const [pendingCount, setPendingCount] = useState(0)
 
   useEffect(() => {
-    getPendingActionCount().then(setPendingCount)
+    getPendingConversationCount().then(setPendingCount)
   }, [])
 
   function isActive(href: string) {

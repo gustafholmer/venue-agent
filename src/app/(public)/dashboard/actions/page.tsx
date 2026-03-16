@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { ActionFeed } from '@/components/agent/action-feed'
+import { ConversationList } from '@/components/agent/conversation-list'
 
 export default async function DashboardActionsPage() {
   const supabase = await createClient()
@@ -8,7 +8,7 @@ export default async function DashboardActionsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/sign-in')
 
-  // Get all venues for this owner
+  // Verify owner has venues
   const { data: venues } = await supabase
     .from('venues')
     .select('id')
@@ -16,23 +16,13 @@ export default async function DashboardActionsPage() {
 
   if (!venues || venues.length === 0) redirect('/dashboard')
 
-  const venueIds = venues.map(v => v.id)
-
-  // Fetch initial actions across all venues
-  const { data: actions } = await supabase
-    .from('agent_actions')
-    .select('*, venues!inner(name)')
-    .in('venue_id', venueIds)
-    .order('created_at', { ascending: false })
-    .limit(50)
-
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-[#1a1a1a]">AI-agent</h1>
-        <p className="text-[#78716c] mt-1">Ärenden från AI-agenten för dina lokaler</p>
+        <p className="text-[#78716c] mt-1">Konversationer från AI-agenten för alla dina lokaler</p>
       </div>
-      <ActionFeed initialActions={actions ?? []} />
+      <ConversationList />
     </div>
   )
 }
