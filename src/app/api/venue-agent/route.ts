@@ -129,19 +129,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Fetch agent config
+    // Fetch agent config (optional — agent works with venue defaults if no config exists)
     const { data: agentConfig } = await serviceClient
       .from('venue_agent_config')
       .select('*')
       .eq('venue_id', venueId)
       .maybeSingle()
-
-    if (!agentConfig || !agentConfig.enabled) {
-      return NextResponse.json(
-        { error: 'Bokningsagenten är inte aktiverad för denna lokal.' },
-        { status: 400 }
-      )
-    }
 
     // Check Gemini is configured
     const genAI = getGenAI()

@@ -89,7 +89,6 @@ export default function VenueAgentPage() {
   })
 
   // Form state
-  const [agentEnabled, setAgentEnabled] = useState(false)
   const [agentLanguage, setAgentLanguage] = useState<'sv' | 'en'>('sv')
 
   // Pricing
@@ -138,8 +137,6 @@ export default function VenueAgentPage() {
       const result = await getAgentConfig(venueId)
       if (result.success && result.config) {
         const c = result.config
-
-        setAgentEnabled(c.is_enabled ?? false)
 
         // Pricing
         const pr = c.pricing_rules as PricingRules | null
@@ -240,7 +237,7 @@ export default function VenueAgentPage() {
       policies,
       faqEntries: faqEntries.length > 0 ? faqEntries : undefined,
       agentLanguage,
-      agentEnabled,
+      agentEnabled: true,
     })
 
     if (result.success) {
@@ -347,33 +344,12 @@ export default function VenueAgentPage() {
         </div>
       )}
 
-      {/* Agent enable/disable toggle - prominent */}
+      {/* Agent info */}
       <div className="bg-white border border-[#e7e5e4] rounded-xl p-6 mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-[#1a1a1a]">Aktivera agent</h2>
-            <p className="text-sm text-[#78716c] mt-0.5">
-              {agentEnabled
-                ? 'Agenten är aktiv och svarar på förfrågan automatiskt'
-                : 'Agenten är avstängd — aktivera för att ta emot kundförfrågningar via AI'}
-            </p>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={agentEnabled}
-            onClick={() => setAgentEnabled(!agentEnabled)}
-            className={`relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c45a3b] ${
-              agentEnabled ? 'bg-[#c45a3b]' : 'bg-[#d6d3d1]'
-            }`}
-          >
-            <span
-              className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                agentEnabled ? 'translate-x-5' : 'translate-x-0'
-              }`}
-            />
-          </button>
-        </div>
+        <h2 className="text-lg font-semibold text-[#1a1a1a]">AI-agenten</h2>
+        <p className="text-sm text-[#78716c] mt-0.5">
+          Agenten svarar på kundernas frågor automatiskt baserat på din lokalprofil. Fyll i mer information nedan för att göra agenten ännu bättre.
+        </p>
       </div>
 
       {/* Section 1: Pricing */}
