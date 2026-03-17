@@ -21,6 +21,7 @@ export interface VenueCardData {
 
 interface VenueCardProps {
   venue: VenueCardData
+  isHighlighted?: boolean
 }
 
 function formatPrice(venue: VenueCardData): string {
@@ -35,13 +36,13 @@ function formatCapacity(venue: VenueCardData): string {
   return ''
 }
 
-export function VenueCard({ venue }: VenueCardProps) {
+export function VenueCard({ venue, isHighlighted = false }: VenueCardProps) {
   const href = venue.slug ? `/venues/${venue.slug}` : `/venues/${venue.id}`
 
   return (
     <Link href={href} className="group block">
       {/* Image */}
-      <div className="relative aspect-[4/3] bg-[#f5f3f0] mb-2 overflow-hidden rounded-sm">
+      <div className="relative aspect-[4/3] bg-[#f5f3f0] mb-2 overflow-hidden">
         {venue.primaryPhotoUrl ? (
           <Image
             src={venue.primaryPhotoUrl}
@@ -62,7 +63,9 @@ export function VenueCard({ venue }: VenueCardProps) {
 
       {/* Content */}
       <div>
-        <h3 className="text-base font-medium text-[#1a1a1a] group-hover:text-[#c45a3b] transition-colors leading-snug">
+        <h3 className={`text-base font-medium transition-colors leading-snug ${
+          isHighlighted ? 'text-[#c45a3b]' : 'text-[#1a1a1a] group-hover:text-[#c45a3b]'
+        }`}>
           {venue.name}
         </h3>
         <p className="text-xs text-[#78716c] mt-0.5">

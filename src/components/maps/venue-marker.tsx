@@ -41,7 +41,7 @@ export function VenueMarker({
 
   // Custom marker icon - larger when hovered or active
   const scale = isHovered || isActive ? 1.3 : 1
-  const fillColor = isHovered || isActive ? '#c45a3b' : '#1a1a1a'
+  const fillColor = '#c45a3b'
   const strokeColor = '#ffffff'
 
   const icon = {

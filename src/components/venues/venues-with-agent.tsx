@@ -295,11 +295,11 @@ export function VenuesWithAgent({
                   key={venue.id}
                   onMouseEnter={() => setHoveredVenueId(venue.id)}
                   onMouseLeave={() => setHoveredVenueId(null)}
-                  className={`transition-shadow duration-200 ${
-                    hoveredVenueId === venue.id ? 'ring-2 ring-[#c45a3b] ring-offset-2 rounded-lg' : ''
+                  className={`rounded-xl p-1 ${
+                    hoveredVenueId === venue.id ? 'ring-2 ring-[#c45a3b]' : ''
                   }`}
                 >
-                  <VenueCard venue={venue} />
+                  <VenueCard venue={venue} isHighlighted={hoveredVenueId === venue.id} />
                 </div>
               ))}
             </div>
