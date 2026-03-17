@@ -21,7 +21,13 @@ export async function getOrCreateConversation(
       .maybeSingle()
 
     if (existing) {
-      return { conversation: existing as AgentConversation, isNew: false }
+      // Verify the caller owns this conversation (or it's anonymous)
+      const conv = existing as AgentConversation
+      if (conv.customer_id && conv.customer_id !== customerId) {
+        // Don't reveal that the conversation exists — just create a new one
+      } else {
+        return { conversation: conv, isNew: false }
+      }
     }
   }
 

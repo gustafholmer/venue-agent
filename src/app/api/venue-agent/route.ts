@@ -28,6 +28,7 @@ interface VenueAgentRequest {
 
 const MAX_TOOL_ITERATIONS = 3
 const MAX_HISTORY_MESSAGES = 50
+const MAX_MESSAGE_LENGTH = 2000
 
 function generateMessageId(): string {
   return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
@@ -101,6 +102,13 @@ export async function POST(request: NextRequest) {
     if (!venueId || !message) {
       return NextResponse.json(
         { error: 'Saknade fält: venueId och message krävs.' },
+        { status: 400 }
+      )
+    }
+
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json(
+        { error: `Meddelandet är för långt. Max ${MAX_MESSAGE_LENGTH} tecken.` },
         { status: 400 }
       )
     }

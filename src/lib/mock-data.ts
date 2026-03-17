@@ -212,11 +212,21 @@ export function getMockPhotosForVenue(venueId: string) {
 
 // Helper function to filter mock venues
 export function filterMockVenues(filters: {
+  q?: string
   area?: string
   capacity?: number
   priceMax?: number
 }) {
   let filtered = [...MOCK_VENUES]
+
+  if (filters.q) {
+    const term = filters.q.toLowerCase()
+    filtered = filtered.filter(v =>
+      v.name.toLowerCase().includes(term) ||
+      v.area?.toLowerCase().includes(term) ||
+      v.city?.toLowerCase().includes(term)
+    )
+  }
 
   if (filters.area) {
     filtered = filtered.filter(v =>

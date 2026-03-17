@@ -142,11 +142,42 @@ export async function processAgentMessage(
       }
     }
 
+    // Check if we got anything meaningful to search on
+    const { filters } = parsedPreferences
+    const hasFilters = filters.event_type || filters.guest_count || filters.areas?.length || filters.budget_max || filters.budget_min || parsedPreferences.vibe_description
+
+    if (!hasFilters) {
+      const clarifyMsg: AgentMessage = {
+        id: generateId(),
+        role: 'agent',
+        content: 'Berätta lite mer om vad du letar efter! Till exempel typ av event, antal gäster, område eller budget.',
+        timestamp: new Date(),
+      }
+
+      await supabase
+        .from('agent_sessions')
+        .update({
+          state: 'idle',
+          messages: [...(session.messages || []), userMsg, clarifyMsg],
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', sessionId)
+
+      return {
+        success: true,
+        response: {
+          message: clarifyMsg.content,
+          state: 'idle',
+          requirements: session.requirements as Record<string, unknown>,
+        },
+      }
+    }
+
     // Merge new requirements with existing ones
     const existingRequirements = (session.requirements || {}) as Record<string, unknown>
     const newRequirements = {
       ...existingRequirements,
-      ...parsedPreferences.filters,
+      ...filters,
       vibe_description: parsedPreferences.vibe_description || existingRequirements.vibe_description,
       flexible_dates: parsedPreferences.flexible_dates,
     }

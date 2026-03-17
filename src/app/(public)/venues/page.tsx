@@ -25,6 +25,7 @@ interface PageProps {
 async function getPublishedVenues(filters: SearchParams): Promise<VenueCardData[]> {
   if (isDemoMode() || !isSupabaseConfigured()) {
     const mockVenues = filterMockVenues({
+      q: filters.q,
       area: filters.area,
       capacity: filters.capacity ? parseInt(filters.capacity, 10) : undefined,
       priceMax: filters.priceMax ? parseInt(filters.priceMax, 10) : undefined,
@@ -69,6 +70,11 @@ async function getPublishedVenues(filters: SearchParams): Promise<VenueCardData[
     `)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
+
+  if (filters.q) {
+    const searchTerm = `%${filters.q}%`
+    query = query.or(`name.ilike.${searchTerm},area.ilike.${searchTerm},city.ilike.${searchTerm}`)
+  }
 
   if (filters.area) {
     query = query.ilike('area', `%${filters.area}%`)

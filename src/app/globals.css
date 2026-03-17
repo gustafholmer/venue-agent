@@ -27,3 +27,8 @@ body {
   background: rgba(255, 255, 255, 0.9);
   color: var(--accent);
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

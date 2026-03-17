@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function AboutPage() {
   return (
     <div className="px-4 sm:px-6 py-12 sm:py-20">
@@ -19,8 +21,14 @@ export default function AboutPage() {
         <section className="mb-16">
           <div className="bg-[#f5f3f0] rounded-2xl p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-              <div className="w-24 h-24 bg-[#e7e5e4] rounded-full flex items-center justify-center text-3xl flex-shrink-0">
-                G
+              <div className="w-24 h-24 rounded-full flex-shrink-0 bg-[#e7e5e4] overflow-hidden">
+                <Image
+                  src="/images/gustaf-profile-image.jpg"
+                  alt="Gustaf Holmer"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-cover animate-[fadeIn_0.5s_ease-in_forwards]"
+                />
               </div>
               <div>
                 <h2 className="text-xl font-medium text-[#1a1a1a] mb-2 text-center sm:text-left">
