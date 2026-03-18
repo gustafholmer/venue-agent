@@ -73,8 +73,13 @@ export function EmbeddedAgentChat({ venue }: EmbeddedAgentChatProps) {
 
   const hasConversationStarted = messages.length > 0
 
-  // Auto-scroll to bottom on new messages
+  // Auto-scroll to bottom on new messages (skip initial mount)
+  const hasScrolled = useRef(false)
   useEffect(() => {
+    if (!hasScrolled.current) {
+      hasScrolled.current = true
+      return
+    }
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isLoading])
 

@@ -9,6 +9,7 @@ import { VenueDetailMap } from '@/components/maps/venue-detail-map'
 import { EmbeddedAgentChat } from '@/components/agent/embedded-agent-chat'
 import { VenueAgentChatSwitch } from '@/components/agent/venue-agent-chat-switch'
 import { SaveButton } from '@/components/venues/save-button'
+import { ShareButton } from '@/components/venues/share-button'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
@@ -69,7 +70,7 @@ function formatPrice(price: number | null): string {
 function DemoModeBanner() {
   return (
     <div className="bg-amber-50 border-b border-amber-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3">
         <div className="flex items-center gap-2 text-amber-800">
           <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -134,44 +135,30 @@ async function VenueDetailContent({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbSchema) }}
       />
       {inDemoMode && <DemoModeBanner />}
+
+      {/* Title + Actions (above gallery, like Airbnb) */}
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 pt-6 pb-2">
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a]">
+            {venue.name}
+          </h1>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <ShareButton />
+            <SaveButton venueId={venue.id} size="md" />
+          </div>
+        </div>
+      </div>
+
       {/* Photo Gallery Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 pb-6">
         <PhotoGallery photos={venue.photos} venueName={venue.name} />
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left Column - Venue Details */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Header */}
-            <div>
-              <div className="flex items-start justify-between gap-4">
-                <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2">
-                  {venue.name}
-                </h1>
-                <SaveButton venueId={venue.id} size="md" />
-              </div>
-              <div className="flex flex-wrap items-center gap-4 text-[#78716c]">
-                <span className="flex items-center gap-1">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
-                </span>
-              </div>
-            </div>
+          <div className="lg:col-span-2 space-y-10">
 
             {/* Description */}
             {venue.description && (
@@ -390,7 +377,7 @@ async function VenueDetailContent({ params }: PageProps) {
                 </div>
               ) : (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-[#1a1a1a] mb-2">Pris</h3>
+                  <h3 className="text-lg font-semibold text-[#1a1a1a] mb-3">Pris</h3>
                   <p className="text-[#78716c]">Kontakta oss för prisuppgifter</p>
                 </div>
               )}
@@ -435,12 +422,12 @@ async function VenueDetailContent({ params }: PageProps) {
 function LoadingState() {
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6">
         {/* Photo skeleton */}
         <div className="aspect-[16/9] bg-[#f3f4f6] rounded-xl animate-pulse" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left column skeleton */}
           <div className="lg:col-span-2 space-y-6 animate-pulse">
