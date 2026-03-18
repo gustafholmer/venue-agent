@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { SidebarChat } from './sidebar-chat'
 import { FilterSection } from './filter-section'
 import { VenueCard, type VenueCardData } from './venue-card'
@@ -39,6 +39,9 @@ export function VenuesWithAgent({
   const [hoveredVenueId, setHoveredVenueId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'list' | 'map'>('list')
   const [loadingMore, setLoadingMore] = useState(false)
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const listContainerRef = useRef<HTMLElement | null>(null)
 
   // When agent finds venues, store them
   function handleVenuesFound(venues: VenueResult[]) {
@@ -100,6 +103,42 @@ export function VenuesWithAgent({
 
   const handleVenueHover = useCallback((venueId: string | null) => {
     setHoveredVenueId(venueId)
+
+    // Debounced scroll-into-view for map-originated hovers
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current)
+      scrollTimeoutRef.current = null
+    }
+    if (venueId) {
+      scrollTimeoutRef.current = setTimeout(() => {
+        const el = cardRefs.current.get(venueId)
+        const container = listContainerRef.current
+        if (!el || !container) return
+
+        const containerRect = container.getBoundingClientRect()
+        const cardRect = el.getBoundingClientRect()
+
+        if (cardRect.top < containerRect.top) {
+          container.scrollTo({
+            top: container.scrollTop - (containerRect.top - cardRect.top) - 16,
+            behavior: 'smooth',
+          })
+        } else if (cardRect.bottom > containerRect.bottom) {
+          container.scrollTo({
+            top: container.scrollTop + (cardRect.bottom - containerRect.bottom) + 16,
+            behavior: 'smooth',
+          })
+        }
+      }, 150)
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current)
+      }
+    }
   }, [])
 
   const handleLoadMore = useCallback(async () => {
@@ -263,7 +302,9 @@ export function VenuesWithAgent({
         </div>
 
         {/* Venue list */}
-        <main className={`lg:w-[60%] px-4 sm:px-6 py-6 lg:py-8 lg:overflow-y-auto ${
+        <main
+          ref={listContainerRef}
+          className={`lg:w-[60%] px-4 sm:px-6 py-6 lg:py-8 lg:overflow-y-auto ${
           mobileView === 'list' ? 'block' : 'hidden lg:block'
         }`}>
           {/* Results header */}
@@ -293,6 +334,13 @@ export function VenuesWithAgent({
               {displayVenues.map((venue) => (
                 <div
                   key={venue.id}
+                  ref={(el) => {
+                    if (el) {
+                      cardRefs.current.set(venue.id, el)
+                    } else {
+                      cardRefs.current.delete(venue.id)
+                    }
+                  }}
                   onMouseEnter={() => setHoveredVenueId(venue.id)}
                   onMouseLeave={() => setHoveredVenueId(null)}
                   className={`rounded-xl p-1 ${
