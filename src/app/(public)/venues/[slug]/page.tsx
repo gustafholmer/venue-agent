@@ -6,7 +6,8 @@ import { isDemoMode } from '@/lib/demo-mode'
 import { isSupabaseConfigured } from '@/lib/supabase/server'
 import { PhotoGallery } from '@/components/venues/photo-gallery'
 import { VenueDetailMap } from '@/components/maps/venue-detail-map'
-import { VenueAgentChat } from '@/components/agent/venue-agent-chat'
+import { EmbeddedAgentChat } from '@/components/agent/embedded-agent-chat'
+import { VenueAgentChatSwitch } from '@/components/agent/venue-agent-chat-switch'
 import { SaveButton } from '@/components/venues/save-button'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -329,9 +330,22 @@ async function VenueDetailContent({ params }: PageProps) {
 
           </div>
 
-          {/* Right Column - Pricing & CTA */}
+          {/* Right Column - Agent & Pricing */}
           <div className="lg:col-span-1">
-            <div className="sticky top-6 bg-white border border-[#e7e5e4] rounded-2xl p-6 shadow-sm">
+            <div className="sticky top-6 space-y-4">
+              {/* Embedded Agent Chat - desktop only */}
+              <div className="hidden lg:block">
+                <EmbeddedAgentChat
+                  venue={{
+                    id: venue.id,
+                    name: venue.name,
+                    slug: venue.slug || venue.id,
+                  }}
+                />
+              </div>
+
+              {/* Pricing Card */}
+              <div className="bg-white border border-[#e7e5e4] rounded-2xl p-6 shadow-sm">
               {/* Pricing */}
               {hasPricing ? (
                 <div className="mb-6">
@@ -388,12 +402,13 @@ async function VenueDetailContent({ params }: PageProps) {
                 </Button>
               </Link>
             </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* AI Agent Chat */}
-      <VenueAgentChat
+      {/* AI Agent Chat - mobile only */}
+      <VenueAgentChatSwitch
         venue={{
           id: venue.id,
           name: venue.name,
