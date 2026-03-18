@@ -964,6 +964,8 @@ export interface Database {
           amenities: string[]
           venue_types: string[]
           vibes: string[]
+          latitude: number | null
+          longitude: number | null
           status: VenueStatus
           similarity: number
         }[]

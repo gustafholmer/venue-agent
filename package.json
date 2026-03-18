@@ -12,7 +12,9 @@
     "serve-functions": "supabase functions serve --env-file .env.local --no-verify-jwt",
     "deploy:functions": "supabase functions deploy && supabase functions deploy send-auth-email --no-verify-jwt",
     "supabase-gen-types-local": "npx supabase gen types typescript --local --schema public > ./src/lib/supabase/database.types.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:reset": "supabase db reset && npx tsx scripts/backfill-embeddings.ts",
+    "db:backfill-embeddings": "npx tsx scripts/backfill-embeddings.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

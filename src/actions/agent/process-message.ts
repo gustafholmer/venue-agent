@@ -27,9 +27,7 @@ function formatSearchSummary(preferences: ParsedPreferences): string {
   const { filters } = preferences
 
   if (filters.event_type) {
-    parts.push(filters.event_type.toUpperCase() === filters.event_type
-      ? filters.event_type
-      : filters.event_type.charAt(0).toUpperCase() + filters.event_type.slice(1))
+    parts.push(filters.event_type)
   }
 
   if (filters.guest_count) {

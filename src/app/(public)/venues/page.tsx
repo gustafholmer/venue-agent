@@ -165,8 +165,10 @@ async function VenuesPageContent({ searchParams }: PageProps) {
   const initialMessages = messagesResult.success ? messagesResult.messages || [] : []
 
   // Fetch venues and areas in parallel
-  const [venues, areas] = await Promise.all([
+  const hasSearchQuery = Boolean(filters.q)
+  const [venues, allVenues, areas] = await Promise.all([
     getPublishedVenues(filters),
+    hasSearchQuery ? getPublishedVenues({}) : Promise.resolve(null),
     getUniqueAreas(),
   ])
 
@@ -198,6 +200,7 @@ async function VenuesPageContent({ searchParams }: PageProps) {
         sessionId={sessionId}
         initialMessages={initialMessages}
         initialVenues={venues}
+        allVenues={allVenues || undefined}
         areas={areas}
         currentFilters={filters}
         demoMode={inDemoMode}

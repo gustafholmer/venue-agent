@@ -126,26 +126,7 @@ export function VenueMap({
   }
 
   if (loadError) {
-    return (
-      <div
-        className={`bg-red-50 border border-red-200 rounded-lg flex items-center justify-center ${className}`}
-        style={{ height }}
-      >
-        <p className="text-sm text-red-600">Failed to load map</p>
-      </div>
-    )
-  }
-
-  // No venues to show
-  if (venues.length === 0) {
-    return (
-      <div
-        className={`bg-[#f5f3f0] border border-[#e7e5e4] rounded-lg flex items-center justify-center ${className}`}
-        style={{ height }}
-      >
-        <p className="text-sm text-[#78716c]">Inga lokaler att visa på kartan</p>
-      </div>
-    )
+    return <MapPlaceholder height={height} className={className} />
   }
 
   return (

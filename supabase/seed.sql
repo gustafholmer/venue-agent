@@ -1,5 +1,5 @@
 -- Seed data for venue-agent local development
--- Run with: supabase db reset
+-- Run with: npm run db:reset (resets DB + generates embeddings)
 
 SET session_replication_role = replica;
 

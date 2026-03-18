@@ -33,7 +33,7 @@ export function getGeminiModel(): GenerativeModel | null {
   return ai?.getGenerativeModel({ model: 'gemini-2.5-flash' }) ?? null
 }
 
-export function getEmbeddingModel(): GenerativeModel | null {
-  const ai = ensureInitialized()
-  return ai?.getGenerativeModel({ model: 'text-embedding-004' }) ?? null
+export function getEmbeddingApiKey(): string | null {
+  if (!isGeminiConfigured()) return null
+  return getApiKey()
 }

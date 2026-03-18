@@ -309,6 +309,8 @@ export async function searchVenues(
         venue.capacity_standing || 0,
         venue.capacity_seated || 0
       ),
+      latitude: venue.latitude,
+      longitude: venue.longitude,
       availableDates: availabilityMap.get(venue.id),
       matchReason: '',
       imageUrl: photoMap.get(venue.id),

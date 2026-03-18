@@ -11,6 +11,7 @@ interface VenuesWithAgentProps {
   sessionId: string
   initialMessages: AgentMessage[]
   initialVenues: VenueCardData[]
+  allVenues?: VenueCardData[]
   areas: string[]
   currentFilters: {
     area?: string
@@ -27,6 +28,7 @@ export function VenuesWithAgent({
   sessionId,
   initialMessages,
   initialVenues,
+  allVenues,
   areas,
   currentFilters,
   demoMode = false,
@@ -35,17 +37,22 @@ export function VenuesWithAgent({
   onLoadMore,
 }: VenuesWithAgentProps) {
   const [agentVenues, setAgentVenues] = useState<VenueResult[]>([])
+  const [agentMessage, setAgentMessage] = useState<string>('')
+  const [showingAll, setShowingAll] = useState(false)
   const [isChatExpanded, setIsChatExpanded] = useState(false)
   const [hoveredVenueId, setHoveredVenueId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'list' | 'map'>('list')
   const [loadingMore, setLoadingMore] = useState(false)
+  const [agentSearching, setAgentSearching] = useState(false)
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const listContainerRef = useRef<HTMLElement | null>(null)
 
   // When agent finds venues, store them
-  function handleVenuesFound(venues: VenueResult[]) {
+  function handleVenuesFound(venues: VenueResult[], message?: string) {
     setAgentVenues(venues)
+    setAgentMessage(message || '')
+    setShowingAll(false)
   }
 
   // Determine which venues to show
@@ -73,20 +80,28 @@ export function VenuesWithAgent({
           price_full_day: null,
           price_evening: av.price,
           primaryPhotoUrl: av.imageUrl || null,
+          latitude: av.latitude ?? null,
+          longitude: av.longitude ?? null,
         }))
 
       return [...matchedVenues, ...additionalVenues]
     }
 
+    // Show all venues if user cleared agent results
+    if (showingAll && allVenues) {
+      return allVenues
+    }
+
     // Otherwise show filtered venues
     return initialVenues
-  }, [agentVenues, initialVenues])
+  }, [agentVenues, initialVenues, showingAll, allVenues])
 
   const hasAgentResults = agentVenues.length > 0
   const hasFilters = currentFilters.area || currentFilters.capacity || currentFilters.priceMax
 
   // Convert venues to map marker data
   const venuesForMap: VenueMarkerData[] = useMemo(() => {
+    if (agentSearching) return []
     return displayVenues
       .filter((v) => v.latitude && v.longitude)
       .map((venue) => ({
@@ -99,7 +114,7 @@ export function VenuesWithAgent({
         price: venue.price_evening || venue.price_full_day || venue.price_half_day || venue.price_per_hour,
         imageUrl: venue.primaryPhotoUrl,
       }))
-  }, [displayVenues])
+  }, [displayVenues, agentSearching])
 
   const handleVenueHover = useCallback((venueId: string | null) => {
     setHoveredVenueId(venueId)
@@ -183,6 +198,7 @@ export function VenuesWithAgent({
                 sessionId={sessionId}
                 initialMessages={initialMessages}
                 onVenuesFound={handleVenuesFound}
+                onLoadingChange={setAgentSearching}
                 isExpanded={isChatExpanded}
                 onExpandedChange={setIsChatExpanded}
                 demoMode={demoMode}
@@ -275,6 +291,7 @@ export function VenuesWithAgent({
               sessionId={sessionId}
               initialMessages={initialMessages}
               onVenuesFound={handleVenuesFound}
+              onLoadingChange={setAgentSearching}
               demoMode={demoMode}
               initialQuery={initialQuery}
             />
@@ -309,17 +326,23 @@ export function VenuesWithAgent({
         }`}>
           {/* Results header */}
           <div className="mb-6">
-            <h1 className="font-[family-name:var(--font-heading)] text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-1">
-              {hasAgentResults ? 'Agentens förslag' : 'Eventlokaler'}
-            </h1>
-            <p className="text-base text-[#78716c]">
-              {displayVenues.length} {displayVenues.length === 1 ? 'lokal' : 'lokaler'}
-              {hasAgentResults && ' matchar din sökning'}
-              {!hasAgentResults && hasFilters && ' matchar dina filter'}
-            </p>
-            {hasAgentResults && (
+            {agentSearching ? (
+              <div className="animate-pulse">
+                <div className="h-8 bg-[#f5f3f0] rounded w-48 mb-2" />
+                <div className="h-5 bg-[#f5f3f0] rounded w-32" />
+              </div>
+            ) : (
+              <p className="text-base text-[#78716c]">
+                {displayVenues.length} {displayVenues.length === 1 ? 'lokal hittad' : 'lokaler hittade'}
+              </p>
+            )}
+            {!agentSearching && hasAgentResults && (
               <button
-                onClick={() => setAgentVenues([])}
+                onClick={() => {
+                  setAgentVenues([])
+                  setShowingAll(true)
+                  window.history.replaceState(null, '', '/venues')
+                }}
                 className="mt-2 text-sm text-[#c45a3b] hover:underline"
               >
                 Visa alla lokaler
@@ -328,7 +351,20 @@ export function VenuesWithAgent({
           </div>
 
           {/* Venue grid */}
-          {displayVenues.length > 0 ? (
+          {agentSearching ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-[#f5f3f0] rounded-xl aspect-[4/3] mb-3" />
+                  <div className="space-y-2 px-1">
+                    <div className="h-4 bg-[#f5f3f0] rounded w-3/4" />
+                    <div className="h-3 bg-[#f5f3f0] rounded w-1/2" />
+                    <div className="h-3 bg-[#f5f3f0] rounded w-1/3" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : displayVenues.length > 0 ? (
             <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
               {displayVenues.map((venue) => (
@@ -375,15 +411,33 @@ export function VenuesWithAgent({
             </>
           ) : (
             <div className="py-16 text-center">
-              <p className="text-[#78716c] mb-4">
+              <svg
+                className="w-16 h-16 mx-auto mb-4 text-[#d6d3d1]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1}
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+              <p className="text-[#78716c] mb-1 font-medium">
                 {hasFilters
-                  ? 'Inga lokaler matchar dina filter.'
-                  : 'Inga lokaler publicerade ännu.'}
+                  ? 'Inga lokaler matchar dina filter'
+                  : 'Inga lokaler publicerade'}
+              </p>
+              <p className="text-sm text-[#a8a29e] mb-4">
+                {hasFilters
+                  ? 'Prova att bredda din sökning'
+                  : 'Nya lokaler kommer snart'}
               </p>
               {hasFilters && (
                 <a
                   href="/venues"
-                  className="text-[#1a1a1a] underline underline-offset-4 hover:text-[#c45a3b]"
+                  className="inline-flex items-center gap-1.5 text-sm text-[#1a1a1a] underline underline-offset-4 hover:text-[#c45a3b]"
                 >
                   Rensa filter
                 </a>

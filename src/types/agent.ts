@@ -24,6 +24,8 @@ export interface VenueResult {
   area: string
   price: number
   capacity: number
+  latitude?: number | null
+  longitude?: number | null
   availableDates?: string[]
   matchReason?: string
   imageUrl?: string

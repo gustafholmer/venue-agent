@@ -22,6 +22,8 @@ RETURNS TABLE (
   amenities text[],
   venue_types text[],
   vibes text[],
+  latitude decimal(9,6),
+  longitude decimal(9,6),
   status venue_status,
   similarity float
 )
@@ -52,6 +54,8 @@ BEGIN
     v.amenities,
     v.venue_types,
     v.vibes,
+    v.latitude,
+    v.longitude,
     v.status,
     1 - (v.description_embedding <=> query_embedding) AS similarity
   FROM venues v

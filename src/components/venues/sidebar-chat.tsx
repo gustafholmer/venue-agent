@@ -8,7 +8,8 @@ interface SidebarChatProps {
   sessionId: string
   initialMessages?: AgentMessage[]
   initialState?: AgentState
-  onVenuesFound?: (venues: VenueResult[]) => void
+  onVenuesFound?: (venues: VenueResult[], message?: string) => void
+  onLoadingChange?: (loading: boolean) => void
   isExpanded?: boolean
   onExpandedChange?: (expanded: boolean) => void
   demoMode?: boolean
@@ -79,6 +80,7 @@ export function SidebarChat({
   initialMessages = [],
   initialState = 'idle',
   onVenuesFound,
+  onLoadingChange,
   isExpanded = true,
   onExpandedChange,
   demoMode = false,
@@ -86,7 +88,12 @@ export function SidebarChat({
 }: SidebarChatProps) {
   const [messages, setMessages] = useState<AgentMessage[]>(initialMessages)
   const [inputValue, setInputValue] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, _setIsLoading] = useState(false)
+
+  const setIsLoading = useCallback((loading: boolean) => {
+    _setIsLoading(loading)
+    onLoadingChange?.(loading)
+  }, [onLoadingChange])
   const [agentState, setAgentState] = useState<AgentState>(initialState)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -153,7 +160,7 @@ export function SidebarChat({
       setAgentState('searching')
 
       if (demoResponse.venues && onVenuesFound) {
-        onVenuesFound(demoResponse.venues)
+        onVenuesFound(demoResponse.venues, demoResponse.message)
       }
 
       setIsLoading(false)
@@ -184,7 +191,7 @@ export function SidebarChat({
 
         // Notify parent about found venues
         if (result.response.venues && result.response.venues.length > 0 && onVenuesFound) {
-          onVenuesFound(result.response.venues)
+          onVenuesFound(result.response.venues, result.response.message)
         }
       } else {
         const errorMessage: AgentMessage = {
