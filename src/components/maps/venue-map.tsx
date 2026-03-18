@@ -1,7 +1,7 @@
 'use client'
 
 import { GoogleMap } from '@react-google-maps/api'
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { useGoogleMaps } from './google-maps-provider'
 import { MapPlaceholder } from './map-placeholder'
 import { VenueMarker, VenueMarkerData } from './venue-marker'
@@ -55,6 +55,7 @@ export function VenueMap({
   const { isLoaded, loadError } = useGoogleMaps()
   const [activeVenue, setActiveVenue] = useState<VenueMarkerData | null>(null)
   const [map, setMap] = useState<google.maps.Map | null>(null)
+  const mapWrapperRef = useRef<HTMLDivElement>(null)
 
   // Calculate bounds when map loads (can't use google.maps during SSR)
   const fitMapToBounds = useCallback(
@@ -148,13 +149,14 @@ export function VenueMap({
   }
 
   return (
-    <div className={`rounded-lg overflow-hidden ${className}`} style={{ height }}>
+    <div ref={mapWrapperRef} className={`rounded-lg overflow-hidden ${className}`} style={{ height }}>
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
         center={center}
         zoom={mapZoom}
         onLoad={onLoad}
         onUnmount={onUnmount}
+        onClick={handleInfoWindowClose}
         options={{
           styles: mapStyles,
           disableDefaultUI: false,
@@ -177,7 +179,7 @@ export function VenueMap({
         ))}
 
         {activeVenue && !singleVenue && (
-          <MapInfoWindow venue={activeVenue} onClose={handleInfoWindowClose} />
+          <MapInfoWindow venue={activeVenue} onClose={handleInfoWindowClose} mapContainerRef={mapWrapperRef} />
         )}
       </GoogleMap>
     </div>
