@@ -63,7 +63,7 @@ export function VenueCard({ venue, isHighlighted = false }: VenueCardProps) {
 
       {/* Content */}
       <div>
-        <h3 className={`text-base font-medium transition-colors leading-snug ${
+        <h3 className={`text-base font-medium leading-snug ${
           isHighlighted ? 'text-[#c45a3b]' : 'text-[#1a1a1a] group-hover:text-[#c45a3b]'
         }`}>
           {venue.name}
