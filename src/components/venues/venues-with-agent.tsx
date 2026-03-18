@@ -5,6 +5,7 @@ import { SidebarChat } from './sidebar-chat'
 import { FilterSection } from './filter-section'
 import { VenueCard, type VenueCardData } from './venue-card'
 import { VenueMap, type VenueMarkerData } from '@/components/maps'
+import { ResizeHandle } from './resize-handle'
 import type { AgentMessage, VenueResult } from '@/types/agent'
 
 interface VenuesWithAgentProps {
@@ -43,10 +44,56 @@ export function VenuesWithAgent({
   const [hoveredVenueId, setHoveredVenueId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'list' | 'map'>('list')
   const [loadingMore, setLoadingMore] = useState(false)
-  const [agentSearching, setAgentSearching] = useState(false)
+  const [agentSearching, setAgentSearching] = useState(Boolean(initialQuery))
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const listContainerRef = useRef<HTMLElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  // Resizable column widths (desktop only, in pixels)
+  const HANDLE_WIDTH = 12
+  const MIN_SIDEBAR = 350
+  const MIN_VENUES = 300
+  const MIN_MAP = 400
+
+  const [sidebarWidth, setSidebarWidth] = useState(MIN_SIDEBAR)
+  // venueWidth=0 means "use default 60/40 split" (calculated on first render)
+  const [venueWidth, setVenueWidth] = useState(0)
+
+  // Calculate actual venue/map widths
+  const getContentWidth = useCallback(() => {
+    const container = containerRef.current
+    if (!container) return 0
+    return container.offsetWidth - sidebarWidth - HANDLE_WIDTH
+  }, [sidebarWidth])
+
+  const effectiveVenueWidth = venueWidth || (getContentWidth() * 0.6)
+
+  const handleSidebarResize = useCallback((delta: number) => {
+    const container = containerRef.current
+    if (!container) return
+    const totalWidth = container.offsetWidth
+
+    setSidebarWidth(prev => {
+      const newWidth = prev + delta
+      const remaining = totalWidth - newWidth - HANDLE_WIDTH
+      if (newWidth < MIN_SIDEBAR) return MIN_SIDEBAR
+      if (remaining < MIN_VENUES + MIN_MAP) return prev
+      return newWidth
+    })
+  }, [])
+
+  const handleContentResize = useCallback((delta: number) => {
+    const contentWidth = getContentWidth()
+    const currentVenue = venueWidth || contentWidth * 0.6
+
+    const newVenue = currentVenue + delta
+    const newMap = contentWidth - newVenue
+
+    if (newVenue < MIN_VENUES || newMap < MIN_MAP) return
+
+    setVenueWidth(newVenue)
+  }, [getContentWidth, venueWidth])
 
   // When agent finds venues, store them
   function handleVenuesFound(venues: VenueResult[], message?: string) {
@@ -169,7 +216,7 @@ export function VenuesWithAgent({
   }, [onLoadMore])
 
   return (
-    <div className="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
+    <div ref={containerRef} className="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
       {/* Mobile: Collapsible chat header */}
       <div className="lg:hidden border-b border-[#e7e5e4]">
         <div
@@ -283,7 +330,10 @@ export function VenuesWithAgent({
       </div>
 
       {/* Desktop: Left sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-[350px] lg:flex-shrink-0 lg:border-r lg:border-[#e7e5e4] lg:bg-white lg:overflow-y-auto">
+      <aside
+        className="hidden lg:flex lg:flex-col lg:flex-shrink-0 lg:bg-white lg:overflow-y-auto"
+        style={{ width: sidebarWidth }}
+      >
         {/* Chat section */}
         <div className="border-b border-[#e7e5e4]">
           <div className="h-[60vh]">
@@ -304,6 +354,9 @@ export function VenuesWithAgent({
         </div>
       </aside>
 
+      {/* Resize handle: sidebar ↔ venue list */}
+      <ResizeHandle onResize={handleSidebarResize} />
+
       {/* Main content area with split view */}
       <div className="flex-1 flex flex-col lg:flex-row lg:min-w-0 lg:overflow-hidden">
         {/* Mobile map view */}
@@ -320,10 +373,11 @@ export function VenuesWithAgent({
 
         {/* Venue list */}
         <main
-          ref={listContainerRef}
-          className={`lg:w-[60%] px-4 sm:px-6 py-6 lg:py-8 lg:overflow-y-auto ${
+          ref={(el) => { listContainerRef.current = el }}
+          className={`px-4 sm:px-6 py-6 lg:py-8 lg:overflow-y-auto ${
           mobileView === 'list' ? 'block' : 'hidden lg:block'
-        }`}>
+        }`}
+          style={{ width: venueWidth ? venueWidth : '60%', flexShrink: 0 }}>
           {/* Results header */}
           <div className="mb-6">
             {agentSearching ? (
@@ -352,7 +406,7 @@ export function VenuesWithAgent({
 
           {/* Venue grid */}
           {agentSearching ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
+            <div className="grid gap-x-4 gap-y-6" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
               {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="animate-pulse">
                   <div className="bg-[#f5f3f0] rounded-xl aspect-[4/3] mb-3" />
@@ -366,7 +420,7 @@ export function VenuesWithAgent({
             </div>
           ) : displayVenues.length > 0 ? (
             <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-6">
+            <div className="grid gap-x-4 gap-y-6" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
               {displayVenues.map((venue) => (
                 <div
                   key={venue.id}
@@ -446,8 +500,13 @@ export function VenuesWithAgent({
           )}
         </main>
 
+        {/* Resize handle: venue list ↔ map */}
+        <ResizeHandle onResize={handleContentResize} />
+
         {/* Desktop map - fixed on right */}
-        <div className="hidden lg:block lg:w-[40%] lg:flex-shrink-0 border-l border-[#e7e5e4]">
+        <div
+          className="hidden lg:block lg:flex-1 lg:h-full"
+        >
           <VenueMap
             venues={venuesForMap}
             height="100%"
