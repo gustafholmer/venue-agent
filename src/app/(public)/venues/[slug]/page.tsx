@@ -5,7 +5,7 @@ import { getVenueBySlug } from '@/actions/venues/get-venue-by-slug'
 import { isDemoMode } from '@/lib/demo-mode'
 import { isSupabaseConfigured } from '@/lib/supabase/server'
 import { PhotoGallery } from '@/components/venues/photo-gallery'
-import { VenueDetailMap } from '@/components/maps/venue-detail-map'
+import { ApproximateLocationMap } from '@/components/maps/approximate-location-map'
 import { EmbeddedAgentChat } from '@/components/agent/embedded-agent-chat'
 import { VenueAgentChatSwitch } from '@/components/agent/venue-agent-chat-switch'
 import { SaveButton } from '@/components/venues/save-button'
@@ -292,25 +292,20 @@ async function VenueDetailContent({ params }: PageProps) {
               </div>
             )}
 
-            {/* Address */}
+            {/* Location */}
             <div>
-              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Adress</h2>
-              <p className="text-[#57534e]">{venue.address}</p>
-              <p className="text-[#57534e] mb-4">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] mb-3">Plats</h2>
+              <p className="text-[#57534e] mb-1">
                 {venue.area ? `${venue.area}, ` : ''}
                 {venue.city}
               </p>
+              <p className="text-sm text-[#78716c] mb-4">
+                Exakt adress visas efter skickad bokningsforfragan
+              </p>
               {venue.latitude && venue.longitude && (
-                <VenueDetailMap
-                  venue={{
-                    id: venue.id,
-                    name: venue.name,
-                    slug: venue.slug,
-                    area: venue.area,
-                    latitude: venue.latitude,
-                    longitude: venue.longitude,
-                  }}
-                  address={`${venue.address}, ${venue.area ? `${venue.area}, ` : ''}${venue.city}`}
+                <ApproximateLocationMap
+                  latitude={venue.latitude}
+                  longitude={venue.longitude}
                 />
               )}
             </div>
