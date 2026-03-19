@@ -45,6 +45,9 @@ export function VenuesWithAgent({
   const [mobileView, setMobileView] = useState<'list' | 'map'>('list')
   const [loadingMore, setLoadingMore] = useState(false)
   const [agentSearching, setAgentSearching] = useState(Boolean(initialQuery))
+  const [mobileCapacity, setMobileCapacity] = useState(currentFilters.capacity ? parseInt(currentFilters.capacity, 10) : 0)
+  const [mobilePrice, setMobilePrice] = useState(currentFilters.priceMax ? parseInt(currentFilters.priceMax, 10) : 0)
+  const mobileDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const listContainerRef = useRef<HTMLElement | null>(null)
@@ -104,14 +107,16 @@ export function VenuesWithAgent({
 
   // Determine which venues to show
   const displayVenues = useMemo(() => {
+    let venues: VenueCardData[]
+
     // If agent has found venues, prioritize those
     if (agentVenues.length > 0) {
-      // Map agent venues to display format, matching with initialVenues for full data
+      // Map agent venues to display format, matching with allVenues/initialVenues for full data
       const agentVenueIds = new Set(agentVenues.map(v => v.id))
-      const matchedVenues = initialVenues.filter(v => agentVenueIds.has(v.id))
+      const sourceVenues = allVenues || initialVenues
+      const matchedVenues = sourceVenues.filter(v => agentVenueIds.has(v.id))
 
-      // Also include any venues from agent that aren't in initialVenues
-      // (in case agent found venues not in current filter set)
+      // Also include any venues from agent that aren't in source
       const additionalVenues: VenueCardData[] = agentVenues
         .filter(av => !matchedVenues.find(mv => mv.id === av.id))
         .map(av => ({
@@ -119,7 +124,7 @@ export function VenuesWithAgent({
           name: av.name,
           slug: av.slug,
           area: av.area,
-          city: av.area, // Use area as city fallback
+          city: av.area,
           capacity_standing: av.capacity,
           capacity_seated: null,
           price_per_hour: null,
@@ -131,17 +136,38 @@ export function VenuesWithAgent({
           longitude: av.longitude ?? null,
         }))
 
-      return [...matchedVenues, ...additionalVenues]
+      venues = [...matchedVenues, ...additionalVenues]
+    } else if (showingAll && allVenues) {
+      venues = allVenues
+    } else {
+      venues = initialVenues
     }
 
-    // Show all venues if user cleared agent results
-    if (showingAll && allVenues) {
-      return allVenues
+    // Apply filters client-side (needed when filtering agent results)
+    if (currentFilters.area) {
+      const area = currentFilters.area.toLowerCase()
+      venues = venues.filter(v => v.area?.toLowerCase().includes(area))
+    }
+    if (currentFilters.capacity) {
+      const min = parseInt(currentFilters.capacity, 10)
+      if (!isNaN(min)) {
+        venues = venues.filter(v =>
+          (v.capacity_standing || 0) >= min || (v.capacity_seated || 0) >= min
+        )
+      }
+    }
+    if (currentFilters.priceMax) {
+      const max = parseInt(currentFilters.priceMax, 10)
+      if (!isNaN(max)) {
+        venues = venues.filter(v => {
+          const price = v.price_evening || v.price_full_day || v.price_half_day
+          return !price || price <= max
+        })
+      }
     }
 
-    // Otherwise show filtered venues
-    return initialVenues
-  }, [agentVenues, initialVenues, showingAll, allVenues])
+    return venues
+  }, [agentVenues, initialVenues, showingAll, allVenues, currentFilters])
 
   const hasAgentResults = agentVenues.length > 0
   const hasFilters = currentFilters.area || currentFilters.capacity || currentFilters.priceMax
@@ -294,38 +320,56 @@ export function VenuesWithAgent({
               <option key={area} value={area}>{area}</option>
             ))}
           </select>
-          <select
-            value={currentFilters.capacity || ''}
-            onChange={(e) => {
-              const params = new URLSearchParams(window.location.search)
-              if (e.target.value) params.set('capacity', e.target.value)
-              else params.delete('capacity')
-              window.location.href = `/venues${params.toString() ? `?${params.toString()}` : ''}`
-            }}
-            className="h-9 px-3 border border-[#e7e5e4] bg-white text-sm rounded-full whitespace-nowrap"
-          >
-            <option value="">Storlek</option>
-            <option value="10">10+</option>
-            <option value="25">25+</option>
-            <option value="50">50+</option>
-            <option value="100">100+</option>
-          </select>
-          <select
-            value={currentFilters.priceMax || ''}
-            onChange={(e) => {
-              const params = new URLSearchParams(window.location.search)
-              if (e.target.value) params.set('priceMax', e.target.value)
-              else params.delete('priceMax')
-              window.location.href = `/venues${params.toString() ? `?${params.toString()}` : ''}`
-            }}
-            className="h-9 px-3 border border-[#e7e5e4] bg-white text-sm rounded-full whitespace-nowrap"
-          >
-            <option value="">Pris</option>
-            <option value="5000">Max 5k</option>
-            <option value="10000">Max 10k</option>
-            <option value="20000">Max 20k</option>
-            <option value="50000">Max 50k</option>
-          </select>
+          <div className="flex items-center gap-1.5 h-9 px-3 border border-[#e7e5e4] bg-white rounded-full whitespace-nowrap">
+            <span className="text-xs text-[#78716c]">Gaster</span>
+            <input
+              type="range"
+              min={0}
+              max={500}
+              step={10}
+              value={mobileCapacity}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10)
+                setMobileCapacity(v)
+                if (mobileDebounceRef.current) clearTimeout(mobileDebounceRef.current)
+                mobileDebounceRef.current = setTimeout(() => {
+                  const params = new URLSearchParams(window.location.search)
+                  if (v > 0) params.set('capacity', String(v))
+                  else params.delete('capacity')
+                  window.location.href = `/venues${params.toString() ? `?${params.toString()}` : ''}`
+                }, 300)
+              }}
+              className="w-20 accent-[#c45a3b]"
+            />
+            <span className="text-xs text-[#1a1a1a] min-w-[28px]">
+              {mobileCapacity > 0 ? `${mobileCapacity}+` : 'Alla'}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 h-9 px-3 border border-[#e7e5e4] bg-white rounded-full whitespace-nowrap">
+            <span className="text-xs text-[#78716c]">Pris</span>
+            <input
+              type="range"
+              min={0}
+              max={100000}
+              step={5000}
+              value={mobilePrice}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10)
+                setMobilePrice(v)
+                if (mobileDebounceRef.current) clearTimeout(mobileDebounceRef.current)
+                mobileDebounceRef.current = setTimeout(() => {
+                  const params = new URLSearchParams(window.location.search)
+                  if (v > 0) params.set('priceMax', String(v))
+                  else params.delete('priceMax')
+                  window.location.href = `/venues${params.toString() ? `?${params.toString()}` : ''}`
+                }, 300)
+              }}
+              className="w-20 accent-[#c45a3b]"
+            />
+            <span className="text-xs text-[#1a1a1a] min-w-[36px]">
+              {mobilePrice > 0 ? `${mobilePrice / 1000}k` : 'Alla'}
+            </span>
+          </div>
         </div>
       </div>
 

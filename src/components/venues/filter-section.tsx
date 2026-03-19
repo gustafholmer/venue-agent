@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect, useRef, type ChangeEvent } from 'react'
 
 interface FilterSectionProps {
   areas: string[]
@@ -16,32 +16,55 @@ export function FilterSection({ areas, className = '' }: FilterSectionProps) {
   const currentCapacity = searchParams.get('capacity') || ''
   const currentPriceMax = searchParams.get('priceMax') || ''
 
-  const handleFilterChange = useCallback(() => {
-    const form = document.getElementById('filter-form') as HTMLFormElement
-    if (!form) return
+  const [capacityValue, setCapacityValue] = useState(currentCapacity ? parseInt(currentCapacity, 10) : 0)
+  const [priceMaxValue, setPriceMaxValue] = useState(currentPriceMax ? parseInt(currentPriceMax, 10) : 0)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const formData = new FormData(form)
-    const params = new URLSearchParams()
+  // Sync local state when URL params change externally
+  useEffect(() => {
+    setCapacityValue(currentCapacity ? parseInt(currentCapacity, 10) : 0)
+  }, [currentCapacity])
+  useEffect(() => {
+    setPriceMaxValue(currentPriceMax ? parseInt(currentPriceMax, 10) : 0)
+  }, [currentPriceMax])
 
-    const area = formData.get('area') as string
-    const capacity = formData.get('capacity') as string
-    const priceMax = formData.get('priceMax') as string
+  const updateFilter = useCallback((name: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
 
-    if (area) params.set('area', area)
-    if (capacity) params.set('capacity', capacity)
-    if (priceMax) params.set('priceMax', priceMax)
+    if (value && value !== '0') {
+      params.set(name, value)
+    } else {
+      params.delete(name)
+    }
 
     router.push(`/venues${params.toString() ? `?${params.toString()}` : ''}`)
-  }, [router])
+  }, [router, searchParams])
+
+  const debouncedUpdateFilter = useCallback((name: string, value: string) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      updateFilter(name, value)
+    }, 300)
+  }, [updateFilter])
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [])
+
+  const handleAreaChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    updateFilter('area', e.target.value)
+  }, [updateFilter])
 
   return (
     <div className={className}>
       <p className="text-xs uppercase tracking-widest text-[#78716c] mb-3">Filter</p>
-      <form id="filter-form" className="space-y-3">
+      <div className="space-y-4">
         <select
           name="area"
-          defaultValue={currentArea}
-          onChange={handleFilterChange}
+          value={currentArea}
+          onChange={handleAreaChange}
           className="w-full h-10 px-3 border border-[#e7e5e4] bg-white text-sm focus:outline-none focus:border-[#1a1a1a] rounded"
         >
           <option value="">Alla områden</option>
@@ -52,33 +75,58 @@ export function FilterSection({ areas, className = '' }: FilterSectionProps) {
           ))}
         </select>
 
-        <select
-          name="capacity"
-          defaultValue={currentCapacity}
-          onChange={handleFilterChange}
-          className="w-full h-10 px-3 border border-[#e7e5e4] bg-white text-sm focus:outline-none focus:border-[#1a1a1a] rounded"
-        >
-          <option value="">Alla storlekar</option>
-          <option value="10">10+ gäster</option>
-          <option value="25">25+ gäster</option>
-          <option value="50">50+ gäster</option>
-          <option value="100">100+ gäster</option>
-          <option value="200">200+ gäster</option>
-        </select>
+        <div>
+          <div className="flex justify-between text-sm mb-1.5">
+            <span className="text-[#78716c]">Antal gaster</span>
+            <span className="text-[#1a1a1a] font-medium">
+              {capacityValue > 0 ? `${capacityValue}+` : 'Alla'}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={500}
+            step={10}
+            value={capacityValue}
+            onChange={(e) => {
+              const v = parseInt(e.target.value, 10)
+              setCapacityValue(v)
+              debouncedUpdateFilter('capacity', e.target.value)
+            }}
+            className="w-full accent-[#c45a3b]"
+          />
+          <div className="flex justify-between text-xs text-[#a8a29e] mt-0.5">
+            <span>0</span>
+            <span>500</span>
+          </div>
+        </div>
 
-        <select
-          name="priceMax"
-          defaultValue={currentPriceMax}
-          onChange={handleFilterChange}
-          className="w-full h-10 px-3 border border-[#e7e5e4] bg-white text-sm focus:outline-none focus:border-[#1a1a1a] rounded"
-        >
-          <option value="">Alla priser</option>
-          <option value="5000">Max 5 000 kr</option>
-          <option value="10000">Max 10 000 kr</option>
-          <option value="20000">Max 20 000 kr</option>
-          <option value="50000">Max 50 000 kr</option>
-        </select>
-      </form>
+        <div>
+          <div className="flex justify-between text-sm mb-1.5">
+            <span className="text-[#78716c]">Max pris</span>
+            <span className="text-[#1a1a1a] font-medium">
+              {priceMaxValue > 0 ? `${priceMaxValue.toLocaleString('sv-SE')} kr` : 'Alla'}
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={100000}
+            step={5000}
+            value={priceMaxValue}
+            onChange={(e) => {
+              const v = parseInt(e.target.value, 10)
+              setPriceMaxValue(v)
+              debouncedUpdateFilter('priceMax', e.target.value)
+            }}
+            className="w-full accent-[#c45a3b]"
+          />
+          <div className="flex justify-between text-xs text-[#a8a29e] mt-0.5">
+            <span>0</span>
+            <span>100 000</span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
