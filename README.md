@@ -44,7 +44,7 @@ Unlike traditional venue directories that rely on filters and forms, Tryffle let
 - Revenue model: 12% platform fee on completed bookings
 - Stage: Pre-revenue, product built, initial venues onboarded
 - Team: Solo founder (technical)
-- Monthly burn: ~3,000 SEK
+- Monthly burn: ~1,150-2,650 SEK
 
 **The opportunity:** The Swedish event venue market is fragmented. There is no dominant digital platform for venue discovery and booking in Stockholm. Venue owners handle inquiries manually via email and phone, losing leads outside business hours. Tryffle's AI agents solve this by providing instant, knowledgeable responses at any time.
 
@@ -338,10 +338,9 @@ The 12% fee is competitive with international benchmarks (Peerspace charges ~15%
 | Database & Auth | Supabase (PostgreSQL + pgvector) | ~250 SEK/month |
 | AI / LLM | Google Gemini 1.5 Flash | ~500-2,000 SEK/month (usage-based) |
 | Payments | Stripe + Stripe Connect | Transaction fees only |
-| Maps | Google Maps API | ~200 SEK/month |
+| Maps | Google Maps API | ~200 SEK/month (uncertain) |
 | Email | Supabase Edge Functions | Included |
-| Domain & Email | venueagent.se | ~150 SEK/month |
-| **Total** | | **~1,300-2,800 SEK/month** |
+| **Total** | | **~1,150-2,650 SEK/month** |
 
 #### Key Processes
 
