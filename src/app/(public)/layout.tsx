@@ -7,6 +7,7 @@ import { WorkspaceSwitcher, AccentBar } from '@/components/workspace-switcher'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
 import { Toaster } from 'sonner'
+import { CookieBanner } from '@/components/cookie-banner'
 
 export default async function PublicLayout({
   children,
@@ -174,6 +175,7 @@ export default async function PublicLayout({
           </div>
         </div>
       </footer>
+      <CookieBanner />
     </div>
   )
 }
