@@ -9,7 +9,12 @@
       "Skill(superpowers:systematic-debugging)",
       "mcp__plugin_episodic-memory_episodic-memory__search",
       "mcp__plugin_superpowers-chrome_chrome__use_browser",
-      "mcp__plugin_episodic-memory_episodic-memory__read"
+      "mcp__plugin_episodic-memory_episodic-memory__read",
+      "WebFetch(domain:www.businesswire.com)",
+      "WebFetch(domain:www.digitalcommerce360.com)",
+      "WebFetch(domain:tripleseat.com)",
+      "WebFetch(domain:www.peerspace.com)",
+      "WebFetch(domain:www.theknotww.com)"
     ]
   }
 }
