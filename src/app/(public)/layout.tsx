@@ -3,7 +3,7 @@ import { createClient, isSupabaseConfigured } from '@/lib/supabase/server'
 import { isDemoMode } from '@/lib/demo-mode'
 import { NotificationBell } from '@/components/notifications/notification-bell'
 import { UserMenu } from '@/components/user-menu'
-import { WorkspaceSwitcher } from '@/components/workspace-switcher'
+import { WorkspaceSwitcher, AccentBar } from '@/components/workspace-switcher'
 import { TryffleLogo } from '@/components/illustrations/agent-mascot'
 import { SavedVenuesProvider } from '@/contexts/saved-venues-context'
 import { Toaster } from 'sonner'
@@ -107,6 +107,7 @@ export default async function PublicLayout({
           </div>
         </div>
       </header>
+      {profile?.roles?.includes('venue_owner') && <AccentBar />}
 
       <Toaster
         position="top-center"
