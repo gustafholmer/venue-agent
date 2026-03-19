@@ -14,7 +14,10 @@
       "WebFetch(domain:www.digitalcommerce360.com)",
       "WebFetch(domain:tripleseat.com)",
       "WebFetch(domain:www.peerspace.com)",
-      "WebFetch(domain:www.theknotww.com)"
+      "WebFetch(domain:www.theknotww.com)",
+      "WebFetch(domain:www.kth.se)",
+      "WebFetch(domain:www.salesforce.com)",
+      "WebFetch(domain:thelevel.ai)"
     ]
   }
 }
