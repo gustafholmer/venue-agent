@@ -48,6 +48,14 @@ Unlike traditional venue directories that rely on filters and forms, Tryffle let
 
 **The opportunity:** The Swedish event venue market is fragmented. There is no dominant digital platform for venue discovery and booking in Stockholm. Venue owners handle inquiries manually via email and phone, losing leads outside business hours. Tryffle's AI agents solve this by providing instant, knowledgeable responses at any time.
 
+```mermaid
+flowchart LR
+    A["🔍 Customer describes event"] --> B["🤖 AI matches venues"]
+    B --> C["💬 Chat with venue agent"]
+    C --> D["📅 Check availability"]
+    D --> E["✅ Book & pay"]
+```
+
 ---
 
 ### Company Description
@@ -211,17 +219,20 @@ The Swedish event and conference market is valued at approximately 30 billion SE
 
 **Competitive Positioning**
 
-```
-                    AI-Native
-                       |
-                       |
-           Tryffle *   |
-                       |
-    Directory ---------|--------- Marketplace
-                       |
-           Lokalguiden |    Evity
-                       |
-                   Traditional
+```mermaid
+quadrantChart
+    title Competitive Positioning
+    x-axis Directory --> Marketplace
+    y-axis Traditional --> "AI-Native"
+    quadrant-1 "AI Marketplace"
+    quadrant-2 "AI Directory"
+    quadrant-3 "Traditional Directory"
+    quadrant-4 "Traditional Marketplace"
+    Tryffle: [0.7, 0.9]
+    Lokalguiden: [0.25, 0.2]
+    Evity: [0.75, 0.2]
+    Venuelab: [0.3, 0.25]
+    Eventlokal: [0.35, 0.15]
 ```
 
 Tryffle is the only player in the Swedish market combining marketplace functionality with AI-native search and per-venue conversational agents. No competitor offers real-time AI-powered Q&A or semantic search.
@@ -238,6 +249,26 @@ Tryffle is the only player in the Swedish market combining marketplace functiona
 ### Marketing & Sales Strategy
 
 #### Go-To-Market Strategy
+
+```mermaid
+timeline
+    title Go-To-Market Roadmap
+    section Phase 1 · Supply
+        Q2 2026 : Direct venue outreach
+                 : 20 published venues
+        Q3 2026 : Partnerships & onboarding
+                 : 50 published venues
+    section Phase 2 · Demand
+        Q3 2026 : SEO & Google Ads launch
+                 : 1,000 monthly visitors
+        Q4 2026 : First bookings
+                 : 50 completed bookings
+    section Phase 3 · Scale
+        Q1 2027 : Scale marketing
+                 : 5,000 monthly visitors
+        Q2 2027 : Expand to Gothenburg
+                 : 15 venues in new city
+```
 
 **Phase 1: Supply-first (Q2-Q3 2026)**
 Build venue inventory through direct outreach.
@@ -268,6 +299,14 @@ As inventory and demand grow, focus shifts to retention and expansion.
 | Geographic expansion | Launch Gothenburg and Malmo |
 
 #### Sales Process (Venue Owners)
+
+```mermaid
+flowchart LR
+    A["🔎 Identify"] --> B["📧 Outreach"]
+    B --> C["🎥 Demo"]
+    C --> D["⚙️ Onboard"]
+    D --> E["🚀 Activate"]
+```
 
 1. **Identify** - Find venues via Google Maps, Instagram, event directories
 2. **Outreach** - Personalized email/call explaining the value proposition
@@ -343,6 +382,15 @@ The 12% fee is competitive with international benchmarks (Peerspace charges ~15%
 - No external funding
 
 #### Revenue Projections
+
+```mermaid
+xychart-beta
+    title "Quarterly Platform Revenue vs Costs (SEK)"
+    x-axis ["Q2 2026", "Q3 2026", "Q4 2026", "Q1 2027", "Q2 2027"]
+    y-axis "SEK" 0 --> 280000
+    bar [0, 27000, 90000, 180000, 270000]
+    line [7500, 22500, 30000, 45000, 52500]
+```
 
 | Quarter | Bookings | GMV (SEK) | Platform Revenue (SEK) | Monthly Costs (SEK) | Net (SEK) |
 |---------|----------|-----------|------------------------|---------------------|-----------|
@@ -436,24 +484,43 @@ License the platform (technology + playbook) to operators in other Nordic market
 
 #### A. Technology Architecture
 
-```
-Customer Browser
-    |
-    v
-Next.js Frontend (Vercel)
-    |
-    +--> Supabase (PostgreSQL + pgvector + Auth + Edge Functions)
-    |
-    +--> Google Gemini API (AI agent, semantic search, embeddings)
-    |
-    +--> Stripe (payments, Connect payouts)
-    |
-    +--> Google Calendar API (venue calendar sync)
-    |
-    +--> Google Maps API (location display)
+```mermaid
+flowchart TD
+    Browser["🌐 Customer Browser"]
+    NextJS["⚡ Next.js Frontend\n(Vercel)"]
+    Supabase["🗄️ Supabase\nPostgreSQL + pgvector\nAuth + Edge Functions"]
+    Gemini["🤖 Google Gemini API\nAI Agent + Semantic Search\n+ Embeddings"]
+    Stripe["💳 Stripe\nPayments + Connect Payouts"]
+    GCal["📅 Google Calendar API\nVenue Calendar Sync"]
+    Maps["🗺️ Google Maps API\nLocation Display"]
+
+    Browser --> NextJS
+    NextJS --> Supabase
+    NextJS --> Gemini
+    NextJS --> Stripe
+    NextJS --> GCal
+    NextJS --> Maps
 ```
 
-#### B. Key Metrics to Track
+#### B. Conversion Funnel
+
+```mermaid
+flowchart TD
+    A["👀 Monthly Visitors\n3,000"] --> B["🔍 Searches\n~2,000"]
+    B --> C["💬 Chat Conversations\n400 (20%)"]
+    C --> D["📋 Booking Requests\n60 (15%)"]
+    D --> E["✅ Completed Bookings\n30 (50%)"]
+    E --> F["💰 GMV\n~450,000 SEK"]
+
+    style A fill:#e8f4f8,stroke:#2196F3
+    style B fill:#e8f4f8,stroke:#2196F3
+    style C fill:#fff3e0,stroke:#FF9800
+    style D fill:#fff3e0,stroke:#FF9800
+    style E fill:#e8f5e9,stroke:#4CAF50
+    style F fill:#e8f5e9,stroke:#4CAF50
+```
+
+#### C. Key Metrics to Track
 
 | Metric | Definition | Target (Month 6) |
 |--------|-----------|-------------------|
