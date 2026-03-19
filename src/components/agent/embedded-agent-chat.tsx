@@ -60,7 +60,7 @@ const MAX_HEIGHT = 500
 export function EmbeddedAgentChat({ venue }: EmbeddedAgentChatProps) {
   const [inputValue, setInputValue] = useState('')
   const [chatHeight, setChatHeight] = useState(DEFAULT_HEIGHT)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const isDragging = useRef(false)
   const dragStartY = useRef(0)
@@ -80,7 +80,10 @@ export function EmbeddedAgentChat({ venue }: EmbeddedAgentChatProps) {
       hasScrolled.current = true
       return
     }
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const container = messagesContainerRef.current
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+    }
   }, [messages, isLoading])
 
   const handleSendMessage = useCallback(
@@ -159,6 +162,7 @@ export function EmbeddedAgentChat({ venue }: EmbeddedAgentChatProps) {
 
       {/* Scrollable message area */}
       <div
+        ref={messagesContainerRef}
         className="overflow-y-auto px-4 py-3 space-y-3"
         style={{ height: chatHeight }}
       >
@@ -179,8 +183,6 @@ export function EmbeddedAgentChat({ venue }: EmbeddedAgentChatProps) {
         ))}
 
         {isLoading && <AgentStatusIndicator status="typing" />}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Drag handle */}

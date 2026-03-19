@@ -59,7 +59,7 @@ function MessageBubble({ message }: { message: AgentChatMessage }) {
 export function VenueAgentChat({ venue }: VenueAgentChatProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -74,7 +74,10 @@ export function VenueAgentChat({ venue }: VenueAgentChatProps) {
   // Auto-scroll to bottom on new messages
   useEffect(() => {
     if (isOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+      const container = messagesContainerRef.current
+      if (container) {
+        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' })
+      }
     }
   }, [messages, isOpen, isLoading])
 
@@ -172,7 +175,7 @@ export function VenueAgentChat({ venue }: VenueAgentChatProps) {
           </div>
 
           {/* Messages area */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+          <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
             {/* Welcome message */}
             {messages.length === 0 && !isLoading && (
               <div className="flex items-start gap-2">
@@ -190,8 +193,6 @@ export function VenueAgentChat({ venue }: VenueAgentChatProps) {
             ))}
 
             {isLoading && <AgentStatusIndicator status="typing" />}
-
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Input area */}
