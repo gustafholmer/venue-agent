@@ -216,7 +216,7 @@ export function VenuesWithAgent({
   }, [onLoadMore])
 
   return (
-    <div ref={containerRef} className="flex flex-col lg:flex-row lg:h-screen lg:overflow-hidden">
+    <div ref={containerRef} className="flex flex-col lg:flex-row lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
       {/* Mobile: Collapsible chat header */}
       <div className="lg:hidden border-b border-[#e7e5e4]">
         <div
