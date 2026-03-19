@@ -127,7 +127,7 @@ export function jsonLdScript(schema: object): string {
  */
 export const VENUE_AGENT_ORGANIZATION: OrganizationData = {
   name: 'Tryffle',
-  description: 'AI-driven marknadsplats för eventlokaler i Stockholm. Beskriv ditt event och hitta matchande lokaler med tillgängliga datum.',
+  description: 'Marknadsplats för eventlokaler i Stockholm. Hitta rätt lokal, ställ frågor direkt i chatten och skicka en bokningsförfrågan.',
   url: BASE_URL,
   logo: `${BASE_URL}/logo.png`,
 }

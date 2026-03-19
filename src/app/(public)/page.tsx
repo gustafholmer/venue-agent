@@ -103,10 +103,10 @@ export default async function LandingPage() {
               </p>
               <h1 className="font-[family-name:var(--font-heading)] text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] leading-[1.1] tracking-tight text-[#1a1a1a]">
                 Berätta vad du söker.<br />
-                <span className="text-[#78716c]">Vår agent hittar eventlokalen.</span>
+                <span className="text-[#78716c]">Vi hittar rätt lokal.</span>
               </h1>
               <p className="mt-5 text-sm text-[#a8a29e] max-w-md">
-                Beskriv ditt event med egna ord. Vår agent förstår vad du behöver och matchar dig med rätt eventlokal.
+                Beskriv ditt event med egna ord, så matchar vi dig med rätt lokal.
               </p>
               <div className="mt-8 max-w-lg">
                 <SearchInput />
@@ -176,7 +176,7 @@ export default async function LandingPage() {
       <section className="bg-[#2a1f1a]">
         <div className="px-4 sm:px-6 py-14 sm:py-20">
           <p className="text-sm uppercase tracking-widest text-[#c9935a] mb-8">
-            Så fungerar agenten
+            Så fungerar det
           </p>
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-8 md:gap-6 items-start">
             <div>
@@ -189,9 +189,9 @@ export default async function LandingPage() {
                 />
               </div>
               <p className="text-[#c45a3b] text-sm font-medium mb-2">01</p>
-              <h3 className="text-[#fef3c7] font-medium mb-2">Beskriv ditt event</h3>
+              <h3 className="text-[#fef3c7] font-medium mb-2">Hitta din lokal</h3>
               <p className="text-[#a8977a] text-sm leading-relaxed">
-                Skriv fritt vad du letar efter. Agenten förstår naturligt språk och ställer följdfrågor vid behov.
+                Sök eller beskriv ditt event med egna ord. Vi matchar dig med lokaler som passar dina behov.
               </p>
             </div>
 
@@ -212,9 +212,9 @@ export default async function LandingPage() {
                 />
               </div>
               <p className="text-[#7b4a6b] text-sm font-medium mb-2">02</p>
-              <h3 className="text-[#fef3c7] font-medium mb-2">Få personliga förslag</h3>
+              <h3 className="text-[#fef3c7] font-medium mb-2">Ställ frågor i chatten</h3>
               <p className="text-[#a8977a] text-sm leading-relaxed">
-                Agenten analyserar hundratals eventlokaler och presenterar de som bäst matchar dina krav.
+                Varje lokal har en AI-assistent som svarar på frågor om tillgänglighet, priser och vad som ingår.
               </p>
             </div>
 
@@ -235,9 +235,9 @@ export default async function LandingPage() {
                 />
               </div>
               <p className="text-[#c9935a] text-sm font-medium mb-2">03</p>
-              <h3 className="text-[#fef3c7] font-medium mb-2">Boka direkt</h3>
+              <h3 className="text-[#fef3c7] font-medium mb-2">Skicka förfrågan</h3>
               <p className="text-[#a8977a] text-sm leading-relaxed">
-                Skicka förfrågan till lokalen du gillar. Lokalägaren svarar inom 24 timmar.
+                Redo att boka? Skicka en förfrågan direkt via chatten. Lokalägaren svarar inom 24 timmar.
               </p>
             </div>
           </div>

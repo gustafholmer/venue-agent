@@ -7,12 +7,12 @@ export default function FAQPage() {
       a: 'Ja, helt gratis! Du betalar ingenting för att söka, chatta med agenten eller skicka förfrågningar till lokaler.',
     },
     {
-      q: 'Hur fungerar AI-agenten?',
-      a: 'Beskriv ditt event med egna ord – antal gäster, typ av tillfälle, önskad stil. Agenten analyserar alla lokaler och presenterar de som bäst matchar dina behov.',
+      q: 'Hur fungerar det?',
+      a: 'Beskriv ditt event med egna ord så matchar vi dig med rätt lokal. Varje lokal har en AI-assistent som kan svara på dina frågor om tillgänglighet, priser och vad som ingår.',
     },
     {
-      q: 'Kan jag lita på agentens rekommendationer?',
-      a: 'Agenten rankar lokaler baserat på hur väl de matchar dina krav, inte på vem som betalar mest. Transparens är viktigt för oss.',
+      q: 'Kan jag lita på rekommendationerna?',
+      a: 'Lokaler rankas baserat på hur väl de matchar dina krav, inte på vem som betalar mest. Transparens är viktigt för oss.',
     },
     {
       q: 'Hur bokar jag en lokal?',
